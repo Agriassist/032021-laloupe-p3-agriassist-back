@@ -1,8 +1,6 @@
 const mainRouter = require('express').Router();
-// const agriculteursRoutes = require('./agriculteurs.routes');
-const administrateursRoutes = require('./administrateurs.routes');
+const agriculteursRoutes = require('./aggriRoutes');
 
-// mainRouter.use('/agriculteurs', agriculteursRoutes);
-mainRouter.use('/administrateurs', administrateursRoutes);
+mainRouter.use('/agriculteurs', agriculteursRoutes);
 
 module.exports = mainRouter;
