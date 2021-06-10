@@ -196,6 +196,7 @@ CREATE TABLE `materiel` (
   `year` int NOT NULL,
   `serial_number` varchar(100) NOT NULL,
   `modele_id` int DEFAULT NULL,
+  `type` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `modele_id` (`modele_id`),
   CONSTRAINT `materiel_ibfk_1` FOREIGN KEY (`modele_id`) REFERENCES `modele` (`id`) ON DELETE CASCADE
@@ -273,11 +274,11 @@ DROP TABLE IF EXISTS `partenariat`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `partenariat` (
   `agriculteur_id` int DEFAULT NULL,
-  `concessionaire_id` int DEFAULT NULL,
+  `concessionnaire_id` int DEFAULT NULL,
   KEY `agriculteur_id` (`agriculteur_id`),
-  KEY `concessionaire_id` (`concessionaire_id`),
+  KEY `concessionnaire_id` (`concessionnaire_id`),
   CONSTRAINT `partenariat_ibfk_1` FOREIGN KEY (`agriculteur_id`) REFERENCES `agriculteur` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionaire_id`) REFERENCES `concessionnaire` (`id`) ON DELETE CASCADE
+  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionnaire_id`) REFERENCES `concessionnaire` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -299,4 +300,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-10 11:43:24
+-- Dump completed on 2021-06-10 15:31:58
