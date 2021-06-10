@@ -1,4 +1,4 @@
-const { findMany, createOne, findOneById, updateOne, deleteOne } = require('../models/agriModels');
+const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/agriculteurModel');
 
 const getAllAgriculteurs = (req, res) => {
   findMany()
@@ -7,17 +7,18 @@ const getAllAgriculteurs = (req, res) => {
       res.json(agriculteurs);
     })
     .catch((err) => {
-      res.status(500).json(err.message);
+      res.status(500).send(err.message);
     });
 };
 
-getOneAgriculteurById = (req, res) => {
+const getOneAgriculteurById = (req, res) => {
   let id;
   if (req.agriId) {
     id = req.agriId;
   } else {
     id = req.params.id;
   }
+
   findOneById(id)
     .then(([agriculteurs]) => {
       if (agriculteurs.length === 0) {
@@ -32,11 +33,12 @@ getOneAgriculteurById = (req, res) => {
 };
 
 const createOneAgriculteur = (req, res, next) => {
-  // il faudrait verifierque les données fournies dans la requete sont correctes
-  const { name, lastmane, identifiant, password, phone, picture_profile } = req.body;
-  createOne({ name, lastmane, identifiant, password, phone, picture_profile })
+  // il faudrait vérifier que les données fournies dans la requête sont correctes
+  const { name, lastname, identifiant, password, phone, picture_profile } = req.body;
+
+  createOne({ name, lastname, identifiant, password, phone, picture_profile })
     .then(([results]) => {
-      // res.status(201).json({ id: results.insertId, name, lastmane, identifiant, password, phone, picture_profile });
+      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile });
       req.agriId = results.insertId;
       next();
     })
@@ -46,7 +48,7 @@ const createOneAgriculteur = (req, res, next) => {
 };
 
 const updateOneAgriculteur = (req, res, next) => {
-  // il faudrait verifier que les données fournies dans la requete sont corectes
+  // il faudrait vérifier que les données fournies dans la requête sont correctes
   updateOne(req.body, req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
@@ -76,8 +78,8 @@ const deleteOneAgriculteur = (req, res) => {
 
 module.exports = {
   getAllAgriculteurs,
-  createOneAgriculteur,
   getOneAgriculteurById,
+  createOneAgriculteur,
   updateOneAgriculteur,
   deleteOneAgriculteur,
 };
