@@ -1,14 +1,13 @@
 const mainRouter = require('express').Router();
-<<<<<<< HEAD
+const agriculteursRoutes = require('./aggriRoutes');
+const concessionnairesRoutes = require('./concessionnaires.routes');
+const adminRoutes = require('./administrateurs.routes');
 const ficheRouter = require('./fiche_technique.routes');
 
-mainRouter.use('/fiche_technique', ficheRouter);
-=======
-// const agriculteursRoutes = require('./aggriRoutes');
-const marquesRoutes = require('./marqueRoutes');
+mainRouter.use('/concessionnaires', concessionnairesRoutes);
+mainRouter.use('/agriculteurs', agriculteursRoutes);
+mainRouter.use('/administrateur', adminRoutes);
 
-// mainRouter.use('/concessionnaires', concessionnairesRoutes);
-mainRouter.use('/marques', marquesRoutes);
->>>>>>> dev
+// mainRouter.use('/fiche_technique', ficheRouter);
 
 module.exports = mainRouter;
