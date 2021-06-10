@@ -46,8 +46,8 @@ const createOneCarnet = (req, res, next) => {
 
 const updateOneCarnet = (req, res) => {
   updateOne(req.body, req.params.id)
-    .then(([resuults]) => {
-      if (resuults.affectedRows === 0) {
+    .then(([results]) => {
+      if (results.affectedRows === 0) {
         res.status(404).send('carnet not found');
       } else {
         next();
