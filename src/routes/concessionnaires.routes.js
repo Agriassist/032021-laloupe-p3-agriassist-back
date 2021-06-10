@@ -1,5 +1,5 @@
 const concRouter = require('express').Router();
-const concessRouter = require('./materielRoutes')
+const agriculteursRoutes = require('./aggriRoutes');
 const {
   getAllConcessionnaires,
   getOneConcessionnaireById,
@@ -14,6 +14,6 @@ concRouter.post('/', createOneConcessionnaire, getOneConcessionnaireById);
 concRouter.put('/:id', updateOneConcessionnaire, getOneConcessionnaireById);
 concRouter.delete('/:id', deleteOneConcessionnaire);
 
-concRouter.use('/materiel', concessRouter);
+concRouter.use('/agriculteur', agriculteursRoutes);
 
 module.exports = concRouter;
