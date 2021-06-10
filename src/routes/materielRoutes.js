@@ -1,6 +1,6 @@
 const materielRouter = require('express').Router();
 const modelesRoutes = require('./modeleRoutes');
-const carnetRoutes = require('./carnet_entretien.routes')
+const carnetRoutes = require('./carnet_entretien.routes');
 const {
   getAllMateriels,
   getOneMaterielById,

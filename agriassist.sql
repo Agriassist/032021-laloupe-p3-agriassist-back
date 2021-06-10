@@ -104,13 +104,13 @@ LOCK TABLES `carnet_entretien` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `concessionaire`
+-- Table structure for table `concessionnaire`
 --
 
-DROP TABLE IF EXISTS `concessionaire`;
+DROP TABLE IF EXISTS `concessionnaire`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `concessionaire` (
+CREATE TABLE `concessionnaire` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `identifiant` varchar(100) NOT NULL,
@@ -126,12 +126,12 @@ CREATE TABLE `concessionaire` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `concessionaire`
+-- Dumping data for table `concessionnaire`
 --
 
-LOCK TABLES `concessionaire` WRITE;
-/*!40000 ALTER TABLE `concessionaire` DISABLE KEYS */;
-/*!40000 ALTER TABLE `concessionaire` ENABLE KEYS */;
+LOCK TABLES `concessionnaire` WRITE;
+/*!40000 ALTER TABLE `concessionnaire` DISABLE KEYS */;
+/*!40000 ALTER TABLE `concessionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -274,11 +274,11 @@ DROP TABLE IF EXISTS `partenariat`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `partenariat` (
   `agriculteur_id` int DEFAULT NULL,
-  `concessionaire_id` int DEFAULT NULL,
+  `concessionnaire_id` int DEFAULT NULL,
   KEY `agriculteur_id` (`agriculteur_id`),
-  KEY `concessionaire_id` (`concessionaire_id`),
+  KEY `concessionnaire_id` (`concessionnaire_id`),
   CONSTRAINT `partenariat_ibfk_1` FOREIGN KEY (`agriculteur_id`) REFERENCES `agriculteur` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionaire_id`) REFERENCES `concessionaire` (`id`) ON DELETE CASCADE
+  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionnaire_id`) REFERENCES `concessionnaire` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
