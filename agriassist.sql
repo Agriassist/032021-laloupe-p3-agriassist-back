@@ -24,13 +24,14 @@ DROP TABLE IF EXISTS `administrateur`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `administrateur` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `lastname` varchar(100) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `lastname` varchar(100) NOT NULL,
   `mail` varchar(100) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
   `phone` varchar(10) DEFAULT NULL,
   `picture_profile` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -54,11 +55,15 @@ CREATE TABLE `agriculteur` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `lastname` varchar(100) DEFAULT NULL,
-  `identifiant` varchar(100) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `identifiant` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `phone` varchar(10) DEFAULT NULL,
   `picture_profile` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `identifiant` (`identifiant`),
+  UNIQUE KEY `identifiant_2` (`identifiant`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -107,14 +112,16 @@ DROP TABLE IF EXISTS `concessionaire`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `concessionaire` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
   `identifiant` varchar(100) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
   `phone` varchar(10) DEFAULT NULL,
   `address` varchar(100) NOT NULL,
   `brands_followed` varchar(100) NOT NULL,
   `picture_logo` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -292,4 +299,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-03 10:08:48
+-- Dump completed on 2021-06-09 15:41:36
