@@ -105,3 +105,5 @@ dist
 
 # base de données
 agriassist.sql
+# package-lock
+package-lock.json
