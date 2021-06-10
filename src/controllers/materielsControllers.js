@@ -33,8 +33,8 @@ const getOneMaterielById = (req, res) => {
 };
 
 const createOneMateriel = (req, res, next) => {
-  const { year, serial_number } = req.body;
-  createOne({ year, serial_number })
+  const { year, serial_number, type } = req.body;
+  createOne({ year, serial_number, type })
     .then(([results]) => {
       req.materielId = results.insertId;
       next();
