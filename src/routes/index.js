@@ -1,5 +1,5 @@
 const mainRouter = require('express').Router();
-const concessionnairesRoutes = require('./concessionnaires.routes');
+const agriculteursRoutes = require('./aggriRoutes');
 
 mainRouter.use('/concessionnaires', concessionnairesRoutes);
 
