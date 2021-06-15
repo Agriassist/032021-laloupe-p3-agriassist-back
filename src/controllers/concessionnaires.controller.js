@@ -1,14 +1,27 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/concessionnaire.model');
+const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByAgriculteurId } = require('../models/concessionnaire.model');
 
 const getAllConcessionnaires = (req, res) => {
-  findMany()
-    .then((results) => {
-      const concessionnaires = results[0];
-      res.json(concessionnaires);
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+  const id = req.params.agriId;
+
+  if (id) {
+    findManyByAgriculteurId(id)
+      .then((results) => {
+        const concessionnaire = results[0];
+        res.json(concessionnaire);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  } else {
+    findMany()
+      .then((results) => {
+        const concessionnaire = results[0];
+        res.json(concessionnaire);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
 };
 
 const getOneConcessionnaireById = (req, res) => {

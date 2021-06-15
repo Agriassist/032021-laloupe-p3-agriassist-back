@@ -30,6 +30,13 @@ const findManyByConcessionaireId = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
+const findManyByMaterielId = (id) => {
+  const sql =
+    'SELECT a.id, a.name, a.lastname, a.identifiant, a.phone, a.picture_profile, a.email FROM materiel m JOIN park p ON m.id = p.materiel_id JOIN agriculteur a ON a.id = p.agriculteur_id WHERE m.id = ?';
+  return connection.promise().query(sql, [id]);
+};
+
+
 module.exports = {
   findMany,
   findOneById,
@@ -37,4 +44,5 @@ module.exports = {
   updateOne,
   deleteOne,
   findManyByConcessionaireId,
+  findManyByMaterielId,
 };

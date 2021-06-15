@@ -2,7 +2,7 @@ const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../m
 
 const getAllPartenariats = (req, res) => {
   findMany()
-    .then(([results]) => {
+    .then((results) => {
       const partenariat = results[0];
       res.json(partenariat);
     })
