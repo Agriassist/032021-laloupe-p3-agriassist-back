@@ -7,6 +7,7 @@ const {
   createOneMateriel,
   updateOneMateriel,
   deleteOneMateriel,
+  AllMaterielsByAgriculteurId,
 } = require('../controllers/materielsControllers');
 
 materielRouter.get('/', getAllMateriels);
@@ -17,5 +18,7 @@ materielRouter.delete('/:id', deleteOneMateriel);
 
 materielRouter.use('/modele', modelesRoutes);
 materielRouter.use('/carnet_entretien', carnetRoutes);
+
+materielRouter.use('/:id/materiel', AllMaterielsByAgriculteurId);
 
 module.exports = materielRouter;
