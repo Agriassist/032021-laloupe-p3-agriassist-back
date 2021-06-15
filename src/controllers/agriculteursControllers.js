@@ -1,4 +1,4 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/agriculteurModel');
+const { findMany, findOneById, createOne, updateOne, deleteOne, findAllAgriculteursByConcessionnaireId } = require('../models/agriculteurModel');
 
 const getAllAgriculteurs = (req, res) => {
   findMany()
@@ -34,11 +34,11 @@ const getOneAgriculteurById = (req, res) => {
 
 const createOneAgriculteur = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
-  const { name, lastname, identifiant, password, phone, picture_profile } = req.body;
+  const { name, lastname, identifiant, password, phone, picture_profile, mail } = req.body;
 
-  createOne({ name, lastname, identifiant, password, phone, picture_profile })
+  createOne({ name, lastname, identifiant, password, phone, picture_profile, mail })
     .then(([results]) => {
-      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile });
+      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile, mail });
       req.agriId = results.insertId;
       next();
     })
