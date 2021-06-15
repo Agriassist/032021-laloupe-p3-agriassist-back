@@ -1,4 +1,4 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/materielsModels');
+const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByAgriculteurId } = require('../models/materielsModels');
 
 const getAllMateriels = (req, res) => {
   findMany()
@@ -33,8 +33,8 @@ const getOneMaterielById = (req, res) => {
 };
 
 const createOneMateriel = (req, res, next) => {
-  const { year, serial_number } = req.body;
-  createOne({ year, serial_number })
+  const { year, serial_number, type } = req.body;
+  createOne({ year, serial_number, type })
     .then(([results]) => {
       req.materielId = results.insertId;
       next();
@@ -72,10 +72,25 @@ const deleteOneMateriel = (req, res) => {
     });
 };
 
+const AllMaterielsByAgriculteurId = (res, req) => {
+  findManyByAgriculteurId(req.params.id)
+    .then(([results]) => {
+      if (results.length === 0) {
+        res.status(404).send('Park not found');
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
 module.exports = {
   getAllMateriels,
   getOneMaterielById,
   createOneMateriel,
   updateOneMateriel,
   deleteOneMateriel,
+  AllMaterielsByAgriculteurId,
 };

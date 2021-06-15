@@ -9,8 +9,7 @@ const {
 } = require('../controllers/partenariat.controller');
 
 partenariatRouter.get('/', getAllPartenariats);
-partenariatRouter.get('/:id', getOnePartenariatById);
-partenariatRouter.post('/', createOnePartenariat, getOnePartenariatById);
+partenariatRouter.post('/', createOnePartenariat);
 partenariatRouter.put('/:id', updateOnePartenariat, getOnePartenariatById);
 partenariatRouter.delete('/:id', deleteOnePartenariat);
 

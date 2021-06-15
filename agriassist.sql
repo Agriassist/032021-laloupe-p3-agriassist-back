@@ -274,11 +274,11 @@ DROP TABLE IF EXISTS `partenariat`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `partenariat` (
   `agriculteur_id` int DEFAULT NULL,
-  `concessionaire_id` int DEFAULT NULL,
+  `concessionnaire_id` int DEFAULT NULL,
   KEY `agriculteur_id` (`agriculteur_id`),
-  KEY `concessionaire_id` (`concessionaire_id`),
+  KEY `concessionnaire_id` (`concessionnaire_id`),
   CONSTRAINT `partenariat_ibfk_1` FOREIGN KEY (`agriculteur_id`) REFERENCES `agriculteur` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionaire_id`) REFERENCES `concessionaire` (`id`) ON DELETE CASCADE
+  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionnaire_id`) REFERENCES `concessionnaire` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

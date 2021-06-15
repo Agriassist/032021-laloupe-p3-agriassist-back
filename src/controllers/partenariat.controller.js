@@ -33,11 +33,10 @@ const getOnePartenariatById = (req, res) => {
 };
 
 const createOnePartenariat = (req, res, next) => {
-  const { agriculteur_id, concessionaire_id } = req.body;
-  createOne({ agriculteur_id, concessionaire_id })
+  const { agriculteur_id, concessionnaire_id } = req.body;
+  createOne({ agriculteur_id, concessionnaire_id })
     .then(([results]) => {
-      req.partId = results.insertId;
-      next();
+      res.status(201).send('Partenariat Ok !!!!!');
     })
     .catch((err) => {
       res.status(500).send(err.message);
