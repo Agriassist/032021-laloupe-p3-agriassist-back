@@ -1,14 +1,12 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByConcessionaireId } = require('../models/agriculteurModel');
+const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
 
-const getAllAgriculteurs = (req, res) => {
-  console.log(req.params.id);
-  const id = req.params.consId;
-
+const getAllAMaterielByAgriculteurId = (req, res) => {
+  const { id } = req.params.id;
   if (id) {
     findManyByConcessionaireId(id)
       .then((results) => {
-        const agriculteurs = results[0];
-        res.json(agriculteurs);
+        const materiel = results[0];
+        res.json(materiel);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -16,8 +14,8 @@ const getAllAgriculteurs = (req, res) => {
   } else {
     findMany()
       .then((results) => {
-        const agriculteurs = results[0];
-        res.json(agriculteurs);
+        const mate = results[0];
+        res.json(mate);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -25,7 +23,7 @@ const getAllAgriculteurs = (req, res) => {
   }
 };
 
-const getOneAgriculteurById = (req, res) => {
+const getOneMaterielByAgriculteurId = (req, res) => {
   let id;
   if (req.agriId) {
     id = req.agriId;
@@ -34,11 +32,11 @@ const getOneAgriculteurById = (req, res) => {
   }
 
   findOneById(id)
-    .then(([agriculteurs]) => {
-      if (agriculteurs.length === 0) {
-        res.status(404).send('Agriculteur not found');
+    .then(([materiel]) => {
+      if (materiel.length === 0) {
+        res.status(404).send('Materiel not found');
       } else {
-        res.json(agriculteurs[0]);
+        res.json(materiel[0]);
       }
     })
     .catch((err) => {
@@ -46,11 +44,11 @@ const getOneAgriculteurById = (req, res) => {
     });
 };
 
-const createOneAgriculteur = (req, res, next) => {
+const createOneMaterielByAgriculteurId = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
-  const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+  const { agriculteur_id, materiel_id } = req.body;
 
-  createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
+  createOne({ agriculteur_id, materiel_id })
     .then(([results]) => {
       // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile });
       req.agriId = results.insertId;
@@ -61,12 +59,12 @@ const createOneAgriculteur = (req, res, next) => {
     });
 };
 
-const updateOneAgriculteur = (req, res, next) => {
+const updateOneMaterielByAgriculteurById = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   updateOne(req.body, req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
-        res.status(404).send('Agriculteur not found');
+        res.status(404).send('Materiel not found');
       } else {
         next();
       }
@@ -76,11 +74,11 @@ const updateOneAgriculteur = (req, res, next) => {
     });
 };
 
-const deleteOneAgriculteur = (req, res) => {
+const deleteOneMaterielByAgriculteurId = (req, res) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
-        res.status(404).send('Agriculteur not found');
+        res.status(404).send('Materiel not found');
       } else {
         res.sendStatus(204);
       }
@@ -89,20 +87,11 @@ const deleteOneAgriculteur = (req, res) => {
       res.status(500).send(err.message);
     });
 };
-// const getAllAgriculteursByConcessionnaireId = (req, res) => {
-//   const { id } = req.params.id;
-//   findManyByConcessionaireId()
-//     .then(() => {})
-//     .catch((err) => {
-//       res.status(500).send(err.message);
-//     });
-// };
 
 module.exports = {
-  getAllAgriculteurs,
-  getOneAgriculteurById,
-  createOneAgriculteur,
-  updateOneAgriculteur,
-  deleteOneAgriculteur,
-  // getAllAgriculteursByConcessionnaireId,
+  getAllAMaterielByAgriculteurId,
+  getOneMaterielByAgriculteurId,
+  createOneMaterielByAgriculteurId,
+  updateOneMaterielByAgriculteurById,
+  deleteOneMaterielByAgriculteurId,
 };

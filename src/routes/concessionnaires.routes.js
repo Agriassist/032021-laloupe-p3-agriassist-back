@@ -14,6 +14,6 @@ concRouter.post('/', createOneConcessionnaire, getOneConcessionnaireById);
 concRouter.put('/:id', updateOneConcessionnaire, getOneConcessionnaireById);
 concRouter.delete('/:id', deleteOneConcessionnaire);
 
-concRouter.use('/:id/agriculteurs', agriculteursRoutes);
+concRouter.use('/:consId/agriculteurs', agriculteursRoutes);
 
 module.exports = concRouter;
