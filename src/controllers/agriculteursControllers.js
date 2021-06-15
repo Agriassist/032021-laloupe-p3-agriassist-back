@@ -52,7 +52,7 @@ const createOneAgriculteur = (req, res, next) => {
 
   createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
     .then(([results]) => {
-      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile });
+      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile, mail });
       req.agriId = results.insertId;
       next();
     })
