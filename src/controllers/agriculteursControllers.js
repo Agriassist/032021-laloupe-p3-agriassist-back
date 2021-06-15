@@ -1,11 +1,21 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByConcessionaireId } = require('../models/agriculteurModel');
+const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByConcessionaireId, findManyByMaterielId } = require('../models/agriculteurModel');
 
 const getAllAgriculteurs = (req, res) => {
-  console.log(req.params.id);
   const id = req.params.consId;
+  const materId = req.params.materId;
 
   if (id) {
     findManyByConcessionaireId(id)
+      .then((results) => {
+        const agriculteurs = results[0];
+        res.json(agriculteurs);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  } else if (materId)
+  {
+    findManyByMaterielId(materid)
       .then((results) => {
         const agriculteurs = results[0];
         res.json(agriculteurs);
@@ -52,7 +62,7 @@ const createOneAgriculteur = (req, res, next) => {
 
   createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
     .then(([results]) => {
-      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile, mail });
+      res.status(201);
       req.agriId = results.insertId;
       next();
     })
@@ -89,14 +99,6 @@ const deleteOneAgriculteur = (req, res) => {
       res.status(500).send(err.message);
     });
 };
-// const getAllAgriculteursByConcessionnaireId = (req, res) => {
-//   const { id } = req.params.id;
-//   findManyByConcessionaireId()
-//     .then(() => {})
-//     .catch((err) => {
-//       res.status(500).send(err.message);
-//     });
-// };
 
 module.exports = {
   getAllAgriculteurs,
@@ -104,5 +106,4 @@ module.exports = {
   createOneAgriculteur,
   updateOneAgriculteur,
   deleteOneAgriculteur,
-  // getAllAgriculteursByConcessionnaireId,
 };
