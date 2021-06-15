@@ -64,7 +64,7 @@ CREATE TABLE `agriculteur` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `identifiant` (`identifiant`),
   UNIQUE KEY `identifiant_2` (`identifiant`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,6 +73,7 @@ CREATE TABLE `agriculteur` (
 
 LOCK TABLES `agriculteur` WRITE;
 /*!40000 ALTER TABLE `agriculteur` DISABLE KEYS */;
+INSERT INTO `agriculteur` VALUES (1,'Axel','Chapellier','123456789','123456','0102032829','main.pdf','agri@outlook.com');
 /*!40000 ALTER TABLE `agriculteur` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,6 +133,38 @@ CREATE TABLE `concessionaire` (
 LOCK TABLES `concessionaire` WRITE;
 /*!40000 ALTER TABLE `concessionaire` DISABLE KEYS */;
 /*!40000 ALTER TABLE `concessionaire` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `concessionnaire`
+--
+
+DROP TABLE IF EXISTS `concessionnaire`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `concessionnaire` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `identifiant` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `address` varchar(100) NOT NULL,
+  `brands_followed` varchar(100) NOT NULL,
+  `picture_logo` varchar(100) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `concessionnaire`
+--
+
+LOCK TABLES `concessionnaire` WRITE;
+/*!40000 ALTER TABLE `concessionnaire` DISABLE KEYS */;
+INSERT INTO `concessionnaire` VALUES (1,'Thomas','123456','123','0102030405','20 rue Max Louis','Renault','main.pdf','wild@outlook.com');
+/*!40000 ALTER TABLE `concessionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -288,6 +321,7 @@ CREATE TABLE `partenariat` (
 
 LOCK TABLES `partenariat` WRITE;
 /*!40000 ALTER TABLE `partenariat` DISABLE KEYS */;
+INSERT INTO `partenariat` VALUES (1,1);
 /*!40000 ALTER TABLE `partenariat` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -300,4 +334,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-10 15:31:58
+-- Dump completed on 2021-06-15 12:04:50
