@@ -75,19 +75,19 @@ const createOneAgriculteur = (req, res, next) => {
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(255).required(),
+          name: Joi.string().max(100).required(),
 
-          lastname: Joi.string().max(255).required(),
+          lastname: Joi.string().max(100).required(),
 
-          identifiant: Joi.string().max(255).required(),
+          identifiant: Joi.string().max(100),
 
-          password: Joi.string().min(8).max(255).required(),
+          password: Joi.string().min(8).max(150).required(),
 
           phone: Joi.string().max(10).required(),
 
-          picture_profile: Joi.string().max(100).required(),
+          picture_profile: Joi.string().max(100),
 
-          email: Joi.string().email().max(255).required(),
+          email: Joi.string().email().max(100).required(),
         }).validate({ name, lastname, identifiant, password, phone, picture_profile, email }, { abortEarly: false }).error;
 
         if (validationErrors) {
