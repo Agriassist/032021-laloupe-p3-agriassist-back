@@ -1,14 +1,27 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/materielsModels');
+const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByAgriculteurId } = require('../models/materielsModels');
 
 const getAllMateriels = (req, res) => {
-  findMany()
-    .then(([results]) => {
-      const materiels = results[0];
-      res.json(materiels);
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+    const id = req.params.agriId;
+
+    if (id) {
+      findManyByAgriculteurId(id)
+        .then((results) => {
+          const agriculteur = results[0];
+          res.json(agriculteur);
+        })
+        .catch((err) => {
+          res.status(500).send(err.message);
+        });
+    } else {
+      findMany()
+        .then((results) => {
+          const agriculteur = results[0];
+          res.json(agriculteur);
+        })
+        .catch((err) => {
+          res.status(500).send(err.message);
+        });
+    }
 };
 
 const getOneMaterielById = (req, res) => {
@@ -72,10 +85,25 @@ const deleteOneMateriel = (req, res) => {
     });
 };
 
+const AllMaterielsByAgriculteurId = (res, req) => {
+  findManyByAgriculteurId(req.params.id)
+    .then(([results]) => {
+      if (results.length === 0) {
+        res.status(404).send('Park not found');
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
 module.exports = {
   getAllMateriels,
   getOneMaterielById,
   createOneMateriel,
   updateOneMateriel,
   deleteOneMateriel,
+  AllMaterielsByAgriculteurId,
 };

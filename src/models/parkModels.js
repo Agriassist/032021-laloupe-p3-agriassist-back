@@ -25,16 +25,10 @@ const deleteOne = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
-const findManyByAgriculteurId = (id) => {
-  const sql =
-    'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM agriculteur a JOIN park p ON a.id = p.agriculteur_id JOIN materiel a ON m.id = p.materiel_id WHERE a.id = ?';
-  return connection.promise().query(sql, [id]);
-};
 module.exports = {
   findMany,
   findOneById,
   createOne,
   updateOne,
   deleteOne,
-  findManyByAgriculteurId,
 };
