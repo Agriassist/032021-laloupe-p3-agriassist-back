@@ -33,8 +33,8 @@ const getOneCarnetById = (req, res) => {
 };
 
 const createOneCarnet = (req, res, next) => {
-  const { oil, use_times } = req.body;
-  createOne({ oil, use_times })
+  const { oil, use_times, materiel_id } = req.body;
+  createOne({ oil, use_times, materiel_id })
     .then(([results]) => {
       req.carnetId = results.insertId;
       next();

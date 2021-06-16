@@ -15,6 +15,7 @@ const createOne = (marque) => {
   return connection.promise().query(sql, [marque]);
 };
 
+
 const updateOne = (marque, id) => {
   const sql = 'UPDATE marque SET ? WHERE id=?';
   return connection.promise().query(sql, [marque, id]);

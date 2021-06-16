@@ -33,8 +33,8 @@ const getOneFicheById = (req, res) => {
 };
 
 const createOneFiche = (req, res, next) => {
-  const { name, file } = req.body;
-  createOne({ name, file })
+  const { name, file, modele_id } = req.body;
+  createOne({ name, file, modele_id })
     .then(([results]) => {
       req.ficheId = results.insertId;
       next();
