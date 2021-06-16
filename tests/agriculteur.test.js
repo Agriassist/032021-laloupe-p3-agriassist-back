@@ -10,13 +10,13 @@ beforeAll(async () => {
 });
 
 const agriculteur = {
-  name: 'varchar(100) DEFAULT NULL',
-  lastname: 'varchar(100) DEFAULT NULL',
-  identifiant: 'varchar(255) NOT NULL',
-  password: 'varchar(255) NOT NULL',
-  phone: 'varch(1',
-  picture_profile: 'varchar(100) NOT NULL',
-  email: 'tesrt@gmail.com',
+  name: 'varchar(100) NOT NULL',
+  lastname: 'varchar(100) NOT NULL',
+  identifiant: 'varchar(100) DEFAULT NULL',
+  password: 'varchar(150) NOT NULL',
+  phone: 'varch(10)',
+  picture_profile: 'varchar(100) DEFAULT NULL',
+  email: 'test@gmail.com',
 };
 
 describe('consoles routes', () => {
@@ -30,5 +30,19 @@ describe('consoles routes', () => {
   it('POSTs /api/agriculteurs shoul return status 200 and an empty array', async () => {
     const response = await request(server).post('/api/agriculteurs').send(agriculteur).expect(201);
     expect(response.body.id).toEqual(1);
+  });
+});
+
+describe('consoles routes', () => {
+  it('PUTs /api/agriculteurs shoul return status 200 and an empty array', async () => {
+    const response = await request(server).put('/api/agriculteurs/:id').send(agriculteur).expect(201);
+    expect(response.body.id).toEqual(1);
+  });
+});
+
+describe('consoles routes', () => {
+  it('DELETEs /api/agriculteurs shoul return status 200 and an empty array', async () => {
+    const response = await request(server).delete('/api/agriculteurs/:id').expect(500);
+    expect(response.body.id).toEqual(0);
   });
 });

@@ -3,13 +3,13 @@ const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData }
 
 const getAllAdministrateurs = (req, res) => {
   findMany()
-  .then((results) => {
-    const administrateurs = results[0];
-    res.json(administrateurs);
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
+    .then((results) => {
+      const administrateurs = results[0];
+      res.json(administrateurs);
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 const getOneAdministrateurById = (req, res) => {
@@ -21,16 +21,16 @@ const getOneAdministrateurById = (req, res) => {
   }
 
   findOneById(id)
-  .then(([administrateurs]) => {
-    if (administrateurs.length === 0) {
-      res.status(404).send('Administrateur not found');
-    } else {
-      res.json(administrateurs[0]);
-    }
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
+    .then(([administrateurs]) => {
+      if (administrateurs.length === 0) {
+        res.status(404).send('Administrateur not found');
+      } else {
+        res.json(administrateurs[0]);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 const createOneAdministrateur = (req, res, next) => {
@@ -53,8 +53,8 @@ const createOneAdministrateur = (req, res, next) => {
           phone: Joi.string().max(10).require(),
 
           picture_profile: Joi.string().max(100),
-        }).validate({name, lastname, mail, password, phone, picture_profile}, {abortEarly: false}).error;
-      
+        }).validate({ name, lastname, mail, password, phone, picture_profile }, { abortEarly: false }).error;
+
         if (validationErrors) {
           res.send('Data enter is invalid');
         } else {
@@ -65,14 +65,15 @@ const createOneAdministrateur = (req, res, next) => {
             })
             .catch((err) => {
               res.status(500).send(err.message);
-            })
-          }
-}
-}).catch((err) => {
-  res.status(500).send(err.message);
-})
-}
-  
+            });
+        }
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
 const updateOneAdministrateur = (req, res, next) => {
   const { name, lastname, mail, password, phone, picture_profile } = req.body;
   verifExistData(mail, phone)
@@ -91,8 +92,8 @@ const updateOneAdministrateur = (req, res, next) => {
           phone: Joi.string().max(10).required(),
 
           picture_profile: Joi.string().max(100),
-        }).validate({name, lastname, mail, password, phone, picture_profile}, {abortEarly: false}).error;
-      
+        }).validate({ name, lastname, mail, password, phone, picture_profile }, { abortEarly: false }).error;
+
         if (validationErrors) {
           res.send('Data enter is invalid');
         } else {
@@ -106,28 +107,29 @@ const updateOneAdministrateur = (req, res, next) => {
             })
             .catch((err) => {
               res.status(500).send(err.message);
-            })
-          }
+            });
+        }
       } else {
         res.send('Administrateur data already exist');
-}
-}).catch((err) => {
-  res.status(500).send(err.message);
-})
-}
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
 
 const deleteOneAdministrateur = (req, res) => {
   deleteOne(req.params.id)
-  .then(([results]) => {
-    if (results.affectedRows === 0) {
-      res.status(404).send('Administrateur not found');
-    } else {
-      res.sendStatus(204);
-    }
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
+    .then(([results]) => {
+      if (results.affectedRows === 0) {
+        res.status(404).send('Administrateur not found');
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 module.exports = {
