@@ -1,13 +1,10 @@
 const materielRouter = require('express').Router();
-const modelesRoutes = require('./modeleRoutes');
-const carnetRoutes = require('./carnet_entretien.routes');
 const {
   getAllMateriels,
   getOneMaterielById,
   createOneMateriel,
   updateOneMateriel,
   deleteOneMateriel,
-  AllMaterielsByAgriculteurId,
 } = require('../controllers/materielsControllers');
 
 materielRouter.get('/', getAllMateriels);
@@ -16,9 +13,13 @@ materielRouter.post('/', createOneMateriel, getOneMaterielById);
 materielRouter.put('/:id', updateOneMateriel, getOneMaterielById);
 materielRouter.delete('/:id', deleteOneMateriel);
 
-materielRouter.use('/modele', modelesRoutes);
-materielRouter.use('/carnet_entretien', carnetRoutes);
+const { getAllAgriculteurs } = require('../controllers/agriculteursControllers');
+materielRouter.get('/:agriId/materiels', getAllAgriculteurs);
 
-materielRouter.use('/:id/materiel', AllMaterielsByAgriculteurId);
+const modelesRoutes = require('./modeleRoutes');
+materielRouter.use('/modele', modelesRoutes);
+
+const carnetRoutes = require('./carnet_entretien.routes');
+materielRouter.use('/carnet_entretien', carnetRoutes);
 
 module.exports = materielRouter;
