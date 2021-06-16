@@ -68,6 +68,7 @@ const getOneAgriculteurById = (req, res) => {
 const createOneAgriculteur = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+ 
   verifExistData(email, identifiant, phone)
     .then(([results]) => {
       if (results[0]) {
@@ -142,7 +143,7 @@ const updateOneAgriculteur = (req, res, next) => {
           updateOne(req.body, req.params.id)
             .then(([results]) => {
               if (results.affectedRows === 0) {
-                res.status(404).send('Concessionnaire not found');
+                res.status(404).send('agriculteur not found');
               } else {
                 next();
               }
@@ -152,10 +153,9 @@ const updateOneAgriculteur = (req, res, next) => {
             });
         }
       } else {
-        res.send('Agriculteur data arleady exist');
+        res.send('Agriculteur data already exist');
       }
     })
-
     .catch((err) => {
       res.status(500).send(err.message);
     });
