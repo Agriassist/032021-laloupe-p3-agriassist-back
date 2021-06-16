@@ -71,7 +71,7 @@ const createOneAgriculteur = (req, res, next) => {
   verifExistData(email, identifiant, phone)
     .then(([results]) => {
       if (results[0]) {
-        res.send('Agriculteur data arleady exist');
+        res.send('Agriculteur data already exist');
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
