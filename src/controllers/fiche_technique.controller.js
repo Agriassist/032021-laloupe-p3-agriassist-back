@@ -1,4 +1,5 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/fiche_technique.model');
+const Joi = require('joi');
+const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/fiche_technique.model');
 
 const getAllFiche = (req, res) => {
   findMany()
@@ -34,29 +35,71 @@ const getOneFicheById = (req, res) => {
 
 const createOneFiche = (req, res, next) => {
   const { name, file } = req.body;
-  createOne({ name, file })
+  verifExistData(name, file)
     .then(([results]) => {
-      req.ficheId = results.insertId;
-      next();
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
-};
+      if (results[0]) {
+        res.send('Fiche data already exist');
+      } else {
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          name: Joi.string().max(100).require(),
+
+          file: Joi.string().max(100).require(),
+        }).validate({name, file}, {abortEarly: false}).error;
+
+        if (validationErrors) {
+          res.send('Fiche enter is invalid');
+        } else {
+          createOne({ name, file })
+            .then(([results]) => {
+              req.ficheId = results.insertId;
+              next();
+            })
+            .catch((err) => {
+                res.status(500).send(err.message);
+              })
+            }
+}
+}).catch((err) => {
+  res.status(500).send(err.message);
+})
+}
 
 const updateOneFiche = (req, res) => {
-  updateOne(req.body, req.params.id)
+  const { name, file } = req.body;
+  verifExistData(name, file)
     .then(([results]) => {
-      if (results.affectedRows === 0) {
-        res.status(404).send('fiche not found');
-      } else {
-        next();
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
-};
+      if (results[0]) {
+        res.send('Fiche data already exist');
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          name: Joi.string().max(100).require(),
+
+          file: Joi.string().max(100).require(),
+        }).validate({name, file}, {abortEarly: false}).error;
+
+        if (validationErrors) {
+          res.send('Fiche enter is invalid');
+        } else {
+          updateOne(req.body, req.params.id)
+            .then(([results]) => {
+              if (results.affectedRows === 0) {
+                res.status(404).send('fiche not found');
+              } else {
+                next();
+              }
+              })
+              .catch((err) => {
+               res.status(500).send(err.message);
+              })
+            }
+        } else {
+          res.send('Fiche data already exist');
+}
+}).catch((err) => {
+  res.status(500).send(err.message);
+})
+}
 
 const deleteOneFiche = (req, res) => {
   deleteOne(req.params.id)
