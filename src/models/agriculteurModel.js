@@ -15,6 +15,11 @@ const createOne = (agriculteur) => {
   return connection.promise().query(sql, [agriculteur]);
 };
 
+const verifExistData = (agriculteur, email, identifiant, phone) => {
+  const sql = 'SELECT * FROM agriculteur WHERE email = ? AND identifiant = ? AND phone = ?';
+  return connection.promise().query(sql, [agriculteur, email, identifiant, phone]);
+}
+
 const updateOne = (agriculteur, id) => {
   const sql = 'UPDATE agriculteur SET ? WHERE id=?';
   return connection.promise().query(sql, [agriculteur, id]);
@@ -41,6 +46,7 @@ module.exports = {
   findMany,
   findOneById,
   createOne,
+  verifExistData,
   updateOne,
   deleteOne,
   findManyByConcessionaireId,

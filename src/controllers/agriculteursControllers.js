@@ -7,6 +7,7 @@ const {
   deleteOne,
   findManyByConcessionaireId,
   findManyByMaterielId,
+  verifExistData,
 } = require('../models/agriculteurModel');
 
 const getAllAgriculteurs = (req, res) => {
@@ -67,34 +68,44 @@ const getOneAgriculteurById = (req, res) => {
 const createOneAgriculteur = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
-
-  createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
+  verifExistData(email, identifiant, phone)
     .then(([results]) => {
-      let validationErrors = null;
-      validationErrors = Joi.object({
-        name: Joi.string().max(255).required(),
-
-        lastname: Joi.string().max(255).required(),
-
-        identifiant: Joi.string().max(255).required(),
-
-        password: Joi.string().min(8).max(255).required(),
-
-        phone: Joi.string().max(10).required(),
-
-        picture_profile: Joi.string().max(100).required(),
-
-        email: Joi.string().email().max(255).required(),
-      }).validate({ name, lastname, identifiant, password, phone, picture_profile, email }, { abortEarly: false }).error;
-
-      if (validationErrors) {
-        res.send('Data enter is invalid');
+      if (results[0]) {
+        res.send('Agriculteur data arleady exist');
       } else {
-        // req.agriId = results.insertId;
-        req.agriId = results.insertId;
-        next();
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          name: Joi.string().max(255).required(),
+
+          lastname: Joi.string().max(255).required(),
+
+          identifiant: Joi.string().max(255).required(),
+
+          password: Joi.string().min(8).max(255).required(),
+
+          phone: Joi.string().max(10).required(),
+
+          picture_profile: Joi.string().max(100).required(),
+
+          email: Joi.string().email().max(255).required(),
+        }).validate({ name, lastname, identifiant, password, phone, picture_profile, email }, { abortEarly: false }).error;
+
+        if (validationErrors) {
+          console.log(validationErrors);
+          res.send('Data enter is invalid');
+        } else {
+          createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
+            .then(([results]) => {
+              req.agriId = results.insertId;
+              next();
+            })
+            .catch((err) => {
+              res.status(500).send(err.message);
+            });
+        }
       }
     })
+
     .catch((err) => {
       res.status(500).send(err.message);
     });
@@ -102,14 +113,49 @@ const createOneAgriculteur = (req, res, next) => {
 
 const updateOneAgriculteur = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
-  updateOne(req.body, req.params.id)
+  const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+
+  verifExistData(email, identifiant, phone)
     .then(([results]) => {
-      if (results.affectedRows === 0) {
-        res.status(404).send('Agriculteur not found');
+      if (results[0]) {
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          name: Joi.string().max(255),
+
+          lastname: Joi.string().max(255),
+
+          identifiant: Joi.string().max(255),
+
+          password: Joi.string().min(8).max(255),
+
+          phone: Joi.string().max(10),
+
+          picture_profile: Joi.string().max(100),
+
+          email: Joi.string().email().max(255),
+        }).validate({ name, lastname, identifiant, password, phone, picture_profile, email }, { abortEarly: false }).error;
+
+        if (validationErrors) {
+          console.log(validationErrors);
+          res.send('Data enter is invalid');
+        } else {
+          updateOne(req.body, req.params.id)
+            .then(([results]) => {
+              if (results.affectedRows === 0) {
+                res.status(404).send('Concessionnaire not found');
+              } else {
+                next();
+              }
+            })
+            .catch((err) => {
+              res.status(500).send(err.message);
+            });
+        }
       } else {
-        next();
+        res.send('Agriculteur data arleady exist');
       }
     })
+
     .catch((err) => {
       res.status(500).send(err.message);
     });
