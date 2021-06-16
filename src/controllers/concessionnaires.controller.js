@@ -46,8 +46,8 @@ const getOneConcessionnaireById = (req, res) => {
 };
 
 const createOneConcessionnaire = (req, res, next) => {
-  const { name, identifiant, password, phone, address, brands_followed, picture_logo, email } = req.body;
-  createOne({ name, identifiant, password, phone, address, brands_followed, picture_logo, email })
+  const { name, identifiant, password, phone, address, picture_logo, email } = req.body;
+  createOne({ name, identifiant, password, phone, address, picture_logo, email })
     .then(([results]) => {
       req.concId = results.insertId;
       next();
