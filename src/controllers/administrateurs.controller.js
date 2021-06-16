@@ -1,4 +1,5 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/administrateur.model');
+const Joi = require('joi');
+const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/administrateur.model');
 
 const getAllAdministrateurs = (req, res) => {
   findMany()
@@ -34,29 +35,86 @@ const getOneAdministrateurById = (req, res) => {
 
 const createOneAdministrateur = (req, res, next) => {
   const { name, lastname, mail, password, phone, picture_profile } = req.body;
-  createOne({ name, lastname, mail, password, phone, picture_profile })
-  .then(([results]) => {
-    req.adminId = results.insertId;
-    next();
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
-};
+  verifExistData(mail, phone)
+    .then(([results]) => {
+      if (results[0]) {
+        res.send('Administrateur data already exist');
+      } else {
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          name: Joi.string().max(100).require(),
 
+          lastname: Joi.string().max(100).require(),
+
+          mail: Joi.string().email().max(100).require(),
+
+          password: Joi.string().max(100).require(),
+
+          phone: Joi.string().max(10).require(),
+
+          picture_profile: Joi.string().max(100),
+        }).validate({name, lastname, mail, password, phone, picture_profile}, {abortEarly: false}).error;
+      
+        if (validationErrors) {
+          res.send('Data enter is invalid');
+        } else {
+          createOne({ name, lastname, mail, password, phone, picture_profile })
+            .then(([results]) => {
+              req.adminId = results.insertId;
+              next();
+            })
+            .catch((err) => {
+              res.status(500).send(err.message);
+            })
+          }
+}
+}).catch((err) => {
+  res.status(500).send(err.message);
+})
+}
+  
 const updateOneAdministrateur = (req, res, next) => {
-  updateOne(req.body, req.params.id)
-  .then(([results]) => {
-    if (results.affectedRows === 0) {
-      res.status(404).send('Administrateur not found');
-    } else {
-      next();
-    }
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
-};
+  const { name, lastname, mail, password, phone, picture_profile } = req.body;
+  verifExistData(mail, phone)
+    .then(([results]) => {
+      if (results[0]) {
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          name: Joi.string().max(100).require(),
+
+          lastname: Joi.string().max(100).require(),
+
+          mail: Joi.string().email().max(100).required(),
+
+          password: Joi.string().max(100).required(),
+
+          phone: Joi.string().max(10).required(),
+
+          picture_profile: Joi.string().max(100),
+        }).validate({name, lastname, mail, password, phone, picture_profile}, {abortEarly: false}).error;
+      
+        if (validationErrors) {
+          res.send('Data enter is invalid');
+        } else {
+          updateOne(req.body, req.params.id)
+            .then(([results]) => {
+              if (results.affectedRows === 0) {
+                res.status(404).send('Mise à jour not found');
+              } else {
+                next();
+              }
+            })
+            .catch((err) => {
+              res.status(500).send(err.message);
+            })
+          }
+      } else {
+        res.send('Administrateur data already exist');
+}
+}).catch((err) => {
+  res.status(500).send(err.message);
+})
+}
 
 const deleteOneAdministrateur = (req, res) => {
   deleteOne(req.params.id)
