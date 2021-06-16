@@ -34,13 +34,8 @@ const getOneFicheById = (req, res) => {
 };
 
 const createOneFiche = (req, res, next) => {
-<<<<<<< HEAD
-  const { name, file } = req.body;
-  verifExistData(name, file)
-=======
   const { name, file, modele_id } = req.body;
   createOne({ name, file, modele_id })
->>>>>>> d4f95eb7a8573de4c2861f68ef97fbd5a930ea6d
     .then(([results]) => {
       if (results[0]) {
         res.send('Fiche data already exist');
