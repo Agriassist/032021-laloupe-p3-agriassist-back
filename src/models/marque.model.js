@@ -15,6 +15,10 @@ const createOne = (marque) => {
   return connection.promise().query(sql, [marque]);
 };
 
+const verifExistData = (marque, name) => {
+  const sql = 'SELECT * FROM marque WHERE name = ?';
+  return connection.promise().query(sql, [marque, name]);
+}
 
 const updateOne = (marque, id) => {
   const sql = 'UPDATE marque SET ? WHERE id=?';
@@ -32,4 +36,5 @@ module.exports = {
   createOne,
   updateOne,
   deleteOne,
+  verifExistData,
 };

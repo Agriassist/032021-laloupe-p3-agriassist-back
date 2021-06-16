@@ -68,26 +68,27 @@ const getOneAgriculteurById = (req, res) => {
 const createOneAgriculteur = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+ 
   verifExistData(email, identifiant, phone)
     .then(([results]) => {
       if (results[0]) {
-        res.send('Agriculteur data arleady exist');
+        res.send('Agriculteur data already exist');
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(255).required(),
+          name: Joi.string().max(100).required(),
 
-          lastname: Joi.string().max(255).required(),
+          lastname: Joi.string().max(100).required(),
 
-          identifiant: Joi.string().max(255).required(),
+          identifiant: Joi.string().max(100),
 
-          password: Joi.string().min(8).max(255).required(),
+          password: Joi.string().min(8).max(150).required(),
 
           phone: Joi.string().max(10).required(),
 
-          picture_profile: Joi.string().max(100).required(),
+          picture_profile: Joi.string().max(100),
 
-          email: Joi.string().email().max(255).required(),
+          email: Joi.string().email().max(100).required(),
         }).validate({ name, lastname, identifiant, password, phone, picture_profile, email }, { abortEarly: false }).error;
 
         if (validationErrors) {
@@ -142,7 +143,7 @@ const updateOneAgriculteur = (req, res, next) => {
           updateOne(req.body, req.params.id)
             .then(([results]) => {
               if (results.affectedRows === 0) {
-                res.status(404).send('Concessionnaire not found');
+                res.status(404).send('agriculteur not found');
               } else {
                 next();
               }
@@ -152,10 +153,9 @@ const updateOneAgriculteur = (req, res, next) => {
             });
         }
       } else {
-        res.send('Agriculteur data arleady exist');
+        res.send('Agriculteur data already exist');
       }
     })
-
     .catch((err) => {
       res.status(500).send(err.message);
     });

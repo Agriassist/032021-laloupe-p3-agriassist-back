@@ -15,6 +15,11 @@ const createOne = (carnet) => {
     return connection.promise().query(sql, [carnet]);
 };
 
+const verifExistData = (carnet, name, file) => {
+    const sql = 'SELECT * FROM fiche_technique WHERE name = ? AND file = ?';
+    return connection.promise().query(sql, [carnet, name, file]);
+}
+
 const updateOne = (carnet, id) => {
     const sql = 'UPDATE fiche_technique SET ? WHERE id=?';
     return connection.promise().query(sql, [carnet, id]);
@@ -31,4 +36,5 @@ module.exports = {
     createOne,
     updateOne,
     deleteOne,
+    verifExistData,
   };
