@@ -16,7 +16,7 @@ const createOne = (carnet) => {
 };
 
 const verifExistData = (oil, use_times, materiel_id) => {
-    const sql = 'SELECT * FROM carnet_entretien WHERE oil = ? AND use_times = ? AND materiel_id = ?';
+    const sql = 'SELECT * FROM carnet_entretien WHERE oil = ? Or use_times = ? OR materiel_id = ?';
     return connection.promise().query(sql, [oil, use_times, materiel_id]);
   };
 

@@ -16,7 +16,7 @@ const createOne = (agriculteur) => {
 };
 
 const verifExistData = (email, identifiant, phone) => {
-  const sql = 'SELECT * FROM agriculteur WHERE email = ? AND identifiant = ? AND phone = ?';
+  const sql = 'SELECT * FROM agriculteur WHERE email = ? OR identifiant = ? OR phone = ?';
   return connection.promise().query(sql, [email, identifiant, phone]);
 };
 
