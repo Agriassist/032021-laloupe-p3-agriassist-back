@@ -15,6 +15,11 @@ const createOne = (carnet) => {
     return connection.promise().query(sql, [carnet]);
 };
 
+const verifExistData = (oil, use_times, materiel_id) => {
+    const sql = 'SELECT * FROM carnet_entretien WHERE oil = ? AND use_times = ? AND materiel_id = ?';
+    return connection.promise().query(sql, [oil, use_times, materiel_id]);
+  };
+
 const updateOne = (carnet, id) => {
     const sql = 'UPDATE carnet_entretien SET ? WHERE id=?';
     return connection.promise().query(sql, [carnet, id]);
@@ -29,6 +34,7 @@ module.exports = {
     findMany,
     findOneById,
     createOne,
+    verifExistData,
     updateOne,
     deleteOne,
   };
