@@ -15,6 +15,11 @@ const createOne = (agriculteur) => {
   return connection.promise().query(sql, [agriculteur]);
 };
 
+const verifExistData = (agriculteur, email, identifiant, phone) => {
+  const sql = 'SELECT * FROM agriculteur WHERE email = ? AND identifiant = ? AND phone = ?';
+  return connection.promise().query(sql, [agriculteur, email, identifiant, phone]);
+}
+
 const updateOne = (agriculteur, id) => {
   const sql = 'UPDATE agriculteur SET ? WHERE id=?';
   return connection.promise().query(sql, [agriculteur, id]);
@@ -30,11 +35,20 @@ const findManyByConcessionaireId = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
+const findManyByMaterielId = (id) => {
+  const sql =
+    'SELECT a.id, a.name, a.lastname, a.identifiant, a.phone, a.picture_profile, a.email FROM materiel m JOIN park p ON m.id = p.materiel_id JOIN agriculteur a ON a.id = p.agriculteur_id WHERE m.id = ?';
+  return connection.promise().query(sql, [id]);
+};
+
+
 module.exports = {
   findMany,
   findOneById,
   createOne,
+  verifExistData,
   updateOne,
   deleteOne,
   findManyByConcessionaireId,
+  findManyByMaterielId,
 };
