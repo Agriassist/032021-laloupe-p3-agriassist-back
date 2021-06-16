@@ -2,7 +2,7 @@ const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../m
 
 const getAllPartenariats = (req, res) => {
   findMany()
-    .then(([results]) => {
+    .then((results) => {
       const partenariat = results[0];
       res.json(partenariat);
     })
@@ -32,10 +32,10 @@ const getOnePartenariatById = (req, res) => {
     });
 };
 
-const createOnePartenariat = (req, res, next) => {
+const createOnePartenariat = (req, res) => {
   const { agriculteur_id, concessionnaire_id } = req.body;
   createOne({ agriculteur_id, concessionnaire_id })
-    .then(([results]) => {
+    .then(([res]) => {
       res.status(201).send('Partenariat Ok !!!!!');
     })
     .catch((err) => {

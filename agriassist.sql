@@ -27,9 +27,9 @@ CREATE TABLE `administrateur` (
   `name` varchar(100) NOT NULL,
   `lastname` varchar(100) NOT NULL,
   `mail` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `phone` varchar(10) DEFAULT NULL,
-  `picture_profile` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `picture_profile` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -53,18 +53,18 @@ DROP TABLE IF EXISTS `agriculteur`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `agriculteur` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `lastname` varchar(100) DEFAULT NULL,
-  `identifiant` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `phone` varchar(10) DEFAULT NULL,
-  `picture_profile` varchar(100) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `lastname` varchar(100) NOT NULL,
+  `identifiant` varchar(100) DEFAULT NULL,
+  `password` varchar(150) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `picture_profile` varchar(100) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `identifiant` (`identifiant`),
   UNIQUE KEY `identifiant_2` (`identifiant`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `agriculteur` (
 
 LOCK TABLES `agriculteur` WRITE;
 /*!40000 ALTER TABLE `agriculteur` DISABLE KEYS */;
-INSERT INTO `agriculteur` VALUES (1,'Axel','Chapellier','123456789','123456','0102032829','main.pdf','agri@outlook.com');
+INSERT INTO `agriculteur` VALUES (1,'Axel','Chapellier','123456789','123456','0102032829','main.pdf','agri@outlook.com'),(2,'testname','testlasname','testidentifiant','test123456','0212131415','main.png','test@outlook.com'),(4,'Claire','Francigny','Claire28000','test123456789','0102030409','main.png','Claire@outlook.com'),(5,'Claire','Francigny','Axel28000','test','0102030241','main.png','Axel@outlook.com');
 /*!40000 ALTER TABLE `agriculteur` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,14 +144,13 @@ DROP TABLE IF EXISTS `concessionnaire`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `concessionnaire` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `identifiant` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `phone` varchar(10) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `identifiant` varchar(100) DEFAULT NULL,
+  `password` varchar(150) NOT NULL,
+  `phone` varchar(10) NOT NULL,
   `address` varchar(100) NOT NULL,
-  `brands_followed` varchar(100) NOT NULL,
   `picture_logo` varchar(100) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -163,7 +162,7 @@ CREATE TABLE `concessionnaire` (
 
 LOCK TABLES `concessionnaire` WRITE;
 /*!40000 ALTER TABLE `concessionnaire` DISABLE KEYS */;
-INSERT INTO `concessionnaire` VALUES (1,'Thomas','123456','123','0102030405','20 rue Max Louis','Renault','main.pdf','wild@outlook.com');
+INSERT INTO `concessionnaire` VALUES (1,'Thomas','123456','123','0102030405','20 rue Max Louis','main.pdf','wild@outlook.com');
 /*!40000 ALTER TABLE `concessionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,4 +333,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-15 12:04:50
+-- Dump completed on 2021-06-16 10:45:54

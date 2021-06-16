@@ -1,14 +1,27 @@
 const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByAgriculteurId } = require('../models/materielsModels');
 
 const getAllMateriels = (req, res) => {
-  findMany()
-    .then(([results]) => {
-      const materiels = results[0];
-      res.json(materiels);
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+    const id = req.params.agriId;
+
+    if (id) {
+      findManyByAgriculteurId(id)
+        .then((results) => {
+          const agriculteur = results[0];
+          res.json(agriculteur);
+        })
+        .catch((err) => {
+          res.status(500).send(err.message);
+        });
+    } else {
+      findMany()
+        .then((results) => {
+          const agriculteur = results[0];
+          res.json(agriculteur);
+        })
+        .catch((err) => {
+          res.status(500).send(err.message);
+        });
+    }
 };
 
 const getOneMaterielById = (req, res) => {

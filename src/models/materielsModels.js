@@ -27,7 +27,7 @@ const deleteOne = (id) => {
 
 const findManyByAgriculteurId = (id) => {
   const sql =
-    'SELECT a.id, a.name, a.lastname, a.identifiant, a.phone, a.picture_profile, a.email FROM aggriculteur a JOIN park p ON a.id = p.aggriculteur_id JOIN materiel a ON m.id = p.materiel_id WHERE m.id = ?';
+    'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM agriculteur a JOIN park p ON a.id = p.agriculteur_id JOIN materiel a ON m.id = p.materiel_id WHERE a.id = ?';
   return connection.promise().query(sql, [id]);
 };
 module.exports = {

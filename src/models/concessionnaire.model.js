@@ -24,6 +24,11 @@ const deleteOne = (id) => {
   const sql = 'DELETE FROM concessionnaire WHERE id=?';
   return connection.promise().query(sql, [id]);
 };
+const findManyByAgriculteurId = (id) => {
+  const sql =
+    'SELECT c.id, c.name, c.lastname, c.identifiant, c.phone, c.picture_logo, c.address, c.email FROM concessionnaire c JOIN partenariat p ON c.id = p.concessionaire_id JOIN agriculteur a ON a.id = p.agriculteur_id WHERE a.id = ?';
+  return connection.promise().query(sql, [id]);
+};
 
 module.exports = {
   findMany,
@@ -31,4 +36,5 @@ module.exports = {
   createOne,
   updateOne,
   deleteOne,
+  findManyByAgriculteurId,
 };
