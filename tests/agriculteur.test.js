@@ -27,7 +27,7 @@ describe('consoles routes', () => {
 });
 
 describe('consoles routes', () => {
-  it('GETs /api/agriculteurs shoul return status 200 and an empty array', async () => {
+  it('POSTs /api/agriculteurs shoul return status 200 and an empty array', async () => {
     const response = await request(server).post('/api/agriculteurs').send(agriculteur).expect(200);
     expect(response.body.id).toEqual(1);
   });

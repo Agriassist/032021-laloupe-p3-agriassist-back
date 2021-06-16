@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByConcessionaireId } = require('../models/agriculteurModel');
 
 const getAllAgriculteurs = (req, res) => {
@@ -52,9 +53,30 @@ const createOneAgriculteur = (req, res, next) => {
 
   createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
     .then(([results]) => {
-      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile, mail });
-      req.agriId = results.insertId;
-      next();
+      let validationErrors = null;
+      validationErrors = Joi.object({
+        name: Joi.string().max(255).required(),
+
+        lastname: Joi.string().max(255).required(),
+
+        identifiant: Joi.string().max(255).required(),
+
+        password: Joi.string().min(8).max(255).required(),
+
+        phone: Joi.string().max(10).required(),
+
+        picture_profile: Joi.string().max(100).required(),
+
+        email: Joi.string().email().max(255).required(),
+      }).validate({ name, lastname, identifiant, password, phone, picture_profile, email }, { abortEarly: false }).error;
+
+      if (validationErrors) {
+        res.send('Data enter is invalid');
+      } else {
+        // req.agriId = results.insertId;
+        req.agriId = results.insertId;
+        next();
+      }
     })
     .catch((err) => {
       res.status(500).send(err.message);
