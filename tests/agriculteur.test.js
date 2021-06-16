@@ -16,7 +16,7 @@ const agriculteur = {
   password: 'varchar(255) NOT NULL',
   phone: 'varch(1',
   picture_profile: 'varchar(100) NOT NULL',
-  email: 'tesrt',
+  email: 'tesrt@gmail.com',
 };
 
 describe('consoles routes', () => {

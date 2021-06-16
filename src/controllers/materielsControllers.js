@@ -1,27 +1,27 @@
 const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByAgriculteurId } = require('../models/materielsModels');
 
 const getAllMateriels = (req, res) => {
-    const id = req.params.agriId;
+  const id = req.params.agriId;
 
-    if (id) {
-      findManyByAgriculteurId(id)
-        .then((results) => {
-          const agriculteur = results[0];
-          res.json(agriculteur);
-        })
-        .catch((err) => {
-          res.status(500).send(err.message);
-        });
-    } else {
-      findMany()
-        .then((results) => {
-          const agriculteur = results[0];
-          res.json(agriculteur);
-        })
-        .catch((err) => {
-          res.status(500).send(err.message);
-        });
-    }
+  if (id) {
+    findManyByAgriculteurId(id)
+      .then((results) => {
+        const agriculteur = results[0];
+        res.json(agriculteur);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  } else {
+    findMany()
+      .then((results) => {
+        const agriculteur = results[0];
+        res.json(agriculteur);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
 };
 
 const getOneMaterielById = (req, res) => {
@@ -46,8 +46,8 @@ const getOneMaterielById = (req, res) => {
 };
 
 const createOneMateriel = (req, res, next) => {
-  const { year, serial_number, type } = req.body;
-  createOne({ year, serial_number, type })
+  const { year, serial_number, type, modele_id } = req.body;
+  createOne({ year, serial_number, type, modele_id })
     .then(([results]) => {
       req.materielId = results.insertId;
       next();

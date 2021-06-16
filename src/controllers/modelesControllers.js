@@ -33,8 +33,8 @@ const getOneModeleById = (req, res) => {
 };
 
 const createOneModele = (req, res, next) => {
-  const { name, picture } = req.body;
-  createOne({ name, picture })
+  const { name, picture, marque_id } = req.body;
+  createOne({ name, picture, marque_id })
     .then(([results]) => {
       req.modeleId = results.insertId;
       next();
