@@ -42,7 +42,9 @@ const createOneMarque = (req, res, next) => {
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
+
           name: Joi.string().max(100).required(),
+          
         }).validate({ name }, { abortEarly: false }).error;
 
         if (validationErrors) {
