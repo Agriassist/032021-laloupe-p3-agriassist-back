@@ -113,10 +113,10 @@ const createOneAgriculteur = (req, res, next) => {
 };
 
 const updateOneAgriculteur = (req, res, next) => {
-  // il faudrait vérifier que les données fournies dans la requête sont correctes
-  const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+  const {name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+  const { id } = req.params;
 
-  verifExistData(email, identifiant, phone)
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         let validationErrors = null;
@@ -140,7 +140,7 @@ const updateOneAgriculteur = (req, res, next) => {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          updateOne(req.body, req.params.id)
+          updateOne(req.body, id)
             .then(([results]) => {
               if (results.affectedRows === 0) {
                 res.status(404).send('agriculteur not found');

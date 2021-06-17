@@ -1,12 +1,12 @@
 const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
 
 const getAllAMaterielByAgriculteurId = (req, res) => {
-  const { id } = req.params.id;
+  const id = req.params.id;
   if (id) {
     findManyByConcessionaireId(id)
       .then((results) => {
-        const materiel = results[0];
-        res.json(materiel);
+        const park = results[0];
+        res.json(park);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -32,11 +32,11 @@ const getOneMaterielByAgriculteurId = (req, res) => {
   }
 
   findOneById(id)
-    .then(([materiel]) => {
-      if (materiel.length === 0) {
-        res.status(404).send('Materiel not found');
+    .then(([park]) => {
+      if (park.length === 0) {
+        res.status(404).send(id);
       } else {
-        res.json(materiel[0]);
+        res.json(park[0]);
       }
     })
     .catch((err) => {
@@ -45,13 +45,11 @@ const getOneMaterielByAgriculteurId = (req, res) => {
 };
 
 const createOneMaterielByAgriculteurId = (req, res, next) => {
-  // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { agriculteur_id, materiel_id } = req.body;
 
   createOne({ agriculteur_id, materiel_id })
-    .then(([results]) => {
-      // res.status(201).json({ id: results.insertId, name, lastname, identifiant, password, phone, picture_profile });
-      req.agriId = results.insertId;
+    .then(() => {
+      req.agriId = agriculteur_id;
       next();
     })
     .catch((err) => {
