@@ -1,15 +1,28 @@
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/materielsModels');
+const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData, findManyByMarqueId } = require('../models/modelesModels');
 
 const getAllModeles = (req, res) => {
-  findMany()
-    .then(([results]) => {
-      const modeles = results[0];
-      res.json(modeles);
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+  const modeleId = req.params.modeleId;
+
+  if (modeleId) {
+    findManyByMarqueId(modeleId)
+      .then((results) => {
+        const modeles = results[0];
+        res.json(modeles);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  } else {
+    findMany()
+      .then(([results]) => {
+        const modeles = results[0];
+        res.json(modeles);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
 };
 
 const getOneModeleById = (req, res) => {
@@ -45,15 +58,19 @@ const createOneModele = (req, res, next) => {
         validationErrors = Joi.object({
           name: Joi.string().max(255).required(),
 
-          picture: Joi.string().max(100).require(),
-        }).validate({ name, picture }, { abortEarly: false }).error;
+          picture: Joi.string().max(100).required(),
+
+          marque_id: Joi.number().integer().required(),
+        }).validate({ name, picture, marque_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
+          console.log(name, picture, marque_id);
           createOne({ name, picture, marque_id })
             .then(([results]) => {
+              console.log(results);
               req.modeleId = results.insertId;
               next();
             })
