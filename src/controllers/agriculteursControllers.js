@@ -161,7 +161,7 @@ const updateOneAgriculteur = (req, res, next) => {
     });
 };
 
-const deleteOneAgricultuer = (req, res) => {
+const deleteOneAgriculteur = (req, res) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {

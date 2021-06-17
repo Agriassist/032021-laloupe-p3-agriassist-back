@@ -16,8 +16,8 @@ const getAllMateriels = (req, res) => {
   } else {
     findMany()
       .then((results) => {
-        const agriculteur = results[0];
-        res.json(agriculteur);
+        const materiel = results[0];
+        res.json(materiel);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -28,7 +28,7 @@ const getAllMateriels = (req, res) => {
 const getOneMaterielById = (req, res) => {
   let id;
   if (req.materielId) {
-    id = req.materielsId;
+    id = req.materielId;
   } else {
     id = req.params.id;
   }
@@ -48,25 +48,25 @@ const getOneMaterielById = (req, res) => {
 
 const createOneMateriel = (req, res, next) => {
   const { year, serial_number, type, modele_id } = req.body;
-  verifExistData(serial_number)
-    .then(([results]) => {
-      if (results[0]) {
-        let validationErrors = null;
-        validationErrors = Joi.object({
-          year: Joi.number().min(1900).max(2021).require(),
+  // verifExistData(serial_number)
+  //   .then(([results]) => {
+  //     if (results[0]) {
+  //       let validationErrors = null;
+  //       validationErrors = Joi.object({
+  //         year: Joi.number().min(1900).max(2021).required(),
 
-          serial_number: Joi.number().integer(),
+  //         serial_number: Joi.n,
 
-          type: Joi.string().max(100).require(),
+  //         type: Joi.string().max(100).required(),
 
 
-          modele_id: Joi.number().intiger().
-        }).validate({ year, serial_number, type, modele_id }, { abortEarly: false }).error;
+  //         modele_id: Joi.number().integer(),
+  //       }).validate({ year, serial_number, type, modele_id }, { abortEarly: false }).error;
 
-        if (validationErrors) {
-          console.log(validationErrors);
-          res.send('Data enter is invalid');
-        } else {
+  //       if (validationErrors) {
+  //         console.log(validationErrors);
+  //         res.send('Data enter is invalid');
+  //       } else {
           createOne({ year, serial_number, type, modele_id })
             .then(([results]) => {
               req.materielId = results.insertId;
@@ -76,12 +76,12 @@ const createOneMateriel = (req, res, next) => {
               res.status(500).send(err.message);
             });
         }
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
-};
+//       }
+//     })
+//     .catch((err) => {
+//       res.status(500).send(err.message);
+//     });
+// };
 
 const updateOneMateriel = (req, res, next) => {
   const { year, serial_number, type, modele_id } = req.body;

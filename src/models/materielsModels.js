@@ -16,7 +16,7 @@ const createOne = (materiel) => {
 };
 
 const verifExistData = (serial_number) => {
-  const sql = 'SELECT * FROM materiel WHERE serial-number = ?';
+  const sql = 'SELECT * FROM materiel WHERE serial_number = ?';
   return connection.promise().query(sql, [serial_number]);
 };
 
@@ -32,7 +32,7 @@ const deleteOne = (id) => {
 
 const findManyByAgriculteurId = (id) => {
   const sql =
-    'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM agriculteur a JOIN park p ON a.id = p.agriculteur_id JOIN materiel a ON m.id = p.materiel_id WHERE a.id = ?';
+    'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM agriculteur a JOIN park p ON a.id = p.agriculteur_id JOIN materiel m ON m.id = p.materiel_id WHERE a.id = ?';
   return connection.promise().query(sql, [id]);
 };
 module.exports = {

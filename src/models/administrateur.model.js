@@ -19,11 +19,6 @@ const verifExistData = (mail, identifiant, phone) => {
   return connection.promise().query(sql, [mail, identifiant, phone]);
 };
 
-const verifExistData = (administrateur, email, phone) => {
-  const sql = 'SELECT * FROM administrateur WHERE mail = ? AND phone = ?';
-  return connection.promise().query(sql, [administrateur, email, phone]);
-}
-
 const updateOne = (administrateur, id) => {
   const sql = 'UPDATE administrateur SET ? WHERE id=?';
   return connection.promise().query(sql, [administrateur, id]);

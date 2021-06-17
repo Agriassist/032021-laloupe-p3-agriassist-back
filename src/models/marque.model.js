@@ -15,9 +15,9 @@ const createOne = (marque) => {
   return connection.promise().query(sql, [marque]);
 };
 
-const verifExistData = (marque, name) => {
+const verifExistData = (name) => {
   const sql = 'SELECT * FROM marque WHERE name = ?';
-  return connection.promise().query(sql, [marque, name]);
+  return connection.promise().query(sql, [name]);
 }
 
 const updateOne = (marque, id) => {
