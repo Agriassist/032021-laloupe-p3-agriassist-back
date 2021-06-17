@@ -3,13 +3,13 @@ const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData }
 
 const getAllMarques = (req, res) => {
   findMany()
-  .then((results) => {
-    const marques = results[0];
-    res.json(marques);
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
+    .then((results) => {
+      const marques = results[0];
+      res.json(marques);
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 const getOneMarqueById = (req, res) => {
@@ -21,16 +21,16 @@ const getOneMarqueById = (req, res) => {
   }
 
   findOneById(id)
-  .then(([marques]) => {
-    if (marques.length === 0) {
-      res.status(404).send('Marque not found');
-    } else {
-      res.json(marques[0]);
-    }
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
+    .then(([marques]) => {
+      if (marques.length === 0) {
+        res.status(404).send('Marque not found');
+      } else {
+        res.json(marques[0]);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 const createOneMarque = (req, res, next) => {
@@ -42,8 +42,8 @@ const createOneMarque = (req, res, next) => {
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(100).require(),
-        }).validate({name}, {abortEarly: false}).error;
+          name: Joi.string().max(100).required(),
+        }).validate({ name }, { abortEarly: false }).error;
 
         if (validationErrors) {
           res.send('Data enter is invalid');
@@ -55,60 +55,63 @@ const createOneMarque = (req, res, next) => {
             })
             .catch((err) => {
               res.status(500).send(err.message);
-            })
-          }
-}
-}).catch((err) => {
-  res.status(500).send(err.message);
-})
-}
+            });
+        }
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
 
 const updateOneMarque = (req, res, next) => {
-  const {name} =req.body;
+  const { name } = req.body;
+  const { id } = req.params;
 
-  verifExistData(name)
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(100).require(),
-        }).validate({name}, {abortEarly: false}).error;
+          name: Joi.string().max(100),
+        }).validate({ name }, { abortEarly: false }).error;
 
-      if (validationErrors) {
-        res.send('Data enter is invalid');
-      } else {
-        updateOne(req.body, req.params.id)
-          .then(([results]) => {
-            if (results.affectedRows === 0) {
-              res.status(404).send('Mise à jour not found');
-            } else {
-              next();
-            }
-          })
-          .catch((err) => {
-            res.status(500).send(err.message);
-          })
+        if (validationErrors) {
+          res.send('Data enter is invalid');
+        } else {
+          updateOne(req.body, id)
+            .then(([results]) => {
+              if (results.affectedRows === 0) {
+                res.status(404).send('Mise à echoue');
+              } else {
+                next();
+              }
+            })
+            .catch((err) => {
+              res.status(500).send(err.message);
+            });
         }
       } else {
-        res.send('Marque data already exist');
-}
-}).catch((err) => {
-  res.status(500).send(err.message);
-})
-}
+        res.status(404).send("Marque don't exist");
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
 
 const deleteOneMarque = (req, res) => {
   deleteOne(req.params.id)
-  .then(([results]) => {
-    if (results.affectedRows === 0) {
-      res.status(404).send('Marque not found');
-    } else {
-      res.sendStatus(204);
-    }
-  })
-  .catch((err) => {
-    res.status(500).send(err.message);
-  });
+    .then(([results]) => {
+      if (results.affectedRows === 0) {
+        res.status(404).send('Marque not found');
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 module.exports = {
