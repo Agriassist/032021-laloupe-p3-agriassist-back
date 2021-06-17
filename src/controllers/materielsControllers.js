@@ -59,7 +59,6 @@ const createOneMateriel = (req, res, next) => {
 
   //         type: Joi.string().max(100).required(),
 
-
   //         modele_id: Joi.number().integer(),
   //       }).validate({ year, serial_number, type, modele_id }, { abortEarly: false }).error;
 
@@ -67,15 +66,15 @@ const createOneMateriel = (req, res, next) => {
   //         console.log(validationErrors);
   //         res.send('Data enter is invalid');
   //       } else {
-          createOne({ year, serial_number, type, modele_id })
-            .then(([results]) => {
-              req.materielId = results.insertId;
-              next();
-            })
-            .catch((err) => {
-              res.status(500).send(err.message);
-            });
-        }
+  createOne({ year, serial_number, type, modele_id })
+    .then(([results]) => {
+      req.materielId = results.insertId;
+      next();
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
 //       }
 //     })
 //     .catch((err) => {
@@ -95,7 +94,7 @@ const updateOneMateriel = (req, res, next) => {
           serial_number: Joi.string().max(100),
 
           type: Joi.string().max(100),
-        }).validate({ year, serial_number, type}, { abortEarly: false }).error;
+        }).validate({ year, serial_number, type }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);

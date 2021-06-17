@@ -69,8 +69,10 @@ const createOneFiche = (req, res, next) => {
 };
 
 const updateOneFiche = (req, res, next) => {
-  const { name, file } = req.body;
-  verifExistData(name, file)
+  const { name, file, modele_id } = req.body;
+  const { id } = req.params;
+
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         res.send('Fiche data already exist');
@@ -79,7 +81,9 @@ const updateOneFiche = (req, res, next) => {
           name: Joi.string().max(100).require(),
 
           file: Joi.string().max(100).require(),
-        }).validate({ name, file },{ abortEarly: false }).error;
+
+          modele_id: Joi.number().integer(),
+        }).validate({ name, file, modele_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
           res.send('Fiche enter is invalid');
