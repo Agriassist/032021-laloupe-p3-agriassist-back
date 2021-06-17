@@ -48,25 +48,26 @@ const getOneMaterielById = (req, res) => {
 
 const createOneMateriel = (req, res, next) => {
   const { year, serial_number, type, modele_id } = req.body;
-  // verifExistData(serial_number)
-  //   .then(([results]) => {
-  //     if (results[0]) {
-  //       let validationErrors = null;
-  //       validationErrors = Joi.object({
-  //         year: Joi.number().min(1900).max(2021).required(),
+  verifExistData(serial_number)
+    .then(([results]) => {
+      if (results[0]) {
+        res.send('Materiel data already exist');
+      } else {
+        let validationErrors = null;
+        validationErrors = Joi.object({
+          year: Joi.number().min(1900).max(2021).required(),
 
-  //         serial_number: Joi.n,
+          serial_number: Joi.string().max(100).required(),
 
-  //         type: Joi.string().max(100).required(),
+          type: Joi.string().max(100).required(),
 
+          modele_id: Joi.number().integer(),
+        }).validate({ year, serial_number, type, modele_id }, { abortEarly: false }).error;
 
-  //         modele_id: Joi.number().integer(),
-  //       }).validate({ year, serial_number, type, modele_id }, { abortEarly: false }).error;
-
-  //       if (validationErrors) {
-  //         console.log(validationErrors);
-  //         res.send('Data enter is invalid');
-  //       } else {
+        if (validationErrors) {
+          console.log(validationErrors);
+          res.send('Data enter is invalid');
+        } else {
           createOne({ year, serial_number, type, modele_id })
             .then(([results]) => {
               req.materielId = results.insertId;
@@ -76,16 +77,18 @@ const createOneMateriel = (req, res, next) => {
               res.status(500).send(err.message);
             });
         }
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(500).send(err.message);
-//     });
-// };
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
 
 const updateOneMateriel = (req, res, next) => {
   const { year, serial_number, type, modele_id } = req.body;
-  verifExistData(year, serial_number, type, modele_id)
+  const { id } = req.params;
+
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         let validationErrors = null;
@@ -95,7 +98,7 @@ const updateOneMateriel = (req, res, next) => {
           serial_number: Joi.string().max(100),
 
           type: Joi.string().max(100),
-        }).validate({ year, serial_number, type}, { abortEarly: false }).error;
+        }).validate({ year, serial_number, type }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);
