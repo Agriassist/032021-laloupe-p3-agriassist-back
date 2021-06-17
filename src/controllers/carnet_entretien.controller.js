@@ -11,7 +11,7 @@ const getAllCarnet = (req, res) => {
       res.status(500).send(err.message);
     });
 };
-
+//j espere que c bien
 const getOneCarnetById = (req, res) => {
   let id;
   if (req.carnetId) {
