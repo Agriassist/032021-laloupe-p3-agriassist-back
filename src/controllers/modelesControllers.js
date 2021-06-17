@@ -89,8 +89,9 @@ const createOneModele = (req, res, next) => {
 const updateOneModele = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, picture, marque_id } = req.body;
+  const { id } = req.params;
 
-  verifExistData(name, picture, marque_id)
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         let validationErrors = null;
@@ -98,7 +99,9 @@ const updateOneModele = (req, res, next) => {
           name: Joi.string().max(255),
 
           picture: Joi.string().max(100),
-        }).validate({ name, picture }, { abortEarly: false }).error;
+
+          marque_id: Joi.number().integer(),
+        }).validate({ name, picture, marque_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);

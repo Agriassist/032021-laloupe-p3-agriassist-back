@@ -58,7 +58,7 @@ const createOneMateriel = (req, res, next) => {
           year: Joi.number().min(1900).max(2021).required(),
 
           serial_number: Joi.string().max(100).required(),
-
+          
           type: Joi.string().max(100).required(),
 
           modele_id: Joi.number().integer(),
@@ -83,7 +83,6 @@ const createOneMateriel = (req, res, next) => {
       res.status(500).send(err.message);
     });
 };
-
 const updateOneMateriel = (req, res, next) => {
   const { year, serial_number, type, modele_id } = req.body;
   const { id } = req.params;
