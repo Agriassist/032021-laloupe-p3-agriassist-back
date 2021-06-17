@@ -20,9 +20,9 @@ const updateOne = (partenariat, id) => {
   return connection.promise().query(sql, [partenariat, id]);
 };
 
-const deleteOne = (id) => {
-  const sql = 'DELETE FROM partenariat WHERE id=?';
-  return connection.promise().query(sql, [id]);
+const deleteOne = (agriculteur_id) => {
+  const sql = 'DELETE FROM partenariat WHERE agriculteur_id=?';
+  return connection.promise().query(sql, [agriculteur_id]);
 };
 
 module.exports = {

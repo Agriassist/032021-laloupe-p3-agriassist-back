@@ -5,12 +5,12 @@ const {
   getOnePartenariatById,
   createOnePartenariat,
   updateOnePartenariat,
-  deleteOnePartenariat,
+  deleteOnePartenariatByAgriculteurId,
 } = require('../controllers/partenariat.controller');
 
 partenariatRouter.get('/', getAllPartenariats);
 partenariatRouter.post('/', createOnePartenariat);
 partenariatRouter.put('/:id', updateOnePartenariat, getOnePartenariatById);
-partenariatRouter.delete('/:id', deleteOnePartenariat);
+partenariatRouter.delete('/:id', deleteOnePartenariatByAgriculteurId);
 
 module.exports = partenariatRouter;

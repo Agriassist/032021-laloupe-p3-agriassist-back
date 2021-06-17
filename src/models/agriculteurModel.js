@@ -31,7 +31,7 @@ const deleteOne = (id) => {
 };
 const findManyByConcessionaireId = (id) => {
   const sql =
-    'SELECT a.id, a.name, a.lastname, a.identifiant, a.phone, a.picture_profile, a.email FROM concessionnaire c JOIN partenariat p ON c.id = p.concessionaire_id JOIN agriculteur a ON a.id = p.agriculteur_id WHERE c.id = ?';
+    'SELECT a.id, a.name, a.lastname, a.identifiant, a.phone, a.picture_profile, a.email FROM concessionnaire c JOIN partenariat p ON c.id = p.concessionnaire_id JOIN agriculteur a ON a.id = p.agriculteur_id WHERE c.id = ?';
   return connection.promise().query(sql, [id]);
 };
 

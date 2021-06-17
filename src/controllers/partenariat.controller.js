@@ -35,7 +35,8 @@ const getOnePartenariatById = (req, res) => {
 const createOnePartenariat = (req, res) => {
   const { agriculteur_id, concessionnaire_id } = req.body;
   createOne({ agriculteur_id, concessionnaire_id })
-    .then(([res]) => {
+    .then(([results]) => {
+      req.agriId = results.insertId;
       res.status(201).send('Partenariat Ok !!!!!');
     })
     .catch((err) => {
@@ -57,7 +58,7 @@ const updateOnePartenariat = (req, res, next) => {
     });
 };
 
-const deleteOnePartenariat = (req, res) => {
+const deleteOnePartenariatByAgriculteurId = (req, res) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
@@ -76,5 +77,5 @@ module.exports = {
   getOnePartenariatById,
   createOnePartenariat,
   updateOnePartenariat,
-  deleteOnePartenariat,
+  deleteOnePartenariatByAgriculteurId,
 };
