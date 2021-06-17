@@ -36,7 +36,7 @@ const createOnePartenariat = (req, res) => {
   const { agriculteur_id, concessionnaire_id } = req.body;
   createOne({ agriculteur_id, concessionnaire_id })
     .then(([results]) => {
-      req.agriId = results.insertId;
+      req.agriId = agriculteur_id;
       res.status(201).send('Partenariat Ok !!!!!');
     })
     .catch((err) => {
