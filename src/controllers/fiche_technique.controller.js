@@ -72,9 +72,7 @@ const updateOneFiche = (req, res, next) => {
   const { name, file, modele_id } = req.body;
   const { id } = req.params;
 
-  findOneById(id);
-  console
-    .log(id)
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         res.send('Fiche data already exist');
