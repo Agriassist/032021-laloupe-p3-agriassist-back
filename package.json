@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/WildCodeSchool/032021-laloupe-p3-agriassist-back#readme",
   "dependencies": {
+    "argon2": "^0.28.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",

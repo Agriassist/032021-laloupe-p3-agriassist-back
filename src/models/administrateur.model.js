@@ -29,6 +29,16 @@ const deleteOne = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
+// Hash password
+
+const hashPassword = async (password) => {
+  return await argon2.hash(password);
+};
+
+const verifyPassword = async (password, hashedPassword) => {
+  return await argon2.verify(hashedPassword, password);
+};
+
 module.exports = {
   findMany,
   findOneById,
@@ -36,4 +46,6 @@ module.exports = {
   updateOne,
   deleteOne,
   verifExistData,
+  verifyPassword,
+  hashPassword,
 };

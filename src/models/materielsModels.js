@@ -37,7 +37,7 @@ const findManyByAgriculteurId = (id) => {
 };
 
 const findManyModeleId = (id) => {
-  const sql = 'SELECT m.id, m.name, m.image FROM modele m JOIN materiel t ON m.id = t.modele_id';
+  const sql = 'SELECT m.id, m.name, m.picture FROM modele m JOIN materiel t ON m.id = t.modele_id';
   return connection.promise().query(sql, [id]);
 };
 module.exports = {
