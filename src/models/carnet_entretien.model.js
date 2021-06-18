@@ -31,7 +31,7 @@ const deleteOne = (id) => {
 };
 
 const findManyMaterielId = (id) => {
-  const sql = 'SELECT m.id, m.type, m.year, number_serial FROM materiel m JOIN carnet_entretien c ON m.id = c.modele_id';
+  const sql = 'SELECT m.id, m.type, m.year, m.serial_number FROM materiel m JOIN carnet_entretien c ON m.id = c.modele_id';
   return connection.promise().query(sql, [id]);
 };
 

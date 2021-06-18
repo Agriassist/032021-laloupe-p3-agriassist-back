@@ -1,5 +1,14 @@
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/administrateur.model');
+const {
+  findMany,
+  findOneById,
+  createOne,
+  updateOne,
+  deleteOne,
+  verifExistData,
+  hashPassword,
+  verifyPassword,
+} = require('../models/administrateur.model');
 
 const getAllAdministrateurs = (req, res) => {
   findMany()
@@ -36,7 +45,7 @@ const getOneAdministrateurById = (req, res) => {
 const createOneAdministrateur = (req, res, next) => {
   const { name, lastname, mail, password, phone, picture_profile } = req.body;
   verifExistData(mail, phone)
-    .then(([results]) => {
+    .then(async ([results]) => {
       if (results[0]) {
         res.send('Administrateur data already exist');
       } else {
@@ -48,7 +57,7 @@ const createOneAdministrateur = (req, res, next) => {
 
           mail: Joi.string().email().max(100).required(),
 
-          password: Joi.string().max(100).required(),
+          password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
 
           phone: Joi.string().max(10).required(),
 
@@ -58,7 +67,8 @@ const createOneAdministrateur = (req, res, next) => {
         if (validationErrors) {
           res.send('Data enter is invalid');
         } else {
-          createOne({ name, lastname, mail, password, phone, picture_profile })
+          const hashedPassword = await hashPassword(password);
+          createOne({ name, lastname, mail, password: hashedPassword, phone, picture_profile })
             .then(([results]) => {
               req.adminId = results.insertId;
               next();
@@ -79,7 +89,7 @@ const updateOneAdministrateur = (req, res, next) => {
   const { id } = req.params;
 
   findOneById(id)
-    .then(([results]) => {
+    .then(async ([results]) => {
       if (results[0]) {
         let validationErrors = null;
         validationErrors = Joi.object({
@@ -89,7 +99,7 @@ const updateOneAdministrateur = (req, res, next) => {
 
           mail: Joi.string().email().max(100),
 
-          password: Joi.string().max(100),
+          password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32),
 
           phone: Joi.string().max(10),
 
@@ -99,6 +109,9 @@ const updateOneAdministrateur = (req, res, next) => {
         if (validationErrors) {
           res.send('Data enter is invalid');
         } else {
+          if (req.body.password) {
+            req.body.password = await hashPassword(password);
+          }
           updateOne(req.body, req.params.id)
             .then(([results]) => {
               if (results.affectedRows === 0) {

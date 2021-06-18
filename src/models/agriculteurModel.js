@@ -1,3 +1,4 @@
+const argon2 = require('argon2');
 const connection = require('../db-connection');
 
 const findMany = () => {
@@ -41,6 +42,16 @@ const findManyByMaterielId = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
+// Hash password
+
+const hashPassword = async (password) => {
+  return await argon2.hash(password);
+};
+
+const verifyPassword = async (password, hashedPassword) => {
+  return await argon2.verify(hashedPassword, password);
+};
+
 module.exports = {
   findMany,
   findOneById,
@@ -50,4 +61,6 @@ module.exports = {
   deleteOne,
   findManyByConcessionaireId,
   findManyByMaterielId,
+  verifyPassword,
+  hashPassword,
 };
