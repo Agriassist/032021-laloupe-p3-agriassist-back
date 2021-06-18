@@ -1,15 +1,35 @@
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/fiche_technique.model');
+const {
+  findMany,
+  findOneById,
+  createOne,
+  updateOne,
+  deleteOne,
+  verifExistData,
+  findManyFicheTechniqueId,
+} = require('../models/fiche_technique.model');
 
 const getAllFiche = (req, res) => {
-  findMany()
-    .then((results) => {
-      const fiche_technique = results[0];
-      res.json(fiche_technique);
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+  const ficheId = req.params.ficheId;
+  if (ficheId) {
+    findManyFicheTechniqueId(ficheId)
+      .then((results) => {
+        const modeles = results[0];
+        res.json(modeles);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  } else {
+    findMany()
+      .then((results) => {
+        const fiche_technique = results[0];
+        res.json(fiche_technique);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
 };
 
 const getOneFicheById = (req, res) => {
