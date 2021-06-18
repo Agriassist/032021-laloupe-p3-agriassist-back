@@ -49,7 +49,7 @@ const getOneModeleById = (req, res) => {
 const createOneModele = (req, res, next) => {
   const { name, picture, marque_id } = req.body;
 
-  verifExistData(name, picture, marque_id)
+  verifExistData(name, picture)
     .then(([results]) => {
       if (results[0]) {
         res.send('Modele data arleady exist');
