@@ -7,6 +7,8 @@ const {
   deleteOne,
   findManyByAgriculteurId,
   verifExistData,
+  verifyPassword,
+  hashPassword,
 } = require('../models/concessionnaire.model');
 
 const getAllConcessionnaires = (req, res) => {
@@ -56,9 +58,9 @@ const getOneConcessionnaireById = (req, res) => {
 
 const createOneConcessionnaire = (req, res, next) => {
   const { name, identifiant, password, phone, address, picture_logo, email } = req.body;
-  
+
   verifExistData(email, identifiant, phone)
-    .then(([results]) => {
+    .then(async ([results]) => {
       if (results[0]) {
         res.send('Concessionnaire data already exist');
       } else {
@@ -68,7 +70,7 @@ const createOneConcessionnaire = (req, res, next) => {
 
           identifiant: Joi.string().max(100).required(),
 
-          password: Joi.string().min(8).max(150).required(),
+          password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
 
           phone: Joi.string().max(10),
 
@@ -81,10 +83,11 @@ const createOneConcessionnaire = (req, res, next) => {
 
         if (validationErrors) {
           console.log(validationErrors);
-          console.log("pas ok");
+          console.log('pas ok');
           res.send('Data enter is invalid');
         } else {
-          createOne({ name, identifiant, password, phone, address, picture_logo, email })
+          const hashedPassword = await hashPassword(password);
+          createOne({ name, identifiant, password: hashedPassword, phone, address, picture_logo, email })
             .then(([results]) => {
               req.concId = results.insertId;
               next();
@@ -106,7 +109,7 @@ const updateOneConcessionnaire = (req, res, next) => {
   const { id } = req.params;
 
   findOneById(id)
-    .then(([results]) => {
+    .then(async ([results]) => {
       if (results[0]) {
         let validationErrors = null;
         validationErrors = Joi.object({
@@ -114,7 +117,7 @@ const updateOneConcessionnaire = (req, res, next) => {
 
           identifiant: Joi.string().max(100),
 
-          password: Joi.string().min(8).max(150),
+          password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32),
 
           phone: Joi.string().max(10),
 
@@ -129,6 +132,10 @@ const updateOneConcessionnaire = (req, res, next) => {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
+          if (req.body.password) {
+            req.body.password = await hashPassword(password);
+          }
+
           updateOne(req.body, req.params.id)
             .then(([results]) => {
               if (results.affectedRows === 0) {

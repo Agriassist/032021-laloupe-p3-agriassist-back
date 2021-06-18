@@ -8,6 +8,8 @@ const {
   findManyByConcessionaireId,
   findManyByMaterielId,
   verifExistData,
+  verifyPassword,
+  hashPassword,
 } = require('../models/agriculteurModel');
 
 const getAllAgriculteurs = (req, res) => {
@@ -68,9 +70,9 @@ const getOneAgriculteurById = (req, res) => {
 const createOneAgriculteur = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
- 
+
   verifExistData(email, identifiant, phone)
-    .then(([results]) => {
+    .then(async ([results]) => {
       if (results[0]) {
         res.send('Agriculteur data already exist');
       } else {
@@ -82,7 +84,7 @@ const createOneAgriculteur = (req, res, next) => {
 
           identifiant: Joi.string().max(100),
 
-          password: Joi.string().min(8).max(150).required(),
+          password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
 
           phone: Joi.string().max(10).required(),
 
@@ -95,7 +97,8 @@ const createOneAgriculteur = (req, res, next) => {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          createOne({ name, lastname, identifiant, password, phone, picture_profile, email })
+          const hashedPassword = await hashPassword(password);
+          createOne({ name, lastname, identifiant, password: hashedPassword, phone, picture_profile, email })
             .then(([results]) => {
               req.agriId = results.insertId;
               next();
@@ -113,11 +116,11 @@ const createOneAgriculteur = (req, res, next) => {
 };
 
 const updateOneAgriculteur = (req, res, next) => {
-  const {name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
+  const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
   const { id } = req.params;
 
   findOneById(id)
-    .then(([results]) => {
+    .then(async ([results]) => {
       if (results[0]) {
         let validationErrors = null;
         validationErrors = Joi.object({
@@ -127,7 +130,7 @@ const updateOneAgriculteur = (req, res, next) => {
 
           identifiant: Joi.string().max(255),
 
-          password: Joi.string().min(8).max(255),
+          password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32),
 
           phone: Joi.string().max(10),
 
@@ -140,6 +143,9 @@ const updateOneAgriculteur = (req, res, next) => {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
+          if (req.body.password) {
+            req.body.password = await hashPassword(password);
+          }
           updateOne(req.body, id)
             .then(([results]) => {
               if (results.affectedRows === 0) {
