@@ -1,14 +1,33 @@
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, findManyByAgriculteurId, verifExistData } = require('../models/materielsModels');
+const {
+  findMany,
+  findOneById,
+  createOne,
+  updateOne,
+  deleteOne,
+  findManyByAgriculteurId,
+  verifExistData,
+  findManyModeleId,
+} = require('../models/materielsModels');
 
 const getAllMateriels = (req, res) => {
   const id = req.params.agriId;
+  const modeleId = req.params.modeleId;
 
   if (id) {
     findManyByAgriculteurId(id)
       .then((results) => {
         const agriculteur = results[0];
         res.json(agriculteur);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  } else if (modeleId) {
+    findManyModeleId(modeleId)
+      .then((results) => {
+        const materiel = results[0];
+        res.json(materiel);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -58,7 +77,7 @@ const createOneMateriel = (req, res, next) => {
           year: Joi.number().min(1900).max(2021).required(),
 
           serial_number: Joi.string().max(100).required(),
-          
+
           type: Joi.string().max(100).required(),
 
           modele_id: Joi.number().integer(),
