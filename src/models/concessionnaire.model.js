@@ -1,3 +1,4 @@
+const argon2 = require('argon2');
 const connection = require('../db-connection');
 
 const findMany = () => {
