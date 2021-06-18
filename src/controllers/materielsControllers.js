@@ -58,7 +58,7 @@ const createOneMateriel = (req, res, next) => {
           year: Joi.number().min(1900).max(2021).required(),
 
           serial_number: Joi.string().max(100).required(),
-          
+
           type: Joi.string().max(100).required(),
 
           modele_id: Joi.number().integer(),
