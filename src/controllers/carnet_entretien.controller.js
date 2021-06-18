@@ -1,7 +1,19 @@
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/carnet_entretien.model');
+const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData, findManyMaterielId } = require('../models/carnet_entretien.model');
 
 const getAllCarnet = (req, res) => {
+  const id = req.params.materielId;
+
+  if (id) {
+    findManyMaterielId(id)
+      .then((results) => {
+        const carnetEntretien = results[0];
+        res.json(carnetEntretien);
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
   findMany()
     .then((results) => {
       const carnet_entretien = results[0];
@@ -90,18 +102,18 @@ const updateOneCarnet = (req, res, next) => {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-            updateOne(req.body, req.params.id)
-              .then(([results]) => {
-                if (results.affectedRows === 0) {
-                  res.status(404).send('carnet not found');
-                } else {
-                  next();
-                }
-              })
-              .catch((err) => {
-                res.status(500).send(err.message);
-              });
-            }
+          updateOne(req.body, req.params.id)
+            .then(([results]) => {
+              if (results.affectedRows === 0) {
+                res.status(404).send('carnet not found');
+              } else {
+                next();
+              }
+            })
+            .catch((err) => {
+              res.status(500).send(err.message);
+            });
+        }
       } else {
         res.send('carnet data already exist');
       }

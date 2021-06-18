@@ -35,6 +35,11 @@ const findManyByAgriculteurId = (id) => {
     'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM agriculteur a JOIN park p ON a.id = p.agriculteur_id JOIN materiel m ON m.id = p.materiel_id WHERE a.id = ?';
   return connection.promise().query(sql, [id]);
 };
+
+const findManyModeleId = (id) => {
+  const sql = 'SELECT m.id, m.name, m.image FROM modele m JOIN materiel t ON m.id = t.modele_id';
+  return connection.promise().query(sql, [id]);
+};
 module.exports = {
   findMany,
   findOneById,
@@ -43,4 +48,5 @@ module.exports = {
   updateOne,
   deleteOne,
   findManyByAgriculteurId,
+  findManyModeleId,
 };
