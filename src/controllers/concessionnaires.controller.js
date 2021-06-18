@@ -103,25 +103,26 @@ const createOneConcessionnaire = (req, res, next) => {
 
 const updateOneConcessionnaire = (req, res, next) => {
   const { name, identifiant, password, phone, address, picture_logo, email } = req.body;
+  const { id } = req.params;
 
-  verifExistData(email, identifiant, phone)
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(100).required(),
+          name: Joi.string().max(100),
 
-          identifiant: Joi.string().max(100).required(),
+          identifiant: Joi.string().max(100),
 
-          password: Joi.string().min(8).max(150).required(),
+          password: Joi.string().min(8).max(150),
 
           phone: Joi.string().max(10),
 
-          address: Joi.string().max(100).required(),
+          address: Joi.string().max(100),
 
           picture_logo: Joi.string().max(100),
 
-          email: Joi.string().email().max(100).required(),
+          email: Joi.string().email().max(100),
         }).validate({ name, identifiant, password, phone, address, picture_logo, email }, { abortEarly: false }).error;
 
         if (validationErrors) {

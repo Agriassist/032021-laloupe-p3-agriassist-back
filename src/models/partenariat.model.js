@@ -5,9 +5,9 @@ const findMany = () => {
   return connection.promise().query(sql);
 };
 
-const findOneById = (id) => {
-  const sql = 'SELECT * FROM partenariat WHERE id=?';
-  return connection.promise().query(sql, [id]);
+const findOneById = (agriculteur_id) => {
+  const sql = 'SELECT * FROM partenariat WHERE agriculteur_id=?';
+  return connection.promise().query(sql, [agriculteur_id]);
 };
 
 const createOne = (partenariat) => {
@@ -15,9 +15,9 @@ const createOne = (partenariat) => {
   return connection.promise().query(sql, [partenariat]);
 };
 
-const updateOne = (partenariat, id) => {
-  const sql = 'UPDATE partenariat SET ? WHERE id=?';
-  return connection.promise().query(sql, [partenariat, id]);
+const updateOne = (partenariat, agriculteur_id) => {
+  const sql = 'UPDATE partenariat SET ? WHERE agriculteur_id=?';
+  return connection.promise().query(sql, [partenariat, agriculteur_id]);
 };
 
 const deleteOne = (agriculteur_id) => {

@@ -70,21 +70,7 @@ const createOneCarnet = (req, res, next) => {
     });
 };
 
-const updateOneCarnet = (req, res) => {
-  updateOne(req.body, req.params.id)
-    .then(([results]) => {
-      if (results.affectedRows === 0) {
-        res.status(404).send('carnet not found');
-      } else {
-        next();
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
-};
-
-const updateOneAgriculteur = (req, res, next) => {
+const updateOneCarnet = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { oil, use_times, materiel_id } = req.body;
 
@@ -95,9 +81,9 @@ const updateOneAgriculteur = (req, res, next) => {
         validationErrors = Joi.object({
           oil: Joi.string().max(100).required(),
 
-          use_times: Joi.int(),
+          use_times: Joi.number().integer(),
 
-          materiel_id: Joi.int(),
+          materiel_id: Joi.number().integer(),
         }).validate({ oil, use_times, materiel_id }, { abortEarly: false }).error;
 
         if (validationErrors) {

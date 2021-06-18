@@ -42,18 +42,18 @@ const createOneAdministrateur = (req, res, next) => {
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(100).require(),
+          name: Joi.string().max(100).required(),
 
-          lastname: Joi.string().max(100).require(),
+          lastname: Joi.string().max(100).required(),
 
-          mail: Joi.string().email().max(100).require(),
+          mail: Joi.string().email().max(100).required(),
 
-          password: Joi.string().max(100).require(),
+          password: Joi.string().max(100).required(),
 
-          phone: Joi.string().max(10).require(),
+          phone: Joi.string().max(10).required(),
 
           picture_profile: Joi.string().max(100),
-        }).validate({ name, lastname, mail, password, phone, picture_profile }, { abortEarly: false }).error;
+        }).validate({ name, lastname, mail, password, phone, picture_profile }, { abortEarly: true }).error;
 
         if (validationErrors) {
           res.send('Data enter is invalid');
@@ -76,20 +76,22 @@ const createOneAdministrateur = (req, res, next) => {
 
 const updateOneAdministrateur = (req, res, next) => {
   const { name, lastname, mail, password, phone, picture_profile } = req.body;
-  verifExistData(mail, phone)
+  const { id } = req.params;
+
+  findOneById(id)
     .then(([results]) => {
       if (results[0]) {
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(100).require(),
+          name: Joi.string().max(100),
 
-          lastname: Joi.string().max(100).require(),
+          lastname: Joi.string().max(100),
 
-          mail: Joi.string().email().max(100).required(),
+          mail: Joi.string().email().max(100),
 
-          password: Joi.string().max(100).required(),
+          password: Joi.string().max(100),
 
-          phone: Joi.string().max(10).required(),
+          phone: Joi.string().max(10),
 
           picture_profile: Joi.string().max(100),
         }).validate({ name, lastname, mail, password, phone, picture_profile }, { abortEarly: false }).error;
