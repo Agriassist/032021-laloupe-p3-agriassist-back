@@ -7,9 +7,13 @@ const {
   deleteOne,
   findManyByAgriculteurId,
   verifExistData,
-  verifyPassword,
+  verifyPasswordConcessionnaire,
   hashPassword,
+  existEmailConcessionnaire,
 } = require('../models/concessionnaire.model');
+
+const { existEmailAgri } = require('../models/agriculteurModel');
+const { existEmailAdmin } = require('../models/administrateur.model');
 
 const getAllConcessionnaires = (req, res) => {
   const id = req.params.agriId;
@@ -171,10 +175,55 @@ const deleteOneConcessionnaire = (req, res) => {
     });
 };
 
+const verifConcessionnaireEmailandPassword = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  let validationErrors = null;
+  validationErrors = Joi.object({
+    password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
+
+    email: Joi.string().email().max(255).required(),
+  }).validate({ password, email }, { abortEarly: false }).error;
+  if (validationErrors) {
+    res.send('error');
+  } else {
+    await existEmailConcessionnaire().then(async ([results]) => {
+      if (results.length === 0) {
+        res.status(404).send("Concessionnaire email don't exist");
+      } else {
+        const passValid = await verifyPasswordConcessionnaire(password, results[0].password);
+        if (!passValid) {
+          res.send('Password est pas bon');
+        } else {
+          await existEmailAdmin().then(async ([results]) => {
+            if (results.length[0]) {
+              res.status(404).send("Admin use already email");
+            } else {
+              await existEmailAgri()
+                .then(async ([results]) => {
+                  if (results.length[0]) {
+                    res.status(404).send("Agriculteur use already email");
+                  } else {
+                    req.concessionnaireId = results[0];
+                    next();
+                  }
+                })
+                .catch((err) => {
+                  res.status(500).send(err.message);
+                });
+            }
+          });
+        }
+      }
+    });
+  }
+};
+
 module.exports = {
   getAllConcessionnaires,
   getOneConcessionnaireById,
   createOneConcessionnaire,
   updateOneConcessionnaire,
   deleteOneConcessionnaire,
+  verifConcessionnaireEmailandPassword,
 };

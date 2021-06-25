@@ -7,8 +7,11 @@ const {
   deleteOne,
   verifExistData,
   hashPassword,
-  verifyPassword,
+  verifyPasswordAdmin,
+  existEmailAdmin,
 } = require('../models/administrateur.model');
+const { existEmailAgri } = require('../models/agriculteurModel');
+const { existEmailConcessionnaire } = require('../models/concessionnaire.model');
 
 const getAllAdministrateurs = (req, res) => {
   findMany()
@@ -148,10 +151,55 @@ const deleteOneAdministrateur = (req, res) => {
     });
 };
 
+const verifAdminEmailandPassword = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  let validationErrors = null;
+  validationErrors = Joi.object({
+    password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
+
+    email: Joi.string().email().max(255).required(),
+  }).validate({ password, email }, { abortEarly: false }).error;
+  if (validationErrors) {
+    res.send('error');
+  } else {
+    await existEmailAdmin().then(async ([results]) => {
+      if (results.length === 0) {
+        res.status(404).send("Admin email don't exist");
+      } else {
+        const passValid = await verifyPasswordAdmin(password, results[0].password);
+        if (!passValid) {
+          res.send('Password est pas bon');
+        } else {
+          await existEmailAgri().then(async ([results]) => {
+            if (results.length[0]) {
+              res.status(404).send("Agriculteur use already email ");
+            } else {
+              await existEmailConcessionnaire()
+                .then(async ([results]) => {
+                  if (results.length[0]) {
+                    res.status(404).send("Concessionnaire use already email");
+                  } else {
+                    req.adminId = results[0];
+                    next();
+                  }
+                })
+                .catch((err) => {
+                  res.status(500).send(err.message);
+                });
+            }
+          });
+        }
+      }
+    });
+  }
+};
+
 module.exports = {
   getAllAdministrateurs,
   getOneAdministrateurById,
   createOneAdministrateur,
   updateOneAdministrateur,
   deleteOneAdministrateur,
+  verifAdminEmailandPassword,
 };

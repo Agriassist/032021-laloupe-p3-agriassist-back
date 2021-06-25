@@ -20,6 +20,11 @@ const verifExistData = (mail, identifiant, phone) => {
   return connection.promise().query(sql, [mail, identifiant, phone]);
 };
 
+const existEmailAdmin = (email) => {
+  const sql = 'SELECT * FROM administrateur WHERE email = ?';
+  return connection.promise().query(sql, [email]);
+};
+
 const updateOne = (administrateur, id) => {
   const sql = 'UPDATE administrateur SET ? WHERE id=?';
   return connection.promise().query(sql, [administrateur, id]);
@@ -36,7 +41,7 @@ const hashPassword = async (password) => {
   return await argon2.hash(password);
 };
 
-const verifyPassword = async (password, hashedPassword) => {
+const verifyPasswordAdmin = async (password, hashedPassword) => {
   return await argon2.verify(hashedPassword, password);
 };
 
@@ -47,6 +52,7 @@ module.exports = {
   updateOne,
   deleteOne,
   verifExistData,
-  verifyPassword,
+  verifyPasswordAdmin,
   hashPassword,
+  existEmailAdmin,
 };
