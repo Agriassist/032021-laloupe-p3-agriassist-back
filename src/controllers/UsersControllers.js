@@ -14,19 +14,10 @@ const {
 } = require('../models/UsersModel');
 
 const getAllUsers = (req, res) => {
-  const id = req.params.consId;
   const materId = req.params.materId;
+  const status = req.params.status;
 
-  if (id) {
-    findManyByConcessionaireId(id)
-      .then((results) => {
-        const agriculteurs = results[0];
-        res.json(agriculteurs);
-      })
-      .catch((err) => {
-        res.status(500).send(err.message);
-      });
-  } else if (materId) {
+  if (materId) {
     findManyByMaterielId(materId)
       .then((results) => {
         const agriculteurs = results[0];
@@ -38,8 +29,8 @@ const getAllUsers = (req, res) => {
   } else {
     findManyUser()
       .then((results) => {
-        const agriculteurs = results[0];
-        res.json(agriculteurs);
+        const users = results[0];
+        res.json(users);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -49,18 +40,18 @@ const getAllUsers = (req, res) => {
 
 const getOneUserById = (req, res) => {
   let id;
-  if (req.agriId) {
-    id = req.agriId;
+  if (req.UserId) {
+    id = req.UserId;
   } else {
     id = req.params.id;
   }
 
   findOneUserById(id)
-    .then(([agriculteurs]) => {
-      if (agriculteurs.length === 0) {
+    .then(([users]) => {
+      if (users.length === 0) {
         res.status(404).send('user not found');
       } else {
-        res.json(agriculteurs[0]);
+        res.json(users[0]);
       }
     })
     .catch((err) => {
@@ -72,7 +63,7 @@ const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
 
-  verifExistDataUser(email, identifiant, phone)
+  verifExistDataUser(email, phone)
     .then(async ([results]) => {
       if (results[0]) {
         res.send('user data already exist');
@@ -99,7 +90,7 @@ const createOneUser = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           const hashedPassword = await hashPassword(password);
-          createOne({ name, lastname, identifiant, password: hashedPassword, phone, picture_profile, email })
+          createOneUser({ name, lastname, identifiant, password: hashedPassword, phone, picture_profile, email })
             .then(([results]) => {
               req.agriId = results.insertId;
               next();
@@ -215,10 +206,10 @@ const verifUserEmailandPassword = async (req, res, next) => {
 };
 
 module.exports = {
-    getAllUsers,
-    getOneUserById,
-    createOneUser,
-    updateOneUser,
-    deleteOneUser,
-    verifUserEmailandPassword,
-}
+  getAllUsers,
+  getOneUserById,
+  createOneUser,
+  updateOneUser,
+  deleteOneUser,
+  verifUserEmailandPassword,
+};
