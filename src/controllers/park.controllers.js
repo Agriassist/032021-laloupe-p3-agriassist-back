@@ -1,29 +1,17 @@
 const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
 
-const getAllAMaterielByAgriculteurId = (req, res) => {
-  const id = req.params.id;
-  if (id) {
-    findManyByConcessionaireId(id)
-      .then((results) => {
-        const park = results[0];
-        res.json(park);
-      })
-      .catch((err) => {
-        res.status(500).send(err.message);
-      });
-  } else {
-    findMany()
-      .then((results) => {
-        const mate = results[0];
-        res.json(mate);
-      })
-      .catch((err) => {
-        res.status(500).send(err.message);
-      });
-  }
+const getAllAMaterielByUserId = (req, res) => {
+  findMany()
+    .then((results) => {
+      const mate = results[0];
+      res.json(mate);
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
-const getOneMaterielByAgriculteurId = (req, res) => {
+const getOneMaterielByUserId = (req, res) => {
   let id;
   if (req.agriId) {
     id = req.agriId;
@@ -44,12 +32,12 @@ const getOneMaterielByAgriculteurId = (req, res) => {
     });
 };
 
-const createOneMaterielByAgriculteurId = (req, res, next) => {
-  const { agriculteur_id, materiel_id } = req.body;
+const createOneMaterielByUserId = (req, res, next) => {
+  const { users_id, materiel_id } = req.body;
 
-  createOne({ agriculteur_id, materiel_id })
+  createOne({ users_id, materiel_id })
     .then(() => {
-      req.agriId = agriculteur_id;
+      req.agriId = users_id;
       next();
     })
     .catch((err) => {
@@ -57,7 +45,7 @@ const createOneMaterielByAgriculteurId = (req, res, next) => {
     });
 };
 
-const updateOneMaterielByAgriculteurById = (req, res, next) => {
+const updateOneMaterielByUserById = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   updateOne(req.body, req.params.id)
     .then(([results]) => {
@@ -72,7 +60,7 @@ const updateOneMaterielByAgriculteurById = (req, res, next) => {
     });
 };
 
-const deleteOneMaterielByAgriculteurId = (req, res) => {
+const deleteOneMaterielByUserId = (req, res) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
@@ -87,9 +75,9 @@ const deleteOneMaterielByAgriculteurId = (req, res) => {
 };
 
 module.exports = {
-  getAllAMaterielByAgriculteurId,
-  getOneMaterielByAgriculteurId,
-  createOneMaterielByAgriculteurId,
-  updateOneMaterielByAgriculteurById,
-  deleteOneMaterielByAgriculteurId,
+  getAllAMaterielByUserId,
+  getOneMaterielByUserId,
+  createOneMaterielByUserId,
+  updateOneMaterielByUserById,
+  deleteOneMaterielByUserId,
 };

@@ -16,10 +16,6 @@ materielRouter.post('/', createOneMateriel, getOneMaterielById);
 materielRouter.put('/:id', updateOneMateriel, getOneMaterielById);
 materielRouter.delete('/:id', deleteOneMateriel);
 
-const { getAllAgriculteurs } = require('../controllers/agriculteursControllers');
-
-materielRouter.get('/:agriId/materiels', getAllAgriculteurs);
-
 const modelesRoutes = require('./modeleRoutes');
 
 materielRouter.use('/:id/modele', modelesRoutes);
