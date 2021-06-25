@@ -1,23 +1,19 @@
 const Joi = require('joi');
-const { existEmailAdmin } = require('../models/administrateur.model');
+
 const {
-  findMany,
-  findOneById,
-  createOne,
-  updateOne,
-  deleteOne,
-  findManyByConcessionaireId,
+  findManyUsers,
+  findOneUserById,
+  createOneUser,
+  verifExistDataUsers,
+  existEmailUsers,
+  updateOneUser,
+  deleteOneUser,
   findManyByMaterielId,
-  verifExistData,
-  verifyPasswordAgri,
   hashPassword,
-  existEmailAgri,
-} = require('../models/agriculteurModel');
-const {  existEmailConcessionnaire } = require('../models/concessionnaire.model');
+  verifyPasswordUser,
+} = require('../models/UsersModel');
 
-
-
-const getAllAgriculteurs = (req, res) => {
+const getAllUsers = (req, res) => {
   const id = req.params.consId;
   const materId = req.params.materId;
 
@@ -40,7 +36,7 @@ const getAllAgriculteurs = (req, res) => {
         res.status(500).send(err.message);
       });
   } else {
-    findMany()
+    findManyUser()
       .then((results) => {
         const agriculteurs = results[0];
         res.json(agriculteurs);
@@ -51,7 +47,7 @@ const getAllAgriculteurs = (req, res) => {
   }
 };
 
-const getOneAgriculteurById = (req, res) => {
+const getOneUserById = (req, res) => {
   let id;
   if (req.agriId) {
     id = req.agriId;
@@ -59,10 +55,10 @@ const getOneAgriculteurById = (req, res) => {
     id = req.params.id;
   }
 
-  findOneById(id)
+  findOneUserById(id)
     .then(([agriculteurs]) => {
-      if (agriculteurs.length === 0*) {
-        res.status(404).send('Agriculteur not found');
+      if (agriculteurs.length === 0) {
+        res.status(404).send('user not found');
       } else {
         res.json(agriculteurs[0]);
       }
@@ -72,14 +68,14 @@ const getOneAgriculteurById = (req, res) => {
     });
 };
 
-const createOneAgriculteur = (req, res, next) => {
+const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
 
-  verifExistData(email, identifiant, phone)
+  verifExistDataUser(email, identifiant, phone)
     .then(async ([results]) => {
       if (results[0]) {
-        res.send('Agriculteur data already exist');
+        res.send('user data already exist');
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
@@ -120,11 +116,11 @@ const createOneAgriculteur = (req, res, next) => {
     });
 };
 
-const updateOneAgriculteur = (req, res, next) => {
+const updateOneUser = (req, res, next) => {
   const { name, lastname, identifiant, password, phone, picture_profile, email } = req.body;
   const { id } = req.params;
 
-  findOneById(id)
+  findOneUserById(id)
     .then(async ([results]) => {
       if (results[0]) {
         let validationErrors = null;
@@ -151,10 +147,10 @@ const updateOneAgriculteur = (req, res, next) => {
           if (req.body.password) {
             req.body.password = await hashPassword(password);
           }
-          updateOne(req.body, id)
+          updateOneUser(req.body, id)
             .then(([results]) => {
               if (results.affectedRows === 0) {
-                res.status(404).send('agriculteur not found');
+                res.status(404).send('user not found');
               } else {
                 next();
               }
@@ -164,7 +160,7 @@ const updateOneAgriculteur = (req, res, next) => {
             });
         }
       } else {
-        res.send('Agriculteur data already exist');
+        res.send('user data already exist');
       }
     })
     .catch((err) => {
@@ -172,11 +168,11 @@ const updateOneAgriculteur = (req, res, next) => {
     });
 };
 
-const deleteOneAgriculteur = (req, res) => {
+const deleteOneUser = (req, res) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
-        res.status(404).send('Agriculteur not found');
+        res.status(404).send('user not found');
       } else {
         res.sendStatus(204);
       }
@@ -186,7 +182,7 @@ const deleteOneAgriculteur = (req, res) => {
     });
 };
 
-const verifAgriEmailandPassword = async (req, res, next) => {
+const verifUserEmailandPassword = async (req, res, next) => {
   const { email, password } = req.body;
 
   let validationErrors = null;
@@ -198,48 +194,31 @@ const verifAgriEmailandPassword = async (req, res, next) => {
   if (validationErrors) {
     res.send('error');
   } else {
-  await existEmailAgri()
+    await existEmailUser()
       .then(async ([results]) => {
         if (results.length === 0) {
-          res.status(404).send("agriculteur email don't exist");
+          res.status(404).send("user email don't exist");
         } else {
-          const passValid = await verifyPasswordAgri(password, results[0].password);
-          if(!passValid){
-            res.send("Password est pas bon")
-          } else{
-            await existEmailConcessionnaire()
-            .then(async ([results]) => {
-              if (results.length[0]) {
-                res.status(404).send("Email already use by Concessionnaire");
-              }  else{
-            await existEmailAdmin()
-            .then(async ([results]) => {
-              if (results.length[0]) {
-                res.status(404).send("Email already use by Admin");
-              } else {
-            req.agriId = results[0]
+          const passValid = await verifyPasswordUser(password, results[0].password);
+          if (!passValid) {
+            res.send('Password est pas bon');
+          } else {
+            req.userId = results[0];
             next();
-
           }
-        
         }
-      )
+      })
       .catch((err) => {
         res.status(500).send(err.message);
       });
-    }
-  });
-}
-}
-});
-}
+  }
 };
 
 module.exports = {
-  getAllAgriculteurs,
-  getOneAgriculteurById,
-  createOneAgriculteur,
-  updateOneAgriculteur,
-  deleteOneAgriculteur,
-  verifAgriEmailandPassword,
-};
+    getAllUsers,
+    getOneUserById,
+    createOneUser,
+    updateOneUser,
+    deleteOneUser,
+    verifUserEmailandPassword,
+}

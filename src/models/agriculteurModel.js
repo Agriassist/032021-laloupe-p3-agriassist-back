@@ -21,6 +21,11 @@ const verifExistData = (email, identifiant, phone) => {
   return connection.promise().query(sql, [email, identifiant, phone]);
 };
 
+const existEmailAgri = (email) => {
+  const sql = 'SELECT * FROM agriculteur WHERE email = ?';
+  return connection.promise().query(sql, [email])
+};
+
 const updateOne = (agriculteur, id) => {
   const sql = 'UPDATE agriculteur SET ? WHERE id=?';
   return connection.promise().query(sql, [agriculteur, id]);
@@ -48,7 +53,7 @@ const hashPassword = async (password) => {
   return await argon2.hash(password);
 };
 
-const verifyPassword = async (password, hashedPassword) => {
+const verifyPasswordAgri = async (password, hashedPassword) => {
   return await argon2.verify(hashedPassword, password);
 };
 
@@ -61,6 +66,7 @@ module.exports = {
   deleteOne,
   findManyByConcessionaireId,
   findManyByMaterielId,
-  verifyPassword,
+  verifyPasswordAgri,
   hashPassword,
+  existEmailAgri,
 };
