@@ -1,4 +1,5 @@
 const connection = require('../db-connection');
+const argon2 = require('argon2')
 
 const findMany = () => {
   const sql = 'SELECT * FROM administrateur';

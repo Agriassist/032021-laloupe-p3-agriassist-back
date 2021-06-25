@@ -68,6 +68,7 @@ const createOneAdministrateur = (req, res, next) => {
         }).validate({ name, lastname, mail, password, phone, picture_profile }, { abortEarly: true }).error;
 
         if (validationErrors) {
+          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
           const hashedPassword = await hashPassword(password);

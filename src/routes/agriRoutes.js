@@ -15,9 +15,11 @@ agriRouter.put('/:id', updateOneAgriculteur, getOneAgriculteurById);
 agriRouter.delete('/:id', deleteOneAgriculteur);
 
 const { getAllConcessionnaires } = require('../controllers/concessionnaires.controller');
+
 agriRouter.get('/:agriId/concessionnaires', getAllConcessionnaires);
 
 const { getAllMateriels } = require('../controllers/materielsControllers');
+
 agriRouter.get('/:agriId/materiels', getAllMateriels);
 
 module.exports = agriRouter;
