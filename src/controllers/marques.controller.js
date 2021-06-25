@@ -25,7 +25,8 @@ const getOneMarqueById = (req, res) => {
       if (marques.length === 0) {
         res.status(404).send('Marque not found');
       } else {
-        res.json(marques[0]);
+        req.info.marque = marques[0]
+        res.json(req.info);
       }
     })
     .catch((err) => {
@@ -42,9 +43,7 @@ const createOneMarque = (req, res, next) => {
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
-
           name: Joi.string().max(100).required(),
-          
         }).validate({ name }, { abortEarly: false }).error;
 
         if (validationErrors) {
