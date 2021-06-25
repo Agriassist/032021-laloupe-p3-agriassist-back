@@ -98,9 +98,9 @@ const updateOneFiche = (req, res, next) => {
         res.send('Fiche data already exist');
         let validationErrors = null;
         validationErrors = Joi.object({
-          name: Joi.string().max(100).require(),
+          name: Joi.string().max(100),
 
-          file: Joi.string().max(100).require(),
+          file: Joi.string().max(100),
 
           modele_id: Joi.number().integer(),
         }).validate({ name, file, modele_id }, { abortEarly: false }).error;
