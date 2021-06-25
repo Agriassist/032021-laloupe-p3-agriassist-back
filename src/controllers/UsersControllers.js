@@ -14,8 +14,8 @@ const {
 } = require('../models/UsersModel');
 
 const getAllUsers = (req, res) => {
-  const id = req.params.consId;
   const materId = req.params.materId;
+  const status = req.params.status;
 
   if (materId) {
     findManyByMaterielId(materId)
@@ -29,8 +29,8 @@ const getAllUsers = (req, res) => {
   } else {
     findMany()
       .then((results) => {
-        const agriculteurs = results[0];
-        res.json(agriculteurs);
+        const users = results[0];
+        res.json(users);
       })
       .catch((err) => {
         res.status(500).send(err.message);
@@ -40,18 +40,18 @@ const getAllUsers = (req, res) => {
 
 const getOneUserById = (req, res) => {
   let id;
-  if (req.agriId) {
-    id = req.agriId;
+  if (req.UserId) {
+    id = req.UserId;
   } else {
     id = req.params.id;
   }
 
   findOneUserById(id)
-    .then(([agriculteurs]) => {
-      if (agriculteurs.length === 0) {
+    .then(([users]) => {
+      if (users.length === 0) {
         res.status(404).send('user not found');
       } else {
-        res.json(agriculteurs[0]);
+        res.json(users[0]);
       }
     })
     .catch((err) => {
@@ -63,7 +63,7 @@ const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { statue, nom, prenom, email, identifiant, hassPassword, phone, photo_profil } = req.body;
 
-  verifExistData(email, identifiant, phone)
+  verifExistDataUser(email, phone)
     .then(async ([results]) => {
       if (results[0]) {
         res.send('user data already exist');

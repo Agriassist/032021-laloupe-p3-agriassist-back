@@ -1,13 +1,8 @@
 const loginRouter = require('express').Router();
 
-const { verifAgriEmailandPassword } = require('../controllers/agriculteursControllers');
-
-const { verifConcessionnaireEmailandPassword } = require('../controllers/concessionnaires.controller');
-
-const { verifAdminEmailandPassword } = require('../controllers/administrateurs.controller');
-
+const { verifUserEmailandPassword } = require('../controllers/UsersControllers');
 const { createToken } = require('../services/jwt');
 
-loginRouter.post('/', verifAgriEmailandPassword, verifConcessionnaireEmailandPassword, verifAdminEmailandPassword, createToken);
+loginRouter.post('/', verifUserEmailandPassword, createToken);
 
 module.exports = loginRouter;
