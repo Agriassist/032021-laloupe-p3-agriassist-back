@@ -25,7 +25,7 @@ const getAllModeles = (req, res) => {
   }
 };
 
-const getOneModeleById = (req, res) => {
+const getOneModeleById = (req, res, next) => {
   let id;
   if (req.modeleId) {
     id = req.modeleId;
@@ -38,7 +38,8 @@ const getOneModeleById = (req, res) => {
       if (modeles.length === 0) {
         res.status(404).send('Modele not found');
       } else {
-        res.json(modeles[0]);
+        req.info.modele = modeles[0];
+        next();
       }
     })
     .catch((err) => {

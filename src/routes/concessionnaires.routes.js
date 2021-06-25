@@ -15,10 +15,7 @@ concRouter.post('/', createOneConcessionnaire, getOneConcessionnaireById);
 concRouter.put('/:id', updateOneConcessionnaire, getOneConcessionnaireById);
 concRouter.delete('/:id', deleteOneConcessionnaire);
 
-
-const {
-  getAllAgriculteurs,
-} = require('../controllers/agriculteursControllers');
+const { getAllAgriculteurs } = require('../controllers/agriculteursControllers');
 
 concRouter.get('/:consId/agriculteurs', getAllAgriculteurs);
 

@@ -44,8 +44,10 @@ const getAllMateriels = (req, res) => {
   }
 };
 
-const getOneMaterielById = (req, res) => {
+const getOneMaterielById = (req, res, next) => {
   let id;
+  console.log(req.materielId);
+  console.log(req.params.id);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -57,7 +59,8 @@ const getOneMaterielById = (req, res) => {
       if (materiels.length === 0) {
         res.status(404).send('Materiel not found');
       } else {
-        res.json(materiels[0]);
+        req.info = { materiel: materiels[0] };
+        next();
       }
     })
     .catch((err) => {
@@ -66,7 +69,7 @@ const getOneMaterielById = (req, res) => {
 };
 
 const createOneMateriel = (req, res, next) => {
-  const { year, serial_number, type, modele_id } = req.body;
+  const { year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang } = req.body;
   verifExistData(serial_number)
     .then(([results]) => {
       if (results[0]) {
@@ -81,13 +84,17 @@ const createOneMateriel = (req, res, next) => {
           type: Joi.string().max(100).required(),
 
           modele_id: Joi.number().integer(),
-        }).validate({ year, serial_number, type, modele_id }, { abortEarly: false }).error;
+
+          prev_oil_chang: Joi.string().max(255),
+
+          next_oil_chang: Joi.string().max(255),
+        }).validate({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          createOne({ year, serial_number, type, modele_id })
+          createOne({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang })
             .then(([results]) => {
               req.materielId = results.insertId;
               next();
@@ -103,7 +110,7 @@ const createOneMateriel = (req, res, next) => {
     });
 };
 const updateOneMateriel = (req, res, next) => {
-  const { year, serial_number, type, modele_id } = req.body;
+  const { year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang } = req.body;
   const { id } = req.params;
 
   findOneById(id)
@@ -116,7 +123,13 @@ const updateOneMateriel = (req, res, next) => {
           serial_number: Joi.string().max(100),
 
           type: Joi.string().max(100),
-        }).validate({ year, serial_number, type }, { abortEarly: false }).error;
+
+          modele_id: Joi.number().integer(),
+
+          prev_oil_chang: Joi.string().max(255),
+
+          next_oil_chang: Joi.string().max(255),
+        }).validate({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);
