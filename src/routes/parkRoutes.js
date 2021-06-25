@@ -1,18 +1,18 @@
 const parkRouter = require('express').Router();
 const materielRoutes = require('./materielRoutes');
 const {
-  getAllAMaterielByAgriculteurId,
-  getOneMaterielByAgriculteurId,
-  createOneMaterielByAgriculteurId,
-  updateOneMaterielByAgriculteurById,
-  deleteOneMaterielByAgriculteurId,
+  getAllAMaterielByUserId,
+  getOneMaterielByUserId,
+  createOneMaterielByUserId,
+  updateOneMaterielByUserById,
+  deleteOneMaterielByUserId,
 } = require('../controllers/park.controllers');
 
-parkRouter.get('/', getAllAMaterielByAgriculteurId);
-parkRouter.get('/:id', getOneMaterielByAgriculteurId);
-parkRouter.post('/', createOneMaterielByAgriculteurId, getOneMaterielByAgriculteurId);
-parkRouter.put('/:id', updateOneMaterielByAgriculteurById, getOneMaterielByAgriculteurId);
-parkRouter.delete('/:id', deleteOneMaterielByAgriculteurId);
+parkRouter.get('/', getAllAMaterielByUserId);
+parkRouter.get('/:id', getOneMaterielByUserId);
+parkRouter.post('/', createOneMaterielByUserId, getOneMaterielByUserId);
+parkRouter.put('/:id', updateOneMaterielByUserById, getOneMaterielByUserId);
+parkRouter.delete('/:id', deleteOneMaterielByUserId);
 
 parkRouter.use('/:id/materiel', materielRoutes);
 

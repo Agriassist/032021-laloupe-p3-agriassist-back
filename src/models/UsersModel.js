@@ -1,7 +1,7 @@
 const argon2 = require('argon2');
 const connection = require('../db-connection');
 
-const findManyUsers = () => {
+const findMany = () => {
   const sql = 'SELECT * FROM users';
   return connection.promise().query(sql);
 };
@@ -11,27 +11,27 @@ const findOneUserById = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
-const createOneUser = (user) => {
+const createOne = (user) => {
   const sql = 'INSERT INTO users SET ?';
   return connection.promise().query(sql, [user]);
 };
 
-const verifExistDataUsers = (email,phone) => {
+const verifExistData = (email,phone) => {
   const sql = 'SELECT * FROM users WHERE email = ? OR phone = ?';
   return connection.promise().query(sql, [email, phone]);
 };
 
-const existEmailUsers = (email) => {
+const existEmail = (email) => {
   const sql = 'SELECT * FROM users WHERE email = ?';
   return connection.promise().query(sql, [email]);
 };
 
-const updateOneUser = (user, id) => {
+const updateOne = (user, id) => {
   const sql = 'UPDATE users SET ? WHERE id=?';
   return connection.promise().query(sql, [user, id]);
 };
 
-const deleteOneUser = (id) => {
+const deleteOne = (id) => {
   const sql = 'DELETE FROM users WHERE id=?';
   return connection.promise().query(sql, [id]);
 };
@@ -48,19 +48,19 @@ const hashPassword = async (password) => {
   return await argon2.hash(password);
 };
 
-const verifyPasswordUser = async (password, hashedPassword) => {
+const verifyPassword = async (password, hashedPassword) => {
   return await argon2.verify(hashedPassword, password);
 };
 
 module.exports = {
-  findManyUsers,
+  findMany,
   findOneUserById,
-  createOneUser,
-  verifExistDataUsers,
-  existEmailUsers,
-  updateOneUser,
-  deleteOneUser,
+  createOne,
+  verifExistData,
+  existEmail,
+  updateOne,
+  deleteOne,
   findManyByMaterielId,
   hashPassword,
-  verifyPasswordUser,
+  verifyPassword,
 };
