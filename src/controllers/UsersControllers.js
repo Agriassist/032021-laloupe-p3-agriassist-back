@@ -14,8 +14,8 @@ const {
 } = require('../models/UsersModel');
 
 const getAllUsers = (req, res) => {
-  const materId = req.params.materId;
-  const status = req.params.status;
+  const { materId } = req.params;
+  const { status } = req.params;
 
   if (materId) {
     findManyByMaterielId(materId)
@@ -178,7 +178,9 @@ const deleteOneUser = (req, res) => {
 };
 
 const verifUserEmailandPassword = async (req, res, next) => {
-  const { email, password } = req.body;
+  const login = JSON.parse(req.body.login);
+  const { email } = login;
+  const { password } = login;
 
   let validationErrors = null;
   validationErrors = Joi.object({
