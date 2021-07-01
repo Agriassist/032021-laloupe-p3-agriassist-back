@@ -6,9 +6,9 @@ const findMany = () => {
   return connection.promise().query(sql);
 };
 
-const findOneUserById = (id) => {
-  const sql = 'SELECT * FROM users WHERE id=?';
-  return connection.promise().query(sql, [id]);
+const findOneUserById = (id, statue) => {
+  const sql = 'SELECT * FROM users WHERE id=? OR statue=?';
+  return connection.promise().query(sql, [id, statue]);
 };
 
 const createOne = (user) => {
@@ -16,7 +16,7 @@ const createOne = (user) => {
   return connection.promise().query(sql, [user]);
 };
 
-const verifExistData = (email,phone) => {
+const verifExistData = (email, phone) => {
   const sql = 'SELECT * FROM users WHERE email = ? OR phone = ?';
   return connection.promise().query(sql, [email, phone]);
 };
@@ -45,11 +45,11 @@ const findManyByMaterielId = (id) => {
 // Hash password
 
 const hashPassword = async (password) => {
-  return await argon2.hash(password);
+  return argon2.hash(password);
 };
 
 const verifyPassword = async (password, hashedPassword) => {
-  return await argon2.verify(hashedPassword, password);
+  return argon2.verify(hashedPassword, password);
 };
 
 module.exports = {
