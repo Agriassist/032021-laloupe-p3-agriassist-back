@@ -4,12 +4,10 @@ const { JWT_SECRET } = process.env;
 
 const createToken = (req, res, next) => {
   let token;
-  if (req.agriculteur) {
-    token = jwt.sign({ id: req.agriculteur.id }, JWT_SECRET, { expiresIn: '1h' });
-  } else if (req.concessionnaire) {
-    token = jwt.sign({ id: req.concessionnaire.id }, JWT_SECRET, { expiresIn: '1h' });
-  } else if (req.administrateur) {
-    token = jwt.sign({ id: req.administrateur.id }, JWT_SECRET, { expiresIn: '1h' });
+  const login = JSON.parse(req.body.login);
+  if (req.user) {
+    token = jwt.sign({ id: req.user.id, status: req.user.status }, JWT_SECRET, { expiresIn: '1h' });
+    next();
   } else {
     res.send("Erreur d'authentification");
   }
@@ -33,6 +31,6 @@ const authenticateWithJsonWebToken = (req, res, next) => {
 };
 
 module.exports = {
- createToken,
+  createToken,
   authenticateWithJsonWebToken,
 };
