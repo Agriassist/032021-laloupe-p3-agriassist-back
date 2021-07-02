@@ -178,9 +178,8 @@ const deleteOneUser = (req, res) => {
 };
 
 const verifUserEmailandPassword = async (req, res, next) => {
-  const login = JSON.parse(req.body.login);
-  const { email } = login;
-  const { password } = login;
+  const { email, password } = req.body;
+  console.log("BONJOUR");
 
   let validationErrors = null;
   validationErrors = Joi.object({
