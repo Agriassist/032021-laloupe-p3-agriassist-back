@@ -11,6 +11,7 @@ const {
   findManyByMaterielId,
   hashPassword,
   verifyPassword,
+  findOnePasswordByEmail,
 } = require('../models/UsersModel');
 
 const getAllUsers = (req, res) => {
@@ -51,8 +52,7 @@ const getOneUserById = (req, res, next) => {
       if (users.length === 0) {
         res.status(404).send('user not found');
       } else {
-        req.info = { users: users[0] };
-        next();
+        res.json(users[0]);
       }
     })
     .catch((err) => {
@@ -198,16 +198,19 @@ const verifUserEmailandPassword = async (req, res, next) => {
         if (results.length === 0) {
           res.status(404).send("user email don't exist");
         } else {
-          req.body.loginPassword = await hashPassword(password);
-          console.log(results[0].password);
-          const passValid = await verifyPassword(password, req.body.loginPassword);
-          console.log(passValid);
-          if (!passValid) {
-            res.send('Password est pas bon');
-          } else {
-            req.userId = results;
-            next();
-          }
+          findOnePasswordByEmail(email).then(async ([result]) => {
+            console.log(result[0].hassPassword);
+
+            req.body.loginPassword = result[0].hassPassword;
+            const passValid = await verifyPassword(password, req.body.loginPassword);
+            console.log(passValid);
+            if (!passValid) {
+              res.send('Password est pas bon');
+            } else {
+              req.userId = results;
+              next();
+            }
+          });
         }
       })
       .catch((err) => {
