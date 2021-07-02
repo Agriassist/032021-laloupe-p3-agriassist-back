@@ -179,25 +179,29 @@ const deleteOneUser = (req, res) => {
 };
 
 const verifUserEmailandPassword = async (req, res, next) => {
-  const login = JSON.parse(req.body.login);
-  const { email } = login;
-  const { password } = login;
+  const { email } = req.body;
+  const { password } = req.body;
+  console.log(email, password);
 
   let validationErrors = null;
   validationErrors = Joi.object({
-    password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
+    password: Joi.string().min(8).max(32).required(),
 
     email: Joi.string().email().max(255).required(),
   }).validate({ password, email }, { abortEarly: false }).error;
   if (validationErrors) {
     res.send('error');
   } else {
-    await existEmail()
+    console.log('ok22');
+    await existEmail(email)
       .then(async ([results]) => {
         if (results.length === 0) {
           res.status(404).send("user email don't exist");
         } else {
-          const passValid = await verifyPassword(password, results[0].password);
+          req.body.loginPassword = await hashPassword(password);
+          console.log(results[0].password);
+          const passValid = await verifyPassword(password, req.body.loginPassword);
+          console.log(passValid);
           if (!passValid) {
             res.send('Password est pas bon');
           } else {
