@@ -1,15 +1,16 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+
 const { JWT_SECRET } = process.env;
 
 const createToken = (req, res, next) => {
   let token;
-  const login = JSON.parse(req.body.login);
-  if (req.user) {
-    token = jwt.sign({ id: req.user.id, status: req.user.status }, JWT_SECRET, { expiresIn: '1h' });
-    next();
+  console.log(req.userId[0].id);
+  if (req.userId[0]) {
+    token = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, JWT_SECRET, { expiresIn: '1h' });
+    res.send({ token });
   } else {
-    res.send("Erreur d'authentification");
+    res.status(500).send("Erreur d'authentification");
   }
   return res.json({ token });
 };
@@ -22,7 +23,7 @@ const authenticateWithJsonWebToken = (req, res, next) => {
       if (!err) {
         next();
       } else {
-        res.status(401).send("You're not allowed to acess these data");
+        res.status(401).send("You're not allowed acess these data");
       }
     });
   } else {
@@ -30,7 +31,27 @@ const authenticateWithJsonWebToken = (req, res, next) => {
   }
 };
 
+const authenticteAdminWithJsonWebToken = (req, res, next) => {
+  console.log(req.headers);
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    console.log(token);
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (!err) {
+        console.log(decoded);
+        next();
+      } else {
+        res.status(401).send("You're not allowed acess these data");
+      }
+    });
+  } else {
+    res.status(401).send("You're not allowed to acess these data");
+  }
+};
+
+
 module.exports = {
   createToken,
   authenticateWithJsonWebToken,
+  authenticteAdminWithJsonWebToken,
 };

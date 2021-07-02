@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 const Joi = require('joi');
 const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData } = require('../models/marque.model');
 
@@ -25,7 +26,7 @@ const getOneMarqueById = (req, res) => {
       if (marques.length === 0) {
         res.status(404).send('Marque not found');
       } else {
-        req.info.marque = marques[0]
+        req.info.marque = marques[0];
         res.json(req.info);
       }
     })
@@ -50,8 +51,8 @@ const createOneMarque = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           createOne({ name })
-            .then(([results]) => {
-              req.marqueId = results.insertId;
+            .then(([result]) => {
+              req.marqueId = result.insertId;
               next();
             })
             .catch((err) => {
@@ -81,8 +82,8 @@ const updateOneMarque = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, id)
-            .then(([results]) => {
-              if (results.affectedRows === 0) {
+            .then(([result]) => {
+              if (result.affectedRows === 0) {
                 res.status(404).send('Mise à echoue');
               } else {
                 next();
