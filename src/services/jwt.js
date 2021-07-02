@@ -23,7 +23,7 @@ const authenticateWithJsonWebToken = (req, res, next) => {
       if (!err) {
         next();
       } else {
-        res.status(401).send("You're not allowed to acess these data");
+        res.status(401).send("You're not allowed acess these data");
       }
     });
   } else {

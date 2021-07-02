@@ -5,8 +5,8 @@ const { getAllUsers, getOneUserById, createOneUser, updateOneUser, deleteOneUser
 const { authenticteAdminWithJsonWebToken } = require('../services/jwt');
 
 userRouter.get('/', authenticteAdminWithJsonWebToken, getAllUsers);
-userRouter.get('/:id', getOneUserById);
-userRouter.post('/', authenticteAdminWithJsonWebToken, createOneUser, getOneUserById);
+userRouter.get('/:id', authenticteAdminWithJsonWebToken, getOneUserById);
+userRouter.post('/', createOneUser, getOneUserById);
 userRouter.put('/:id', updateOneUser, getOneUserById);
 userRouter.delete('/:id', deleteOneUser);
 
