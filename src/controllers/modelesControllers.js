@@ -1,8 +1,9 @@
+/* eslint-disable prefer-destructuring */
 const Joi = require('joi');
 const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData, findManyByMarqueId } = require('../models/modelesModels');
 
 const getAllModeles = (req, res) => {
-  const modeleId = req.params.modeleId;
+  const { modeleId } = req.params;
 
   if (modeleId) {
     findManyByMarqueId(modeleId)
@@ -65,14 +66,11 @@ const createOneModele = (req, res, next) => {
         }).validate({ name, picture, marque_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          console.log(name, picture, marque_id);
           createOne({ name, picture, marque_id })
-            .then(([results]) => {
-              console.log(results);
-              req.modeleId = results.insertId;
+            .then(([result]) => {
+              req.modeleId = result.insertId;
               next();
             })
             .catch((err) => {
@@ -109,8 +107,8 @@ const updateOneModele = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, req.params.id)
-            .then(([results]) => {
-              if (results.affectedRows === 0) {
+            .then(([result]) => {
+              if (result.affectedRows === 0) {
                 res.status(404).send('Modele not found');
               } else {
                 next();

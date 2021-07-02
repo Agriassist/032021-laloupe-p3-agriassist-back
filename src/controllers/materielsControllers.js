@@ -5,17 +5,17 @@ const {
   createOne,
   updateOne,
   deleteOne,
-  findManyByAgriculteurId,
+  findManyByUserId,
   verifExistData,
   findManyModeleId,
 } = require('../models/materielsModels');
 
 const getAllMateriels = (req, res) => {
   const id = req.params.agriId;
-  const modeleId = req.params.modeleId;
+  const { modeleId } = req.params;
 
   if (id) {
-    findManyByAgriculteurId(id)
+    findManyByUserId(id)
       .then((results) => {
         const agriculteur = results[0];
         res.json(agriculteur);
@@ -46,8 +46,6 @@ const getAllMateriels = (req, res) => {
 
 const getOneMaterielById = (req, res, next) => {
   let id;
-  console.log(req.materielId);
-  console.log(req.params.id);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -95,8 +93,8 @@ const createOneMateriel = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           createOne({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang })
-            .then(([results]) => {
-              req.materielId = results.insertId;
+            .then(([result]) => {
+              req.materielId = result.insertId;
               next();
             })
             .catch((err) => {
@@ -136,8 +134,8 @@ const updateOneMateriel = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, req.params.id)
-            .then(([results]) => {
-              if (results.affectedRows === 0) {
+            .then(([result]) => {
+              if (result.affectedRows === 0) {
                 res.status(404).send('Materiel not found');
               } else {
                 next();
@@ -171,8 +169,8 @@ const deleteOneMateriel = (req, res) => {
     });
 };
 
-const AllMaterielsByAgriculteurId = (res, req) => {
-  findManyByAgriculteurId(req.params.id)
+const AllMaterielsByUserId = (res, req) => {
+  findManyByUserId(req.params.id)
     .then(([results]) => {
       if (results.length === 0) {
         res.status(404).send('Park not found');
@@ -191,5 +189,5 @@ module.exports = {
   createOneMateriel,
   updateOneMateriel,
   deleteOneMateriel,
-  AllMaterielsByAgriculteurId,
+  AllMaterielsByUserId,
 };

@@ -38,7 +38,7 @@ const getAllUsers = (req, res) => {
   }
 };
 
-const getOneUserById = (req, res) => {
+const getOneUserById = (req, res, next) => {
   let id;
   if (req.UserId) {
     id = req.UserId;
@@ -51,7 +51,8 @@ const getOneUserById = (req, res) => {
       if (users.length === 0) {
         res.status(404).send('user not found');
       } else {
-        res.json(users[0]);
+        req.info = { users: users[0] };
+        next();
       }
     })
     .catch((err) => {
@@ -63,7 +64,7 @@ const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { statue, nom, prenom, email, identifiant, hassPassword, phone, photo_profil } = req.body;
 
-  verifExistDataUser(email, phone)
+  verifExistData(email, phone)
     .then(async ([results]) => {
       if (results[0]) {
         res.send('user data already exist');
@@ -93,8 +94,8 @@ const createOneUser = (req, res, next) => {
         } else {
           const hashedPassword = await hashPassword(hassPassword);
           createOne({ statue, nom, prenom, email, identifiant, hassPassword: hashedPassword, phone, photo_profil })
-            .then(([results]) => {
-              req.agriId = results.insertId;
+            .then(([result]) => {
+              req.agriId = result.insertId;
               next();
             })
             .catch((err) => {
@@ -143,8 +144,8 @@ const updateOneUser = (req, res, next) => {
             req.body.hassPassword = await hashPassword(hassPassword);
           }
           updateOne(req.body, id)
-            .then(([results]) => {
-              if (results.affectedRows === 0) {
+            .then(([result]) => {
+              if (result.affectedRows === 0) {
                 res.status(404).send('user not found');
               } else {
                 next();
@@ -178,29 +179,33 @@ const deleteOneUser = (req, res) => {
 };
 
 const verifUserEmailandPassword = async (req, res, next) => {
-  const login = JSON.parse(req.body.login);
-  const { email } = login;
-  const { password } = login;
+  const { email } = req.body;
+  const { password } = req.body;
+  console.log(email, password);
 
   let validationErrors = null;
   validationErrors = Joi.object({
-    password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32).required(),
+    password: Joi.string().min(8).max(32).required(),
 
     email: Joi.string().email().max(255).required(),
   }).validate({ password, email }, { abortEarly: false }).error;
   if (validationErrors) {
     res.send('error');
   } else {
-    await existEmail()
+    console.log('ok22');
+    await existEmail(email)
       .then(async ([results]) => {
         if (results.length === 0) {
           res.status(404).send("user email don't exist");
         } else {
-          const passValid = await verifyPassword(password, results[0].password);
+          req.body.loginPassword = await hashPassword(password);
+          console.log(results[0].password);
+          const passValid = await verifyPassword(password, req.body.loginPassword);
+          console.log(passValid);
           if (!passValid) {
             res.send('Password est pas bon');
           } else {
-            req.userId = results[0];
+            req.userId = results;
             next();
           }
         }

@@ -9,9 +9,11 @@ const {
 
 const { getOneModeleById } = require('../controllers/modelesControllers');
 const { getOneMarqueById } = require('../controllers/marques.controller');
+const { getOneUserById } = require('../controllers/UsersControllers');
 
 materielRouter.get('/', getAllMateriels);
 materielRouter.get('/:id', getOneMaterielById, getOneModeleById, getOneMarqueById);
+materielRouter.get('/:id', getOneUserById);
 materielRouter.post('/', createOneMateriel, getOneMaterielById);
 materielRouter.put('/:id', updateOneMateriel, getOneMaterielById);
 materielRouter.delete('/:id', deleteOneMateriel);

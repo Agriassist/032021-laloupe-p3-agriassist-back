@@ -10,7 +10,7 @@ const {
 } = require('../models/fiche_technique.model');
 
 const getAllFiche = (req, res) => {
-  const ficheId = req.params.ficheId;
+  const { ficheId } = req.params;
   if (ficheId) {
     findManyFicheTechniqueId(ficheId)
       .then((results) => {

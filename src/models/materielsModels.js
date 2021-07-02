@@ -30,9 +30,9 @@ const deleteOne = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
-const findManyByAgriculteurId = (id) => {
+const findManyByUserId = (id) => {
   const sql =
-    'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM agriculteur a JOIN park p ON a.id = p.agriculteur_id JOIN materiel m ON m.id = p.materiel_id WHERE a.id = ?';
+    'SELECT m.id, m.year, m.serial_number, m.type, m.modele_id FROM users u JOIN park p ON u.id = p.users_id JOIN materiel m ON m.id = p.materiel_id WHERE u.id = ?';
   return connection.promise().query(sql, [id]);
 };
 
@@ -47,6 +47,6 @@ module.exports = {
   verifExistData,
   updateOne,
   deleteOne,
-  findManyByAgriculteurId,
+  findManyByUserId,
   findManyModeleId,
 };
