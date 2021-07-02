@@ -1,8 +1,8 @@
 const loginRouter = require('express').Router();
 
 const { verifUserEmailandPassword } = require('../controllers/UsersControllers');
-const { createToken } = require('../services/jwt');
+const { createToken, authenticateWithJsonWebToken } = require('../services/jwt');
 
-loginRouter.post('/', verifUserEmailandPassword, createToken);
+loginRouter.post('/', verifUserEmailandPassword, createToken, authenticateWithJsonWebToken);
 
 module.exports = loginRouter;

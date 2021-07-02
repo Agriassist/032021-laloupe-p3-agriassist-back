@@ -16,68 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `administrateur`
---
-
-DROP TABLE IF EXISTS `administrateur`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `administrateur` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `lastname` varchar(100) NOT NULL,
-  `mail` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `phone` varchar(10) NOT NULL,
-  `picture_profile` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mail` (`mail`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `administrateur`
---
-
-LOCK TABLES `administrateur` WRITE;
-/*!40000 ALTER TABLE `administrateur` DISABLE KEYS */;
-/*!40000 ALTER TABLE `administrateur` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `agriculteur`
---
-
-DROP TABLE IF EXISTS `agriculteur`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `agriculteur` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `lastname` varchar(100) NOT NULL,
-  `identifiant` varchar(100) DEFAULT NULL,
-  `password` varchar(150) NOT NULL,
-  `phone` varchar(10) NOT NULL,
-  `picture_profile` varchar(100) DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `identifiant` (`identifiant`),
-  UNIQUE KEY `identifiant_2` (`identifiant`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `agriculteur`
---
-
-LOCK TABLES `agriculteur` WRITE;
-/*!40000 ALTER TABLE `agriculteur` DISABLE KEYS */;
-INSERT INTO `agriculteur` VALUES (1,'Axel','Chapellier','123456789','123456','0102032829','main.pdf','agri@outlook.com'),(2,'testname','testlasname','testidentifiant','test123456','0212131415','main.png','test@outlook.com'),(4,'Claire','Francigny','Claire28000','test123456789','0102030409','main.png','Claire@outlook.com'),(5,'Claire','Francigny','Axel28000','test','0102030241','main.png','Axel@outlook.com');
-/*!40000 ALTER TABLE `agriculteur` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `carnet_entretien`
 --
 
@@ -92,7 +30,7 @@ CREATE TABLE `carnet_entretien` (
   PRIMARY KEY (`id`),
   KEY `materiel_id` (`materiel_id`),
   CONSTRAINT `carnet_entretien_ibfk_1` FOREIGN KEY (`materiel_id`) REFERENCES `materiel` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +39,7 @@ CREATE TABLE `carnet_entretien` (
 
 LOCK TABLES `carnet_entretien` WRITE;
 /*!40000 ALTER TABLE `carnet_entretien` DISABLE KEYS */;
+INSERT INTO `carnet_entretien` VALUES (1,'HUILE MOTEUR CHAMPIONC2 OEM SPECIFIC',1300,NULL);
 /*!40000 ALTER TABLE `carnet_entretien` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,37 +72,6 @@ CREATE TABLE `concessionaire` (
 LOCK TABLES `concessionaire` WRITE;
 /*!40000 ALTER TABLE `concessionaire` DISABLE KEYS */;
 /*!40000 ALTER TABLE `concessionaire` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `concessionnaire`
---
-
-DROP TABLE IF EXISTS `concessionnaire`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `concessionnaire` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `identifiant` varchar(100) DEFAULT NULL,
-  `password` varchar(150) NOT NULL,
-  `phone` varchar(10) NOT NULL,
-  `address` varchar(100) NOT NULL,
-  `picture_logo` varchar(100) DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `concessionnaire`
---
-
-LOCK TABLES `concessionnaire` WRITE;
-/*!40000 ALTER TABLE `concessionnaire` DISABLE KEYS */;
-INSERT INTO `concessionnaire` VALUES (1,'Thomas','123456','123','0102030405','20 rue Max Louis','main.pdf','wild@outlook.com');
-/*!40000 ALTER TABLE `concessionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -204,7 +112,7 @@ CREATE TABLE `marque` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,6 +121,7 @@ CREATE TABLE `marque` (
 
 LOCK TABLES `marque` WRITE;
 /*!40000 ALTER TABLE `marque` DISABLE KEYS */;
+INSERT INTO `marque` VALUES (1,'New Holland');
 /*!40000 ALTER TABLE `marque` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,10 +138,12 @@ CREATE TABLE `materiel` (
   `serial_number` varchar(100) NOT NULL,
   `modele_id` int DEFAULT NULL,
   `type` varchar(100) NOT NULL,
+  `prev_oil_change` varchar(255) DEFAULT NULL,
+  `next_oil_change` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `modele_id` (`modele_id`),
   CONSTRAINT `materiel_ibfk_1` FOREIGN KEY (`modele_id`) REFERENCES `modele` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,6 +152,7 @@ CREATE TABLE `materiel` (
 
 LOCK TABLES `materiel` WRITE;
 /*!40000 ALTER TABLE `materiel` DISABLE KEYS */;
+INSERT INTO `materiel` VALUES (1,1986,'AB6633214yOP203',1,'Tracteur','02/12/2024','02/12/2026'),(3,1986,'AB6633214yOP203',1,'Tracteur','02/12/2024','02/12/2026'),(4,1200,'1111111111',NULL,'banane',NULL,NULL),(5,1200,'1111111111',NULL,'banane',NULL,NULL),(6,1986,'AB6633214yOP203',NULL,'Tracteur',NULL,NULL);
 /*!40000 ALTER TABLE `materiel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,7 +171,7 @@ CREATE TABLE `modele` (
   PRIMARY KEY (`id`),
   KEY `marque_id` (`marque_id`),
   CONSTRAINT `modele_ibfk_1` FOREIGN KEY (`marque_id`) REFERENCES `marque` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,6 +180,7 @@ CREATE TABLE `modele` (
 
 LOCK TABLES `modele` WRITE;
 /*!40000 ALTER TABLE `modele` DISABLE KEYS */;
+INSERT INTO `modele` VALUES (1,'742','741.jpg',1);
 /*!40000 ALTER TABLE `modele` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,13 +192,15 @@ DROP TABLE IF EXISTS `park`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `park` (
-  `agriculteur_id` int DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `users_id` int DEFAULT NULL,
   `materiel_id` int DEFAULT NULL,
-  KEY `agriculteur_id` (`agriculteur_id`),
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
   KEY `materiel_id` (`materiel_id`),
-  CONSTRAINT `park_ibfk_1` FOREIGN KEY (`agriculteur_id`) REFERENCES `agriculteur` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `park_ibfk_2` FOREIGN KEY (`materiel_id`) REFERENCES `materiel` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `park_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `park_ibfk_2` FOREIGN KEY (`materiel_id`) REFERENCES `materiel` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,34 +209,42 @@ CREATE TABLE `park` (
 
 LOCK TABLES `park` WRITE;
 /*!40000 ALTER TABLE `park` DISABLE KEYS */;
+INSERT INTO `park` VALUES (1,1,1);
 /*!40000 ALTER TABLE `park` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `partenariat`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `partenariat`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `partenariat` (
-  `agriculteur_id` int DEFAULT NULL,
-  `concessionnaire_id` int DEFAULT NULL,
-  KEY `agriculteur_id` (`agriculteur_id`),
-  KEY `concessionnaire_id` (`concessionnaire_id`),
-  CONSTRAINT `partenariat_ibfk_1` FOREIGN KEY (`agriculteur_id`) REFERENCES `agriculteur` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `partenariat_ibfk_2` FOREIGN KEY (`concessionnaire_id`) REFERENCES `concessionnaire` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `statue` varchar(100) NOT NULL,
+  `nom` varchar(100) NOT NULL,
+  `prenom` varchar(100) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `identifiant` varchar(100) DEFAULT NULL,
+  `hassPassword` varchar(150) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `photo_profil` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `phone` (`phone`),
+  UNIQUE KEY `identifiant` (`identifiant`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `partenariat`
+-- Dumping data for table `users`
 --
 
-LOCK TABLES `partenariat` WRITE;
-/*!40000 ALTER TABLE `partenariat` DISABLE KEYS */;
-INSERT INTO `partenariat` VALUES (1,1);
-/*!40000 ALTER TABLE `partenariat` ENABLE KEYS */;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'agriculteur','Georges','Lepetit','g.lepetit@orange.fr','GeorgesDeLaBrousse','$argon2i$v=19$m=4096,t=3,p=1$cmtzJ0R2hj7JlY91Nhktpw$bImmRHVdZAi2gIBJWdPeWaJqJJ4bE9euiW3GeV4lj8w','0237450178','lefit.jpg');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -333,4 +256,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-16 10:45:54
+-- Dump completed on 2021-07-01 10:03:15
