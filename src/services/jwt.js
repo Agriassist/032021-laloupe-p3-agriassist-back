@@ -3,16 +3,16 @@ const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = process.env;
 
-const createToken = (req, res, next) => {
+const createToken = (req, res) => {
   let token;
   console.log(req.userId[0].id);
   if (req.userId[0]) {
     token = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, JWT_SECRET, { expiresIn: '1h' });
-    res.send({ token });
+    res.send({ token, status: req.userId[0].statue, id: req.userId[0].id });
   } else {
     res.status(500).send("Erreur d'authentification");
   }
-  return res.json({ token });
+  return res.json({ token, status: req.userId[0].statue, id: req.userId[0].id });
 };
 
 const authenticateWithJsonWebToken = (req, res, next) => {
@@ -48,7 +48,6 @@ const authenticteAdminWithJsonWebToken = (req, res, next) => {
     res.status(401).send("You're not allowed to acess these data");
   }
 };
-
 
 module.exports = {
   createToken,

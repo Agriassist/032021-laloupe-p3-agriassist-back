@@ -5,15 +5,15 @@ const {
   createOneMateriel,
   updateOneMateriel,
   deleteOneMateriel,
+  AllMaterielsByUserId,
 } = require('../controllers/materielsControllers');
 
 const { getOneModeleById } = require('../controllers/modelesControllers');
 const { getOneMarqueById } = require('../controllers/marques.controller');
-const { getOneUserById } = require('../controllers/UsersControllers');
 
 materielRouter.get('/', getAllMateriels);
 materielRouter.get('/:id', getOneMaterielById, getOneModeleById, getOneMarqueById);
-materielRouter.get('/:id', getOneUserById);
+materielRouter.get('/users/:id', AllMaterielsByUserId);
 materielRouter.post('/', createOneMateriel, getOneMaterielById);
 materielRouter.put('/:id', updateOneMateriel, getOneMaterielById);
 materielRouter.delete('/:id', deleteOneMateriel);
