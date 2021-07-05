@@ -5,9 +5,9 @@ const findMany = () => {
   return connection.promise().query(sql);
 };
 
-const findOneById = (agriculteur_id) => {
-  const sql = 'SELECT * FROM park WHERE agriculteur_id=?';
-  return connection.promise().query(sql, [agriculteur_id]);
+const findOneById = (users_id) => {
+  const sql = 'SELECT * FROM park WHERE users_id=?';
+  return connection.promise().query(sql, [users_id]);
 };
 
 const createOne = (materiel) => {
@@ -15,14 +15,14 @@ const createOne = (materiel) => {
   return connection.promise().query(sql, [materiel]);
 };
 
-const updateOne = (materiel, agriculteur_id) => {
-  const sql = 'UPDATE park SET ? WHERE agriculteur_id=?';
-  return connection.promise().query(sql, [materiel, agriculteur_id]);
+const updateOne = (materiel, users_id) => {
+  const sql = 'UPDATE park SET ? WHERE users_id=?';
+  return connection.promise().query(sql, [materiel, users_id]);
 };
 
-const deleteOne = (agriculteur_id) => {
-  const sql = 'DELETE FROM park WHERE agriculteur_id=?';
-  return connection.promise().query(sql, [agriculteur_id]);
+const deleteOne = (users_id) => {
+  const sql = 'DELETE FROM park WHERE users_id=?';
+  return connection.promise().query(sql, [users_id]);
 };
 
 module.exports = {
