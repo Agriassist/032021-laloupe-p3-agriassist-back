@@ -16,7 +16,6 @@ const {
 
 const getAllUsers = (req, res) => {
   const { materId } = req.params;
-  const { status } = req.params;
 
   if (materId) {
     findManyByMaterielId(materId)
@@ -39,7 +38,7 @@ const getAllUsers = (req, res) => {
   }
 };
 
-const getOneUserById = (req, res, next) => {
+const getOneUserById = (req, res) => {
   let id;
   if (req.UserId) {
     id = req.UserId;
@@ -219,6 +218,27 @@ const verifUserEmailandPassword = async (req, res, next) => {
   }
 };
 
+const getManyMaterielById = (req, res) => {
+  let id;
+  if (req.MatId) {
+    id = req.MatId;
+  } else {
+    id = req.params.Matid;
+  }
+
+  findManyByMaterielId(id)
+    .then(([users]) => {
+      if (users.length === 0) {
+        res.status(404).send('user not found');
+      } else {
+        res.json(users);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
 module.exports = {
   getAllUsers,
   getOneUserById,
@@ -226,4 +246,5 @@ module.exports = {
   updateOneUser,
   deleteOneUser,
   verifUserEmailandPassword,
+  getManyMaterielById,
 };

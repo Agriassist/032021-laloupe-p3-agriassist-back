@@ -48,6 +48,8 @@ const getOneMaterielById = (req, res, next) => {
   let id;
   if (req.materielId) {
     id = req.materielId;
+  } else if (req.body.id) {
+    id = req.body.id;
   } else {
     id = req.params.id;
   }
@@ -169,13 +171,20 @@ const deleteOneMateriel = (req, res) => {
     });
 };
 
-const AllMaterielsByUserId = (res, req) => {
-  findManyByUserId(req.params.id)
+const AllMaterielsByUserId = (req, res) => {
+  let id;
+  if (req.Userid) {
+    id = req.Userid;
+  } else {
+    id = req.params.id;
+  }
+
+  findManyByUserId(id)
     .then(([results]) => {
       if (results.length === 0) {
         res.status(404).send('Park not found');
       } else {
-        res.sendStatus(204);
+        res.json(results);
       }
     })
     .catch((err) => {
