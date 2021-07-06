@@ -223,9 +223,9 @@ const getManyMaterielById = (req, res) => {
   if (req.MatId) {
     id = req.MatId;
   } else {
-    id = req.params.Matid;
+    id = req.params.id;
   }
-
+console.log(id);
   findManyByMaterielId(id)
     .then(([users]) => {
       if (users.length === 0) {
