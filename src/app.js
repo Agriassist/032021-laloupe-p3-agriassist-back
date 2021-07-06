@@ -5,6 +5,7 @@ const cors = require('cors');
 const mainRouter = require('./routes');
 
 app.use(cors());
+app.use('/images_profil', express.static('public/images_profil'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

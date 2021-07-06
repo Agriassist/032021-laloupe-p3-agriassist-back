@@ -2,7 +2,7 @@ const userRouter = require('express').Router();
 
 const { getAllUsers, getOneUserById, createOneUser, updateOneUser, deleteOneUser, getManyMaterielById } = require('../controllers/UsersControllers');
 
-const { authenticteAdminWithJsonWebToken } = require('../services/jwt');
+// const { authenticteAdminWithJsonWebToken } = require('../services/jwt');
 
 userRouter.get('/', authenticteAdminWithJsonWebToken, getAllUsers);
 userRouter.get('/:id', authenticteAdminWithJsonWebToken, getOneUserById);
