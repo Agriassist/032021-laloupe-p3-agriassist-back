@@ -13,8 +13,9 @@ const getAllAMaterielByUserId = (req, res) => {
 
 const getOneMaterielByUserId = (req, res) => {
   let id;
-  if (req.agriId) {
-    id = req.agriId;
+  console.log(req.body);
+  if (req.materielId) {
+    id = req.materielId;
   } else {
     id = req.params.id;
   }
@@ -24,7 +25,7 @@ const getOneMaterielByUserId = (req, res) => {
       if (park.length === 0) {
         res.status(404).send(id);
       } else {
-        res.json(park[0]);
+        res.json(park);
       }
     })
     .catch((err) => {
