@@ -4,6 +4,7 @@ const multer = require('multer');
 const {
   findMany,
   findOneUserById,
+  findOnebyNameAndStatue,
   createOne,
   verifExistData,
   existEmail,
