@@ -143,7 +143,7 @@ const updateOneUser = (req, res, next) => {
     },
   });
 
-  const upload = multer({ storage: storage }).single('file');
+  const upload = multer({ storage }).single('file');
 
   upload(req, res, (err) => {
     const user = JSON.parse(req.body.user);
@@ -250,7 +250,7 @@ const verifUserEmailandPassword = async (req, res, next) => {
             const passValid = await verifyPassword(password, req.body.loginPassword);
             console.log(passValid);
             if (!passValid) {
-              res.send('Password est pas bon');
+              res.status(401).send('Password est pas bon');
             } else {
               req.userId = results;
               next();

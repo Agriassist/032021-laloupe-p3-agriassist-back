@@ -9,7 +9,7 @@ const createToken = (req, res) => {
   if (req.userId[0]) {
     token = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, JWT_SECRET, { expiresIn: '15min' });
     const refreshToken = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, REFRESH_JWT_SECRET);
-    res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 1000 });
+    res.cookie('refresh_token', refreshToken, { maxAge: 1 * 60 * 1000 });
     res.json({ token, status: req.userId[0].statue, id: req.userId[0].id });
   } else {
     res.status(500).send("Erreur d'authentification");
@@ -30,8 +30,13 @@ const authorizationWithRefreshJsonWebToken = (req, res, next) => {
     });
   } else {
     res.clearCookie('refresh_token');
-    return res.status(401).send("You're not allowed to access this data");
+    res.status(401).send("You're not allowed to access this data");
   }
+};
+
+const recupCookie = (req, res) => {
+  const cookie = req.cookies.refresh_token;
+  res.json(cookie);
 };
 
 const authenticateWithJsonWebToken = (req, res, next) => {
@@ -70,6 +75,7 @@ const authenticteAdminWithJsonWebToken = (req, res, next) => {
 
 module.exports = {
   createToken,
+  recupCookie,
   authenticateWithJsonWebToken,
   authorizationWithRefreshJsonWebToken,
   authenticteAdminWithJsonWebToken,
