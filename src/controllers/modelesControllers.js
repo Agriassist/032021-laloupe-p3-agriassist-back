@@ -40,6 +40,7 @@ const getOneModeleById = (req, res, next) => {
         res.status(404).send('Modele not found');
       } else {
         req.info.modele = modeles[0];
+        res.status(201).json(modeles[0]);
         next();
       }
     })
@@ -53,9 +54,10 @@ const createOneModele = (req, res, next) => {
 
   verifExistData(name, picture)
     .then(([results]) => {
-      if (results[0]) {
+      if (!results[0]) {
         res.send('Modele data arleady exist');
       } else {
+        console.log(results);
         let validationErrors = null;
         validationErrors = Joi.object({
           name: Joi.string().max(255).required(),
@@ -68,6 +70,7 @@ const createOneModele = (req, res, next) => {
         if (validationErrors) {
           res.send('Data enter is invalid');
         } else {
+          console.log({ name, picture, marque_id });
           createOne({ name, picture, marque_id })
             .then(([result]) => {
               req.modeleId = result.insertId;
