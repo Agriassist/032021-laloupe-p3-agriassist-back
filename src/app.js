@@ -11,6 +11,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use('/images_profil', express.static('public/images_profil'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

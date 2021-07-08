@@ -10,6 +10,10 @@ const findOneUserById = (id) => {
   const sql = 'SELECT * FROM users WHERE id=?';
   return connection.promise().query(sql, [id]);
 };
+const findOnebyNameAndStatue = (nom, status) => {
+  const sql = 'SELECT * FROM users WHERE nom=? AND status=?';
+  return connection.promise().query(sql, [nom, status]);
+};
 
 const findOnePasswordByEmail = (email) => {
   const sql = 'SELECT hassPassword FROM users WHERE email = ?';
@@ -63,6 +67,7 @@ module.exports = {
   findMany,
   findOneUserById,
   findOnePasswordByEmail,
+  findOnebyNameAndStatue,
   createOne,
   verifExistData,
   existEmail,
