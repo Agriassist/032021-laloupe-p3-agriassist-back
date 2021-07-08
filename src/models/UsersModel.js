@@ -48,7 +48,7 @@ const deleteOne = (id) => {
 
 const findManyByMaterielId = (id) => {
   const sql =
-    'SELECT u.id, u.nom, u.prenom, u.email, u.identifiant, u.phone, u.photo_profil FROM materiel m JOIN park p ON m.id = p.materiel_id JOIN users u ON u.id = p.users_id WHERE m.id = ?';
+    'SELECT u.statue, u.id, u.nom, u.prenom, u.email, u.identifiant, u.phone, u.photo_profil FROM materiel m JOIN park p ON m.id = p.materiel_id JOIN users u ON u.id = p.users_id WHERE m.id = ?';
   return connection.promise().query(sql, [id]);
 };
 

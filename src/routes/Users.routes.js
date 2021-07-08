@@ -5,9 +5,9 @@ const { getAllUsers, getOneUserById, createOneUser, updateOneUser, deleteOneUser
 const { authenticteAdminWithJsonWebToken } = require('../services/jwt');
 
 userRouter.get('/', /*authenticteAdminWithJsonWebToken,*/ getAllUsers);
-userRouter.get('/:id', /*authenticteAdminWithJsonWebToken*/ getOneUserById);
+userRouter.get('/:id', /*authenticteAdminWithJsonWebToken,*/ getOneUserById);
 userRouter.get('/materiel/:id', getManyMaterielById);
-userRouter.get('/:name/:id',)
+userRouter.get('/:name/:id')
 userRouter.post('/', createOneUser, getOneUserById);
 userRouter.put('/:id', updateOneUser, getOneUserById);
 userRouter.delete('/:id', deleteOneUser);

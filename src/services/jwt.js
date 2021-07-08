@@ -1,18 +1,37 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, REFRESH_JWT_SECRET } = process.env;
 
 const createToken = (req, res) => {
   let token;
   console.log(req.userId[0].id);
   if (req.userId[0]) {
-    token = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, JWT_SECRET, { expiresIn: '1h' });
-    res.send({ token, status: req.userId[0].statue, id: req.userId[0].id });
+    token = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, JWT_SECRET, { expiresIn: '15min' });
+    const refreshToken = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, REFRESH_JWT_SECRET);
+    res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 1000 });
+    res.json({ token, status: req.userId[0].statue, id: req.userId[0].id });
   } else {
     res.status(500).send("Erreur d'authentification");
   }
-  return res.json({ token, status: req.userId[0].statue, id: req.userId[0].id });
+};
+const authorizationWithRefreshJsonWebToken = (req, res, next) => {
+  console.log('Cookie token: ', req.cookies.refresh_token);
+  if (req.cookies.refresh_token) {
+    jwt.verify(req.cookies.refresh_token, REFRESH_JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.clearCookie('refresh_token');
+        res.status(401).send("You're not allowed to access this data");
+      } else {
+        console.log(decoded);
+        req.UserId = decoded.id;
+        next();
+      }
+    });
+  } else {
+    res.clearCookie('refresh_token');
+    return res.status(401).send("You're not allowed to access this data");
+  }
 };
 
 const authenticateWithJsonWebToken = (req, res, next) => {
@@ -52,5 +71,6 @@ const authenticteAdminWithJsonWebToken = (req, res, next) => {
 module.exports = {
   createToken,
   authenticateWithJsonWebToken,
+  authorizationWithRefreshJsonWebToken,
   authenticteAdminWithJsonWebToken,
 };
