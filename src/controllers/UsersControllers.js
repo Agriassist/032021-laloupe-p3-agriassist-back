@@ -59,6 +59,30 @@ const getOneUserById = (req, res) => {
     });
 };
 
+const getOneUserByIdRefresh = (req, res, next) => {
+  let id;
+  if (req.UserId) {
+    id = req.UserId;
+  } else {
+    id = req.params.id;
+  }
+
+  findOneUserById(id)
+    .then(([users]) => {
+      console.log(users);
+      if (users.length === 0) {
+        res.status(404).send('user not found');
+      } else {
+        req.userId = users;
+        console.log(req.userId);
+        next();
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
 const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { statue, nom, prenom, email, identifiant, hassPassword, phone, photo_profil } = req.body;
@@ -245,6 +269,7 @@ module.exports = {
   createOneUser,
   updateOneUser,
   deleteOneUser,
+  getOneUserByIdRefresh,
   verifUserEmailandPassword,
   getManyMaterielById,
 };
