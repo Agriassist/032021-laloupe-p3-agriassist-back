@@ -40,7 +40,6 @@ const getOneModeleById = (req, res, next) => {
         res.status(404).send('Modele not found');
       } else {
         req.info.modele = modeles[0];
-        res.status(201).json(modeles[0]);
         next();
       }
     })
