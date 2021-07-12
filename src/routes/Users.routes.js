@@ -10,7 +10,7 @@ const {
 } = require('../services/jwt');
 
 userRouter.get('/logout', clearCookie);
-userRouter.get('/', authenticateAdminWithJsonWebToken, getAllUsers);
+userRouter.get('/', getAllUsers);
 userRouter.get('/:id', authenticateAdminWithJsonWebToken, getOneUserById);
 userRouter.get('/materiel/:id', authenticateAgriWithJsonWebToken, getManyMaterielById);
 userRouter.post('/', createOneUser, getOneUserById);

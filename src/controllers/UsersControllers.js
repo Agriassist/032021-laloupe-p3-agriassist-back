@@ -96,7 +96,7 @@ const createOneUser = (req, res, next) => {
       // const photodefault = req.file.get('images_default/twitter.jpg');
       let validationErrors = null;
       validationErrors = Joi.object({
-        statue: Joi.string().valid('agriculteur', 'concessionnaire').required(),
+        statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur').required(),
 
         nom: Joi.string().max(100).required(),
 
@@ -159,7 +159,7 @@ const updateOneUser = (req, res, next) => {
           if (results[0]) {
             let validationErrors = null;
             validationErrors = Joi.object({
-              statue: Joi.string().valid('agriculteur', 'concessionnaire'),
+              statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
 
               nom: Joi.string().max(100),
 
