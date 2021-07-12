@@ -11,9 +11,11 @@ const {
 const { getOneModeleById } = require('../controllers/modelesControllers');
 const { getOneMarqueById } = require('../controllers/marques.controller');
 
+const { authenticateWithJsonWebToken, authenticateAdminWithJsonWebToken, authenticateAgriWithJsonWebToken, authenticateConcWithJsonWebToken } = require('../services/jwt');
+
 materielRouter.get('/', getAllMateriels);
 materielRouter.get('/:id', getOneMaterielById, getOneModeleById, getOneMarqueById);
-materielRouter.get('/users/:id', AllMaterielsByUserId);
+materielRouter.get('/users/:id', authenticateWithJsonWebToken, AllMaterielsByUserId);
 materielRouter.post('/', createOneMateriel, getOneMaterielById);
 materielRouter.put('/:id', updateOneMateriel, getOneMaterielById);
 materielRouter.delete('/:id', deleteOneMateriel);

@@ -39,6 +39,10 @@ const recupCookie = (req, res) => {
   res.json(cookie);
 };
 
+const clearCookie = (req, res) => {
+  res.clearCookie('refresh_token');
+};
+
 const authenticateWithJsonWebToken = (req, res, next) => {
   console.log(req.headers);
   if (req.headers.authorization) {
@@ -55,15 +59,63 @@ const authenticateWithJsonWebToken = (req, res, next) => {
   }
 };
 
-const authenticteAdminWithJsonWebToken = (req, res, next) => {
-  console.log(req.headers);
+const authenticateAdminWithJsonWebToken = (req, res, next) => {
+  console.log(req.headers, 'avant');
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(' ')[1];
-    console.log(token);
+    console.log(token, 'ici');
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (!err) {
-        console.log(decoded);
-        next();
+        console.log('la', decoded);
+        if (decoded.status !== 'administateur') {
+          res.status(401).send("You're not allowed acess these data");
+        } else {
+          next();
+        }
+      } else {
+        res.status(401).send("You're not allowed acess these data");
+      }
+    });
+  } else {
+    res.status(401).send("You're not allowed to acess these data");
+  }
+};
+
+const authenticateAgriWithJsonWebToken = (req, res, next) => {
+  console.log(req.headers, 'avant');
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    console.log(token, 'ici');
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (!err) {
+        console.log('la', decoded);
+        if (decoded.status !== 'agriculteur') {
+          res.status(401).send("You're not allowed acess these data");
+        } else {
+          next();
+        }
+      } else {
+        res.status(401).send("You're not allowed acess these data");
+      }
+    });
+  } else {
+    res.status(401).send("You're not allowed to acess these data");
+  }
+};
+
+const authenticateConcWithJsonWebToken = (req, res, next) => {
+  console.log(req.headers, 'avant');
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    console.log(token, 'ici');
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (!err) {
+        console.log('la', decoded);
+        if (decoded.status !== 'concessionnaire') {
+          res.status(401).send("You're not allowed acess these data");
+        } else {
+          next();
+        }
       } else {
         res.status(401).send("You're not allowed acess these data");
       }
@@ -76,7 +128,10 @@ const authenticteAdminWithJsonWebToken = (req, res, next) => {
 module.exports = {
   createToken,
   recupCookie,
+  clearCookie,
   authenticateWithJsonWebToken,
   authorizationWithRefreshJsonWebToken,
-  authenticteAdminWithJsonWebToken,
+  authenticateAgriWithJsonWebToken,
+  authenticateConcWithJsonWebToken,
+  authenticateAdminWithJsonWebToken,
 };
