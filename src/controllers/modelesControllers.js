@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData, findManyByMarqueId } = require('../models/modelesModels');
+const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistDataModele, findManyByMarqueId } = require('../models/modelesModels');
 
 const getAllModeles = (req, res) => {
   const { modeleId } = req.params;
@@ -51,10 +51,11 @@ const getOneModeleById = (req, res, next) => {
 const createOneModele = (req, res, next) => {
   const { name, picture, marque_id } = req.body;
 
-  verifExistData(name, picture)
+  verifExistDataModele(name, picture)
     .then(([results]) => {
       if (results[0]) {
         res.send('Modele data arleady exist');
+        console.log(results[0]);
       } else {
         let validationErrors = null;
         validationErrors = Joi.object({
@@ -71,6 +72,7 @@ const createOneModele = (req, res, next) => {
           createOne({ name, picture, marque_id })
             .then(([result]) => {
               req.modeleId = result.insertId;
+              console.log('Ok');
               next();
             })
             .catch((err) => {
