@@ -34,7 +34,6 @@ const findManyByMarqueId = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
-
 module.exports = {
   findMany,
   findOneById,
