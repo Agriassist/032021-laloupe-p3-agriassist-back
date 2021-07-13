@@ -133,80 +133,133 @@ const createOneUser = (req, res, next) => {
 };
 const updateOneUser = (req, res, next) => {
   const { id } = req.params;
+  if (!req.body.email) {
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, 'public/images_profil');
+      },
+      filename: (_, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+      },
+    });
 
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'public/images_profil');
-    },
-    filename: (_, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
-    },
-  });
+    const upload = multer({ storage }).single('file');
 
-  const upload = multer({ storage }).single('file');
+    upload(req, res, (err) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        const user = JSON.parse(req.body.user);
+        user.photo_profil = req.file.filename;
+        console.log(user);
+        findOneUserById(id)
+          .then(async ([results]) => {
+            console.log(results);
+            if (results[0]) {
+              let validationErrors = null;
+              validationErrors = Joi.object({
+                statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
 
-  upload(req, res, (err) => {
-    const user = JSON.parse(req.body.user);
+                nom: Joi.string().max(100),
 
-    if (err) {
-      res.status(500).json(err);
-    } else {
-      user.photo_profil = req.file.filename;
-      console.log(user);
-      findOneUserById(id)
-        .then(async ([results]) => {
-          console.log(results);
-          if (results[0]) {
-            let validationErrors = null;
-            validationErrors = Joi.object({
-              statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
+                prenom: Joi.string().max(100),
 
-              nom: Joi.string().max(100),
+                email: Joi.string().email().max(100),
 
-              prenom: Joi.string().max(100),
+                identifiant: Joi.string().max(100),
 
-              email: Joi.string().email().max(100),
+                hassPassword: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32),
 
-              identifiant: Joi.string().max(100),
+                phone: Joi.string().max(10),
 
-              hassPassword: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32),
+                photo_profil: Joi.string().max(100),
+              }).validate(user, { abortEarly: false }).error;
 
-              phone: Joi.string().max(10),
-
-              photo_profil: Joi.string().max(100),
-            }).validate(user, { abortEarly: false }).error;
-
-            if (validationErrors) {
-              console.log(validationErrors);
-              res.send('Data enter is invalid');
+              if (validationErrors) {
+                console.log(validationErrors);
+                res.send('Data enter is invalid');
+              } else {
+                if (user.hassPassword) {
+                  user.hassPassword = await hashPassword(user.hassPassword);
+                }
+                if (user.email === results[0].email) {
+                  delete user.email;
+                }
+                updateOne(user, id)
+                  .then(([result]) => {
+                    if (result.affectedRows === 0) {
+                      res.status(404).send('user not found');
+                    } else {
+                      next();
+                    }
+                  })
+                  .catch((err) => {
+                    res.status(500).send(err.message);
+                  });
+              }
             } else {
-              if (user.hassPassword) {
-                user.hassPassword = await hashPassword(user.hassPassword);
-              }
-              if (user.email === results[0].email) {
-                delete user.email;
-              }
-              updateOne(user, id)
-                .then(([result]) => {
-                  if (result.affectedRows === 0) {
-                    res.status(404).send('user not found');
-                  } else {
-                    next();
-                  }
-                })
-                .catch((err) => {
-                  res.status(500).send(err.message);
-                });
+              res.send('user data already exist');
             }
+          })
+          .catch((err) => {
+            res.status(500).send(err.message);
+          });
+      }
+    });
+  } else {
+    findOneUserById(id)
+      .then(async ([results]) => {
+        console.log(results);
+        if (results[0]) {
+          let validationErrors = null;
+          validationErrors = Joi.object({
+            statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
+
+            nom: Joi.string().max(100),
+
+            prenom: Joi.string().max(100),
+
+            email: Joi.string().email().max(100),
+
+            identifiant: Joi.string().max(100),
+
+            hassPassword: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')).min(8).max(32),
+
+            phone: Joi.string().max(10),
+
+            photo_profil: Joi.string().max(100),
+          }).validate(req.body, { abortEarly: false }).error;
+
+          if (validationErrors) {
+            console.log(validationErrors);
+            res.send('Data enter is invalid');
           } else {
-            res.send('user data already exist');
+            if (req.body.hassPassword) {
+              req.body.hassPassword = await hashPassword(req.body.hassPassword);
+            }
+            if (req.body.email === results[0].email) {
+              delete req.body.email;
+            }
+            updateOne(req.body, id)
+              .then(([result]) => {
+                if (result.affectedRows === 0) {
+                  res.status(404).send('user not found');
+                } else {
+                  next();
+                }
+              })
+              .catch((err) => {
+                res.status(500).send(err.message);
+              });
           }
-        })
-        .catch((err) => {
-          res.status(500).send(err.message);
-        });
-    }
-  });
+        } else {
+          res.send('user data already exist');
+        }
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
 };
 
 const deleteOneUser = (req, res) => {
