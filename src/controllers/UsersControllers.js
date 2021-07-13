@@ -88,6 +88,7 @@ const getOneUserByIdRefresh = (req, res, next) => {
 const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { statue, nom, prenom, email, identifiant, hassPassword, phone, photo_profil } = req.body;
+  console.log(req.body);
 
   verifExistData(email, phone).then(async ([results]) => {
     if (results[0]) {
@@ -120,7 +121,7 @@ const createOneUser = (req, res, next) => {
         const hashedPassword = await hashPassword(hassPassword);
         createOne({ statue, nom, prenom, email, identifiant, hassPassword: hashedPassword, phone, photo_profil: 'twitter.jpg' })
           .then(([result]) => {
-            req.agriId = result.insertId;
+            req.UserId = result.insertId;
             next();
           })
           .catch((err) => {
