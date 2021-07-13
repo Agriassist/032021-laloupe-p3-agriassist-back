@@ -63,11 +63,7 @@ const getOneMaterielById = (req, res, next) => {
         res.status(404).send('Materiel not found');
       } else {
         req.info = { materiel: materiels[0] };
-        if (req.materielId) {
-          res.status(201).json(materiels[0]);
-        } else {
-          next();
-        }
+        next();
       }
     })
     .catch((err) => {

@@ -96,7 +96,7 @@ const createOneUser = (req, res, next) => {
       // const photodefault = req.file.get('images_default/twitter.jpg');
       let validationErrors = null;
       validationErrors = Joi.object({
-        statue: Joi.string().valid('agriculteur', 'concessionnaire').required(),
+        statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur').required(),
 
         nom: Joi.string().max(100).required(),
 
@@ -119,7 +119,6 @@ const createOneUser = (req, res, next) => {
       } else {
         const hashedPassword = await hashPassword(hassPassword);
         createOne({ statue, nom, prenom, email, identifiant, hassPassword: hashedPassword, phone, photo_profil: 'twitter.jpg' })
-        console.log(photo_profil)
           .then(([result]) => {
             req.agriId = result.insertId;
             next();
@@ -159,7 +158,7 @@ const updateOneUser = (req, res, next) => {
           if (results[0]) {
             let validationErrors = null;
             validationErrors = Joi.object({
-              statue: Joi.string().valid('agriculteur', 'concessionnaire'),
+              statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
 
               nom: Joi.string().max(100),
 
@@ -181,7 +180,7 @@ const updateOneUser = (req, res, next) => {
               res.send('Data enter is invalid');
             } else {
               if (user.hassPassword) {
-                user.hassPassword = await hashPassword(hassPassword);
+                user.hassPassword = await hashPassword(user.hassPassword);
               }
               if (user.email === results[0].email) {
                 delete user.email;
@@ -236,6 +235,7 @@ const verifUserEmailandPassword = async (req, res, next) => {
   }).validate({ password, email }, { abortEarly: false }).error;
   if (validationErrors) {
     res.send('error');
+    console.log('Banane');
   } else {
     console.log('ok22');
     await existEmail(email)
@@ -271,7 +271,7 @@ const getManyMaterielById = (req, res) => {
   } else {
     id = req.params.id;
   }
-console.log(id);
+  console.log(id);
   findManyByMaterielId(id)
     .then(([users]) => {
       if (users.length === 0) {
