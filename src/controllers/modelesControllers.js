@@ -17,7 +17,8 @@ const getAllModeles = (req, res) => {
   } else {
     findMany()
       .then(([results]) => {
-        const modeles = results[0];
+        console.log(results);
+        const modeles = results;
         res.json(modeles);
       })
       .catch((err) => {
@@ -38,9 +39,11 @@ const getOneModeleById = (req, res, next) => {
     .then(([modeles]) => {
       if (modeles.length === 0) {
         res.status(404).send('Modele not found');
-      } else {
+      } else if (req.next === 'nop') {
         req.info.modele = modeles[0];
+      } else {
         next();
+        req.info.modele = modeles[0];
       }
     })
     .catch((err) => {
@@ -50,10 +53,11 @@ const getOneModeleById = (req, res, next) => {
 
 const createOneModele = (req, res, next) => {
   const { name, picture, marque_id } = req.body;
+  console.log(name, picture, marque_id);
 
   verifExistData(name, picture)
     .then(([results]) => {
-      if (!results[0]) {
+      if (results[0]) {
         res.send('Modele data arleady exist');
       } else {
         console.log(results);
@@ -73,6 +77,7 @@ const createOneModele = (req, res, next) => {
           createOne({ name, picture, marque_id })
             .then(([result]) => {
               req.modeleId = result.insertId;
+              req.next = 'nop';
               next();
             })
             .catch((err) => {

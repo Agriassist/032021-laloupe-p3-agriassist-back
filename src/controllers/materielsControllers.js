@@ -62,8 +62,13 @@ const getOneMaterielById = (req, res, next) => {
         console.log(materiels);
         res.status(404).send('Materiel not found');
       } else {
+        console.log(materiels);
         req.info = { materiel: materiels[0] };
-        next();
+        if (req.info.materiel.serial_number) {
+          res.json(materiels[0]);
+        } else {
+          next();
+        }
       }
     })
     .catch((err) => {
@@ -72,7 +77,7 @@ const getOneMaterielById = (req, res, next) => {
 };
 
 const createOneMateriel = (req, res, next) => {
-  const { year, serial_number, type, modele_id, prev_oil_change, next_oil_change } = req.body;
+  const { year, serial_number, type, modele_id, prev_oil_change, next_oil_change, modeleId, marqueId, concessionnaireId, agriculteurId } = req.body;
   verifExistData(serial_number)
     .then(([results]) => {
       if (results[0]) {
@@ -99,7 +104,8 @@ const createOneMateriel = (req, res, next) => {
         } else {
           createOne({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change })
             .then(([result]) => {
-              req.materielId = result.insertId;
+              // req.materielId = result.insertId;
+              req.infoCompte = { materiel_Id: result.insertId, modeleId, agriculteurId, concessionnaireId };
               next();
             })
             .catch((err) => {
