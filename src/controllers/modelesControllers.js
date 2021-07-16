@@ -29,8 +29,11 @@ const getAllModeles = (req, res) => {
 
 const getOneModeleById = (req, res, next) => {
   let id;
+  console.log(req.info.materiel.modele_id);
   if (req.modeleId) {
     id = req.modeleId;
+  } else if (req.info.materiel.modele_id) {
+    id = req.info.materiel.modele_id;
   } else {
     id = req.params.id;
   }
@@ -39,12 +42,10 @@ const getOneModeleById = (req, res, next) => {
     .then(([modeles]) => {
       if (modeles.length === 0) {
         res.status(404).send('Modele not found');
-      } else if (req.next === 'nop') {
-        req.info.modele = modeles[0];
-      } else {
-        next();
-        req.info.modele = modeles[0];
       }
+      req.info.modele = modeles[0];
+      console.log(req.info);
+      next();
     })
     .catch((err) => {
       res.status(500).send(err.message);
@@ -77,7 +78,6 @@ const createOneModele = (req, res, next) => {
           createOne({ name, picture, marque_id })
             .then(([result]) => {
               req.modeleId = result.insertId;
-              req.next = 'nop';
               next();
             })
             .catch((err) => {
