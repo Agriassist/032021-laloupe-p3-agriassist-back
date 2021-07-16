@@ -51,6 +51,8 @@ const getOneMaterielById = (req, res, next) => {
     id = req.materielId;
   } else if (req.body.id) {
     id = req.body.id;
+  } else if (req.materiel_Id) {
+    id = req.materiel_Id;
   } else {
     id = req.params.id;
   }
@@ -64,7 +66,7 @@ const getOneMaterielById = (req, res, next) => {
       } else {
         console.log(materiels);
         req.info = { materiel: materiels[0] };
-        if (req.info.materiel.serial_number) {
+        if (req.materiel_Id) {
           res.json(materiels[0]);
         } else {
           next();

@@ -40,7 +40,7 @@ const createOneMaterielByUserId = (req, res, next) => {
   createOne({ users_id: agriculteurId, materiel_id: materiel_Id })
     .then(() => {
       createOne({ users_id: concessionnaireId, materiel_id: materiel_Id }).then(() => {
-        req.materielId = materiel_Id;
+        req.materiel_Id = materiel_Id;
         next();
       });
     })
