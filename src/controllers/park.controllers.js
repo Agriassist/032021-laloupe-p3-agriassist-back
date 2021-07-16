@@ -34,12 +34,15 @@ const getOneMaterielByUserId = (req, res) => {
 };
 
 const createOneMaterielByUserId = (req, res, next) => {
-  const { users_id, materiel_id } = req.body;
+  console.log(req.infoCompte, 'laaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  const { materiel_Id, agriculteurId, concessionnaireId } = req.infoCompte;
 
-  createOne({ users_id, materiel_id })
+  createOne({ users_id: agriculteurId, materiel_id: materiel_Id })
     .then(() => {
-      req.agriId = users_id;
-      next();
+      createOne({ users_id: concessionnaireId, materiel_id: materiel_Id }).then(() => {
+        req.materiel_Id = materiel_Id;
+        next();
+      });
     })
     .catch((err) => {
       res.status(500).send(err.message);

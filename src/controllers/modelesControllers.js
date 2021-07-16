@@ -17,7 +17,8 @@ const getAllModeles = (req, res) => {
   } else {
     findMany()
       .then(([results]) => {
-        const modeles = results[0];
+        console.log(results);
+        const modeles = results;
         res.json(modeles);
       })
       .catch((err) => {
@@ -28,8 +29,11 @@ const getAllModeles = (req, res) => {
 
 const getOneModeleById = (req, res, next) => {
   let id;
+  console.log(req.info.materiel.modele_id);
   if (req.modeleId) {
     id = req.modeleId;
+  } else if (req.info.materiel.modele_id) {
+    id = req.info.materiel.modele_id;
   } else {
     id = req.params.id;
   }
@@ -38,10 +42,10 @@ const getOneModeleById = (req, res, next) => {
     .then(([modeles]) => {
       if (modeles.length === 0) {
         res.status(404).send('Modele not found');
-      } else {
-        req.info.modele = modeles[0];
-        next();
       }
+      req.info.modele = modeles[0];
+      console.log(req.info);
+      next();
     })
     .catch((err) => {
       res.status(500).send(err.message);
@@ -50,10 +54,11 @@ const getOneModeleById = (req, res, next) => {
 
 const createOneModele = (req, res, next) => {
   const { name, picture, marque_id } = req.body;
+  console.log(name, picture, marque_id);
 
   verifExistData(name, picture)
     .then(([results]) => {
-      if (!results[0]) {
+      if (results[0]) {
         res.send('Modele data arleady exist');
       } else {
         console.log(results);

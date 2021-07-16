@@ -17,6 +17,8 @@ const getOneMarqueById = (req, res) => {
   let id;
   if (req.marqueId) {
     id = req.marqueId;
+  } else if (req.info.modele.marque_id) {
+    id = req.info.modele.marque_id;
   } else {
     id = req.params.id;
   }
