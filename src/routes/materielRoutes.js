@@ -18,9 +18,7 @@ const {
   authenticateConcWithJsonWebToken,
 } = require('../services/jwt');
 
-const {
-  createOneMaterielByUserId,
-} = require('../controllers/park.controllers');
+const { createOneMaterielByUserId } = require('../controllers/park.controllers');
 
 materielRouter.get('/', getAllMateriels);
 materielRouter.get('/:id', getOneMaterielById, getOneModeleById, getOneMarqueById);
