@@ -118,6 +118,7 @@ const updateOneModele = (req, res, next) => {
               if (result.affectedRows === 0) {
                 res.status(404).send('Modele not found');
               } else {
+                req.modeleId = result.insertId;
                 next();
               }
             })

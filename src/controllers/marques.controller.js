@@ -88,6 +88,7 @@ const updateOneMarque = (req, res, next) => {
               if (result.affectedRows === 0) {
                 res.status(404).send('Mise à echoue');
               } else {
+                req.marqueId = result.insertId;
                 next();
               }
             })

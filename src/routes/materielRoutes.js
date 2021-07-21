@@ -8,8 +8,8 @@ const {
   AllMaterielsByUserId,
 } = require('../controllers/materielsControllers');
 
-const { getOneModeleById } = require('../controllers/modelesControllers');
-const { getOneMarqueById } = require('../controllers/marques.controller');
+const { getOneModeleById, updateOneModele } = require('../controllers/modelesControllers');
+const { getOneMarqueById, updateOneMarque } = require('../controllers/marques.controller');
 
 const {
   authenticateWithJsonWebToken,
