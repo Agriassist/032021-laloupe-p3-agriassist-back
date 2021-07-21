@@ -8,8 +8,8 @@ const {
   AllMaterielsByUserId,
 } = require('../controllers/materielsControllers');
 
-const { getOneModeleById } = require('../controllers/modelesControllers');
-const { getOneMarqueById } = require('../controllers/marques.controller');
+const { getOneModeleById, updateOneModele } = require('../controllers/modelesControllers');
+const { getOneMarqueById, updateOneMarque } = require('../controllers/marques.controller');
 
 const {
   authenticateWithJsonWebToken,
@@ -18,9 +18,7 @@ const {
   authenticateConcWithJsonWebToken,
 } = require('../services/jwt');
 
-const {
-  createOneMaterielByUserId,
-} = require('../controllers/park.controllers');
+const { createOneMaterielByUserId } = require('../controllers/park.controllers');
 
 materielRouter.get('/', getAllMateriels);
 materielRouter.get('/:id', getOneMaterielById, getOneModeleById, getOneMarqueById);

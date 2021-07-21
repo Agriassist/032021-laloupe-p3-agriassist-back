@@ -1,4 +1,4 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
+const { findMany, findManyById, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
 
 const getAllAMaterielByUserId = (req, res) => {
   findMany()
@@ -32,6 +32,29 @@ const getOneMaterielByUserId = (req, res) => {
       res.status(500).send(err.message);
     });
 };
+
+const getUsersByMaterielId = (req, res) => {
+  let id;
+  console.log(req.body);
+  if (req.materielId) {
+    id = req.materielId;
+  } else {
+    id = req.params.id;
+  }
+
+  findManyById(id)
+    .then(([park]) => {
+      if (park.length === 0) {
+        res.status(404).send(id);
+      } else {
+        res.json(park);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
 
 const createOneMaterielByUserId = (req, res, next) => {
   console.log(req.infoCompte, 'laaaaaaaaaaaaaaaaaaaaaaaaaaaa');
@@ -80,6 +103,7 @@ const deleteOneMaterielByUserId = (req, res) => {
 
 module.exports = {
   getAllAMaterielByUserId,
+  getUsersByMaterielId,
   getOneMaterielByUserId,
   createOneMaterielByUserId,
   updateOneMaterielByUserById,
