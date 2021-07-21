@@ -1,5 +1,7 @@
 const Joi = require('joi');
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 const {
   findMany,
@@ -133,6 +135,7 @@ const createOneUser = (req, res, next) => {
 };
 const updateOneUser = (req, res, next) => {
   const { id } = req.params;
+  console.log(req.body.email);
   if (!req.body.email) {
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
@@ -150,7 +153,9 @@ const updateOneUser = (req, res, next) => {
         res.status(500).json(err);
       } else {
         const user = JSON.parse(req.body.user);
+        const { profil_picture } = user;
         user.photo_profil = req.file.filename;
+        delete user.profil_picture;
         console.log(user);
         findOneUserById(id)
           .then(async ([results]) => {
@@ -190,7 +195,14 @@ const updateOneUser = (req, res, next) => {
                     if (result.affectedRows === 0) {
                       res.status(404).send('user not found');
                     } else {
-                      next();
+                      console.log(__dirname);
+                      fs.unlink(path.join(__dirname, `/../../public/images_profil/${profil_picture}`), (err) => {
+                        if (err) {
+                          res.status(500).json(err);
+                        } else {
+                          next();
+                        }
+                      });
                     }
                   })
                   .catch((err) => {
