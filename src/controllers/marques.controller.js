@@ -17,6 +17,8 @@ const getOneMarqueById = (req, res) => {
   let id;
   if (req.marqueId) {
     id = req.marqueId;
+  } else if (req.info.modele.marque_id) {
+    id = req.info.modele.marque_id;
   } else {
     id = req.params.id;
   }
@@ -86,6 +88,7 @@ const updateOneMarque = (req, res, next) => {
               if (result.affectedRows === 0) {
                 res.status(404).send('Mise à echoue');
               } else {
+                req.marqueId = result.insertId;
                 next();
               }
             })

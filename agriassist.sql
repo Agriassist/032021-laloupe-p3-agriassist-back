@@ -30,7 +30,7 @@ CREATE TABLE `carnet_entretien` (
   PRIMARY KEY (`id`),
   KEY `materiel_id` (`materiel_id`),
   CONSTRAINT `carnet_entretien_ibfk_1` FOREIGN KEY (`materiel_id`) REFERENCES `materiel` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,6 @@ CREATE TABLE `carnet_entretien` (
 
 LOCK TABLES `carnet_entretien` WRITE;
 /*!40000 ALTER TABLE `carnet_entretien` DISABLE KEYS */;
-INSERT INTO `carnet_entretien` VALUES (1,'HUILE MOTEUR CHAMPIONC2 OEM SPECIFIC',1300,NULL);
 /*!40000 ALTER TABLE `carnet_entretien` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +111,7 @@ CREATE TABLE `marque` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +120,7 @@ CREATE TABLE `marque` (
 
 LOCK TABLES `marque` WRITE;
 /*!40000 ALTER TABLE `marque` DISABLE KEYS */;
-INSERT INTO `marque` VALUES (1,'New Holland');
+INSERT INTO `marque` VALUES (4,'Massey Ferguson'),(5,'New Holland'),(6,'Case IH');
 /*!40000 ALTER TABLE `marque` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,7 +142,7 @@ CREATE TABLE `materiel` (
   PRIMARY KEY (`id`),
   KEY `modele_id` (`modele_id`),
   CONSTRAINT `materiel_ibfk_1` FOREIGN KEY (`modele_id`) REFERENCES `modele` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +151,7 @@ CREATE TABLE `materiel` (
 
 LOCK TABLES `materiel` WRITE;
 /*!40000 ALTER TABLE `materiel` DISABLE KEYS */;
-INSERT INTO `materiel` VALUES (1,1986,'AB6633214yOP203',1,'Tracteur','02/12/2024','02/12/2026'),(3,1986,'AB6633214yOP203',1,'Tracteur','02/12/2024','02/12/2026'),(4,1200,'1111111111',NULL,'banane',NULL,NULL),(5,1200,'1111111111',NULL,'banane',NULL,NULL),(6,1986,'AB6633214yOP203',NULL,'Tracteur',NULL,NULL);
+INSERT INTO `materiel` VALUES (27,2009,'0123456789',20,'PUMA 210','0h','600h'),(28,2012,'012345678',23,'T7.200','0h','600h'),(29,2018,'01234567',24,'7718S','0h','500h'),(30,2015,'0123456000',24,'7718S','0h','500h');
 /*!40000 ALTER TABLE `materiel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +170,7 @@ CREATE TABLE `modele` (
   PRIMARY KEY (`id`),
   KEY `marque_id` (`marque_id`),
   CONSTRAINT `modele_ibfk_1` FOREIGN KEY (`marque_id`) REFERENCES `marque` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +179,7 @@ CREATE TABLE `modele` (
 
 LOCK TABLES `modele` WRITE;
 /*!40000 ALTER TABLE `modele` DISABLE KEYS */;
-INSERT INTO `modele` VALUES (1,'742','741.jpg',1);
+INSERT INTO `modele` VALUES (20,'PUMA 210','PUMA_210.jpg',6),(21,'MAGNUM 340','MAGNUM_340.jpg',6),(22,'T 6050','T_6050.jpg',5),(23,'T7.200','T7.200.jpg',5),(24,'7718S','7718S.jpg',4),(25,'6713S','6713S.jpg',4);
 /*!40000 ALTER TABLE `modele` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +199,7 @@ CREATE TABLE `park` (
   KEY `materiel_id` (`materiel_id`),
   CONSTRAINT `park_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
   CONSTRAINT `park_ibfk_2` FOREIGN KEY (`materiel_id`) REFERENCES `materiel` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +208,7 @@ CREATE TABLE `park` (
 
 LOCK TABLES `park` WRITE;
 /*!40000 ALTER TABLE `park` DISABLE KEYS */;
-INSERT INTO `park` VALUES (1,1,1);
+INSERT INTO `park` VALUES (58,1,27),(59,3,27),(60,1,28),(61,3,28),(62,1,29),(63,3,29),(64,1,30),(65,3,30);
 /*!40000 ALTER TABLE `park` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,7 +233,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `identifiant` (`identifiant`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,7 +242,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'agriculteur','Georges','Lepetit','g.lepetit@orange.fr','GeorgesDeLaBrousse','$argon2i$v=19$m=4096,t=3,p=1$HqyTE1yGi2QDF+QEgfo7bw$qEzLM4Iq85yL2OJmoYsOWk2YTxrMKGxKWGkZjgikHtE','0237450178','lefit.jpg');
+INSERT INTO `users` VALUES (1,'agriculteur','Georges','Lepetit','g.lepetit@orange.fr','GeorgesDeLaBrousse','$argon2i$v=19$m=4096,t=3,p=1$HqyTE1yGi2QDF+QEgfo7bw$qEzLM4Iq85yL2OJmoYsOWk2YTxrMKGxKWGkZjgikHtE','0237450178','1626874309427-no_profile_s.png'),(3,'concessionnaire','michel','Lepetit','g.legrnad@orange.fr','GeorgeBrousse','$argon2i$v=19$m=4096,t=3,p=1$12WIb55vCDJquUuuwq3s/A$ptze47rFeJOGw3o2PnLZsrtWItUsCFT14UXkNSnyuEc','0237450278','left.jpg'),(5,'administrateur','Benoit','Masson','b-masson28@gmail.fr','benoit','$argon2i$v=19$m=4096,t=3,p=1$Giw62gRWGMukdyna4u32wA$1YFkK9TdCIDAnU4jznaDbJy3QSGqcdwpqwGmbPrejH0','0237008290','1626873775838-88030445_p0_custom1200.jpg');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -256,4 +255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-07-02 12:24:41
+-- Dump completed on 2021-07-21 15:35:00
