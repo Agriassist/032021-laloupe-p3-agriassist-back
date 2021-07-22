@@ -12,6 +12,7 @@ app.use(
   }),
 );
 app.use('/images_profil', express.static('public/images_profil'));
+app.use('/images_fichetech', express.static('public/images_fichetech'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

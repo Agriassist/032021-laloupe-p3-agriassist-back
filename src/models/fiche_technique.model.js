@@ -16,7 +16,7 @@ const createOne = (carnet) => {
 };
 
 const verifExistData = (name, file) => {
-  const sql = 'SELECT * FROM fiche_technique WHERE name = ? OR file = ?';
+  const sql = 'SELECT * FROM fiche_technique WHERE name = ?';
   return connection.promise().query(sql, [name, file]);
 };
 

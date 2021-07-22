@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const multer = require('multer');
 const {
   findMany,
   findOneById,
@@ -54,38 +55,56 @@ const getOneFicheById = (req, res) => {
 };
 
 const createOneFiche = (req, res, next) => {
-  const { name, file, modele_id } = req.body;
-  createOne({ name, file, modele_id })
-    .then(([results]) => {
-      if (results[0]) {
-        res.send('Fiche data already exist');
-      } else {
-        let validationErrors = null;
-        validationErrors = Joi.object({
-          name: Joi.string().max(100).required(),
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/images_fichetech');
+    },
+    filename: (_, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
 
-          file: Joi.string().max(100).required(),
-
-          modele_id: Joi.string().max(100).required(),
-        }).validate({ name, file, modele_id }, { abortEarly: false }).error;
-
-        if (validationErrors) {
-          res.send('Fiche enter is invalid');
+  const upload = multer({ storage }).single('file');
+  upload(req, res, (err) => {
+    const info = JSON.parse(req.body.info);
+    if (err) {
+      res.status(500).json(err);
+    } else {
+      verifExistData(info.name).then(async ([results]) => {
+        if (results[0]) {
+          res.send('name file already exist');
         } else {
-          createOne({ name, file })
-            .then(([results]) => {
-              req.ficheId = results.insertId;
-              next();
-            })
-            .catch((err) => {
-              res.status(500).send(err.message);
-            });
+          let validationErrors = null;
+          validationErrors = Joi.object({
+            name: Joi.string().max(100),
+
+            file: Joi.string().max(100),
+
+            modele_id: Joi.number().integer(),
+          }).validate(info, { abortEarly: false }).error;
+
+          if (validationErrors) {
+            console.log(validationErrors);
+            res.send('Data enter is invalid');
+          } else {
+            req.pdf = {
+              file: req.file.filename,
+              ...info,
+            };
+            createOne(req.pdf)
+            .then(([result]) => {
+                console.log(result)
+                req.ficheId = result.insertId;
+                next();
+              })
+              .catch((err) => {
+                res.status(500).send(err.message);
+              });
+          }
         }
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+      });
+    }
+  });
 };
 
 const updateOneFiche = (req, res, next) => {

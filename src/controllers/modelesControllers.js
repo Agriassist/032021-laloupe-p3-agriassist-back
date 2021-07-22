@@ -17,7 +17,7 @@ const getAllModeles = (req, res) => {
   } else {
     findMany()
       .then(([results]) => {
-        const modeles = results[0];
+        const modeles = results;
         res.json(modeles);
       })
       .catch((err) => {
