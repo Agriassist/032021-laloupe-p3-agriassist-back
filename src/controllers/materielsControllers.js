@@ -121,7 +121,8 @@ const createOneMateriel = (req, res, next) => {
     });
 };
 const updateOneMateriel = (req, res, next) => {
-  const { year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang } = req.body;
+  const { year, serial_number, type, modele_id, prev_oil_change, next_oil_change } = req.body;
+  console.log(req.body);
   const { id } = req.params;
 
   findOneById(id)
@@ -137,22 +138,27 @@ const updateOneMateriel = (req, res, next) => {
 
           modele_id: Joi.number().integer(),
 
-          prev_oil_chang: Joi.string().max(255),
+          prev_oil_change: Joi.string().max(255),
 
-          next_oil_chang: Joi.string().max(255),
-        }).validate({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang }, { abortEarly: false }).error;
+          next_oil_change: Joi.string().max(255),
+        }).validate({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, { abortEarly: false }).error;
 
         if (validationErrors) {
           console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          updateOne(req.body, req.params.id)
-            .then(([result]) => {
-              if (result.affectedRows === 0) {
+          updateOne({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, req.params.id)
+            .then(([materiels]) => {
+              if (materiels.affectedRows === 0) {
                 res.status(404).send('Materiel not found');
               } else {
-                req.materielId = req.params.id;
-                next();
+                console.log(materiels);
+                req.info = { materiel: materiels[0] };
+                if (req.materiel_Id) {
+                  res.json(materiels[0]);
+                } else {
+                  next();
+                }
               }
             })
             .catch((err) => {
