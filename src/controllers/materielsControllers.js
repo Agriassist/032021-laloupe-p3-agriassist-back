@@ -196,6 +196,7 @@ const AllMaterielsByUserId = (req, res) => {
       if (results.length === 0) {
         res.status(404).send('Park not found');
       } else {
+        console.log(results);
         res.json(results);
       }
     })

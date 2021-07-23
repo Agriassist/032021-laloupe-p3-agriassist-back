@@ -55,7 +55,6 @@ const getUsersByMaterielId = (req, res) => {
     });
 };
 
-
 const createOneMaterielByUserId = (req, res, next) => {
   console.log(req.infoCompte, 'laaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   const { materiel_Id, agriculteurId, concessionnaireId } = req.infoCompte;
