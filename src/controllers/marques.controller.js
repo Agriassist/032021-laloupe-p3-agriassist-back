@@ -29,6 +29,7 @@ const getOneMarqueById = (req, res) => {
         res.status(404).send('Marque not found');
       } else {
         req.info.marque = marques[0];
+        console.log(req.info, 'infos');
         res.json(req.info);
       }
     })
