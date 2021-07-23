@@ -114,11 +114,12 @@ const updateOneModele = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, req.params.id)
-            .then(([result]) => {
-              if (result.affectedRows === 0) {
+            .then(([modeles]) => {
+              if (modeles.affectedRows === 0) {
                 res.status(404).send('Modele not found');
               } else {
-                req.modeleId = result.insertId;
+                req.info.modele = modeles[0];
+                console.log(req.info);
                 next();
               }
             })
