@@ -62,7 +62,6 @@ const createOneCarnet = (req, res, next) => {
         }).validate({ oil, use_times, materiel_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter si invalid');
         } else {
           createOne({ oil, use_times, materiel_id })
@@ -99,12 +98,11 @@ const updateOneCarnet = (req, res, next) => {
         }).validate({ oil, use_times, materiel_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, req.params.id)
-            .then(([results]) => {
-              if (results.affectedRows === 0) {
+            .then(([result]) => {
+              if (result.affectedRows === 0) {
                 res.status(404).send('carnet not found');
               } else {
                 next();

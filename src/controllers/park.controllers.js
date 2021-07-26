@@ -13,7 +13,6 @@ const getAllAMaterielByUserId = (req, res) => {
 
 const getOneMaterielByUserId = (req, res) => {
   let id;
-  console.log(req.body);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -35,7 +34,6 @@ const getOneMaterielByUserId = (req, res) => {
 
 const getUsersByMaterielId = (req, res) => {
   let id;
-  console.log(req.body);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -56,7 +54,6 @@ const getUsersByMaterielId = (req, res) => {
 };
 
 const createOneMaterielByUserId = (req, res, next) => {
-  console.log(req.infoCompte, 'laaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   const { materiel_Id, agriculteurId, concessionnaireId } = req.infoCompte;
 
   createOne({ users_id: agriculteurId, materiel_id: materiel_Id })

@@ -12,7 +12,6 @@ const findOneById = (id) => {
 
 const createOne = (modele) => {
   const sql = 'INSERT INTO modele SET ?';
-  console.log(modele);
   return connection.promise().query(sql, [modele]);
 };
 const verifExistData = (name, picture) => {

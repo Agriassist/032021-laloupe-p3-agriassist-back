@@ -32,7 +32,6 @@ const verifExistData = (email, phone) => {
 
 const existEmail = (email) => {
   const sql = 'SELECT * FROM users WHERE email = ?';
-  console.log(email);
   return connection.promise().query(sql, [email]);
 };
 
@@ -59,7 +58,6 @@ const hashPassword = async (password) => {
 };
 
 const verifyPassword = (password, hashedPassword) => {
-  console.log(password, hashedPassword);
   return argon2.verify(hashedPassword, password);
 };
 

@@ -29,7 +29,6 @@ const getOneMarqueById = (req, res) => {
         res.status(404).send('Marque not found');
       } else {
         req.info.marque = marques[0];
-        console.log(req.info, 'infos');
         res.json(req.info);
       }
     })
@@ -90,7 +89,6 @@ const updateOneMarque = (req, res, next) => {
                 res.status(404).send('Mise à echoue');
               } else {
                 req.info.marque = marques[0];
-                console.log(req.info, 'infos');
                 res.json(req.info);
               }
             })
