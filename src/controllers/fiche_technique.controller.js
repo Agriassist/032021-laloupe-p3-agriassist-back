@@ -7,13 +7,13 @@ const {
   updateOne,
   deleteOne,
   verifExistData,
-  findManyFicheTechniqueId,
+  findFicheTechniqueByModeleId,
 } = require('../models/fiche_technique.model');
 
 const getAllFiche = (req, res) => {
   const { ficheId } = req.params;
   if (ficheId) {
-    findManyFicheTechniqueId(ficheId)
+    findFicheTechniqueByModeleId(ficheId)
       .then((results) => {
         const modeles = results[0];
         res.json(modeles);
@@ -66,7 +66,7 @@ const createOneFiche = (req, res, next) => {
 
   const upload = multer({ storage }).single('file');
   upload(req, res, (err) => {
-    const info = JSON.parse(req.body.info);
+    const { info } = req.body.info;
     if (err) {
       res.status(500).json(err);
     } else {
@@ -92,8 +92,8 @@ const createOneFiche = (req, res, next) => {
               ...info,
             };
             createOne(req.pdf)
-            .then(([result]) => {
-                console.log(result)
+              .then(([result]) => {
+                console.log(result);
                 req.ficheId = result.insertId;
                 next();
               })

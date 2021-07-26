@@ -30,7 +30,7 @@ const deleteOne = (id) => {
   return connection.promise().query(sql, [id]);
 };
 
-const findManyFicheTechniqueId = (id) => {
+const findFicheTechniqueByModeleId = (id) => {
   const sql = 'SELECT m.id, m.name, m.image FROM modele m JOIN fiche_technique t ON m.id = t.modele_id';
   return connection.promise().query(sql, [id]);
 };
@@ -42,5 +42,6 @@ module.exports = {
   updateOne,
   deleteOne,
   verifExistData,
-  findManyFicheTechniqueId,
+  findFicheTechniqueByModeleId
+  ,
 };
