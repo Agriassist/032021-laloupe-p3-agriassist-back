@@ -66,7 +66,7 @@ const createOneFiche = (req, res, next) => {
 
   const upload = multer({ storage }).single('file');
   upload(req, res, (err) => {
-    const { info } = req.body.info;
+    const info = JSON.parse(req.body.info);
     if (err) {
       res.status(500).json(err);
     } else {
