@@ -32,7 +32,7 @@ const authorizationWithRefreshJsonWebToken = (req, res, next) => {
     res.clearCookie('refresh_token');
     res.status(401).send("You're not allowed to access this data");
   }
-};
+}; 
 
 const recupCookie = (req, res) => {
   const cookie = req.cookies.refresh_token;
