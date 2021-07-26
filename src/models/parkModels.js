@@ -10,6 +10,11 @@ const findOneById = (users_id) => {
   return connection.promise().query(sql, [users_id]);
 };
 
+const findManyById = (Mat_id) => {
+  const sql = 'SELECT * FROM park WHERE materiel_id=?';
+  return connection.promise().query(sql, [Mat_id]);
+};
+
 const createOne = (materiel) => {
   const sql = 'INSERT INTO park SET ?';
   return connection.promise().query(sql, [materiel]);
@@ -28,6 +33,7 @@ const deleteOne = (users_id) => {
 module.exports = {
   findMany,
   findOneById,
+  findManyById,
   createOne,
   updateOne,
   deleteOne,

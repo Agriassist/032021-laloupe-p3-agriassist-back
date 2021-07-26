@@ -11,7 +11,7 @@ const {
 
 userRouter.get('/logout', clearCookie);
 userRouter.get('/', getAllUsers);
-userRouter.get('/:id', authenticateAdminWithJsonWebToken, getOneUserById);
+userRouter.get('/:id', getOneUserById);
 userRouter.get('/materiel/:id', authenticateAgriWithJsonWebToken, getManyMaterielById);
 userRouter.post('/', createOneUser, getOneUserById);
 userRouter.put('/:id', updateOneUser, getOneUserById);

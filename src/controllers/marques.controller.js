@@ -17,6 +17,8 @@ const getOneMarqueById = (req, res) => {
   let id;
   if (req.marqueId) {
     id = req.marqueId;
+  } else if (req.info.modele.marque_id) {
+    id = req.info.modele.marque_id;
   } else {
     id = req.params.id;
   }
@@ -27,6 +29,7 @@ const getOneMarqueById = (req, res) => {
         res.status(404).send('Marque not found');
       } else {
         req.info.marque = marques[0];
+        console.log(req.info, 'infos');
         res.json(req.info);
       }
     })
@@ -82,11 +85,13 @@ const updateOneMarque = (req, res, next) => {
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, id)
-            .then(([result]) => {
-              if (result.affectedRows === 0) {
+            .then(([marques]) => {
+              if (marques.affectedRows === 0) {
                 res.status(404).send('Mise à echoue');
               } else {
-                next();
+                req.info.marque = marques[0];
+                console.log(req.info, 'infos');
+                res.json(req.info);
               }
             })
             .catch((err) => {

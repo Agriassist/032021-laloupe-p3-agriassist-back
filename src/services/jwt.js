@@ -32,7 +32,7 @@ const authorizationWithRefreshJsonWebToken = (req, res, next) => {
     res.clearCookie('refresh_token');
     res.status(401).send("You're not allowed to access this data");
   }
-};
+}; 
 
 const recupCookie = (req, res) => {
   const cookie = req.cookies.refresh_token;
@@ -68,17 +68,20 @@ const authenticateAdminWithJsonWebToken = (req, res, next) => {
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (!err) {
         console.log('la', decoded);
-        if (decoded.status !== 'administateur') {
+        if (decoded.status !== 'administrateur') {
           res.status(401).send("You're not allowed acess these data");
+          console.log('err1');
         } else {
           next();
         }
       } else {
         res.status(401).send("You're not allowed acess these data");
+        console.log('err2');
       }
     });
   } else {
     res.status(401).send("You're not allowed to acess these data");
+    console.log('err3');
   }
 };
 
