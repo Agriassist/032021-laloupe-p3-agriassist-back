@@ -46,7 +46,6 @@ connection.deleteAllDBData = async () => {
         process.env.DB_NAME_TEST || 'contact_api_database_test'
       }' AND table_name != 'migrations'`,
     );
-  // console.log('tableNames: ', tableNames);
   const [constraints] = await connection
     .promise()
     .query(
@@ -55,7 +54,6 @@ connection.deleteAllDBData = async () => {
       }' AND column_name != 'id' AND referenced_table_name!='NULL';`,
     );
 
-  // console.log('constraints: ', constraints);
   const tables = tableNames.map((name) => {
     let table = null;
     constraints.forEach((constraint) => {
@@ -76,7 +74,6 @@ connection.deleteAllDBData = async () => {
       orderedTables.push(table);
     }
   });
-  // console.log('Tables: ', tables);
   if (process.env.NODE_ENV === 'test') {
     for (let i = 0; i < orderedTables.length; i += 1) {
       const { TABLE_NAME, CONSTRAINT_NAME } = orderedTables[i];
@@ -84,7 +81,6 @@ connection.deleteAllDBData = async () => {
         await connection.promise().query(`ALTER TABLE ${TABLE_NAME} DROP CONSTRAINT ${CONSTRAINT_NAME};`);
       }
       await connection.promise().query(`TRUNCATE TABLE ${TABLE_NAME};`);
-      // console.log(`2-${i} ${TABLE_NAME}`);
     }
     if (constraints.length) {
       for (let j = 0; j < orderedTables.length; j += 1) {
@@ -96,7 +92,6 @@ connection.deleteAllDBData = async () => {
               `ALTER TABLE ${TABLE_NAME} ADD CONSTRAINT ${CONSTRAINT_NAME} FOREIGN KEY (${COLUMN_NAME}) REFERENCES ${REFERENCED_TABLE_NAME}(${REFERENCED_COLUMN_NAME});`,
             );
         }
-        // console.log(`3-${j} ${TABLE_NAME}`);
       }
     }
   }

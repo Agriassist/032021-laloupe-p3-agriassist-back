@@ -13,7 +13,6 @@ const getAllAMaterielByUserId = (req, res) => {
 
 const getOneMaterielByUserId = (req, res) => {
   let id;
-  console.log(req.body);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -35,7 +34,6 @@ const getOneMaterielByUserId = (req, res) => {
 
 const getUsersByMaterielId = (req, res) => {
   let id;
-  console.log(req.body);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -56,7 +54,6 @@ const getUsersByMaterielId = (req, res) => {
 };
 
 const createOneMaterielByUserId = (req, res, next) => {
-  console.log(req.infoCompte, 'laaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   const { materiel_Id, agriculteurId, concessionnaireId } = req.infoCompte;
 
   createOne({ users_id: agriculteurId, materiel_id: materiel_Id })
@@ -86,13 +83,13 @@ const updateOneMaterielByUserById = (req, res, next) => {
     });
 };
 
-const deleteOneMaterielByUserId = (req, res) => {
+const deleteOneParkByMaterielId = (req, res, next) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
         res.status(404).send('Materiel not found');
       } else {
-        res.sendStatus(204);
+        next();
       }
     })
     .catch((err) => {
@@ -106,5 +103,5 @@ module.exports = {
   getOneMaterielByUserId,
   createOneMaterielByUserId,
   updateOneMaterielByUserById,
-  deleteOneMaterielByUserId,
+  deleteOneParkByMaterielId,
 };

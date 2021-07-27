@@ -18,14 +18,14 @@ const {
   authenticateConcWithJsonWebToken,
 } = require('../services/jwt');
 
-const { createOneMaterielByUserId } = require('../controllers/park.controllers');
+const { createOneMaterielByUserId, deleteOneParkByMaterielId } = require('../controllers/park.controllers');
 
 materielRouter.get('/', getAllMateriels);
 materielRouter.get('/:id', getOneMaterielById, getOneModeleById, getOneMarqueById);
 materielRouter.get('/users/:id', authenticateWithJsonWebToken, AllMaterielsByUserId);
 materielRouter.post('/', createOneMateriel, createOneMaterielByUserId, getOneMaterielById);
 materielRouter.put('/:id', updateOneMateriel, updateOneModele, updateOneMarque);
-materielRouter.delete('/:id', deleteOneMateriel);
+materielRouter.delete('/:id', deleteOneParkByMaterielId, deleteOneMateriel);
 
 const modelesRoutes = require('./modeleRoutes');
 

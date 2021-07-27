@@ -26,7 +26,7 @@ const updateOne = (materiel, users_id) => {
 };
 
 const deleteOne = (users_id) => {
-  const sql = 'DELETE FROM park WHERE users_id=?';
+  const sql = 'DELETE FROM park WHERE materiel_id=?';
   return connection.promise().query(sql, [users_id]);
 };
 
