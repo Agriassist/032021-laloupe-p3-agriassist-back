@@ -56,15 +56,12 @@ const getOneMaterielById = (req, res, next) => {
   } else {
     id = req.params.id;
   }
-  console.log(id);
 
   findOneById(id)
     .then(([materiels]) => {
       if (materiels.length === 0) {
-        console.log(materiels);
         res.status(404).send('Materiel not found');
       } else {
-        console.log(materiels);
         req.info = { materiel: materiels[0] };
         if (req.materiel_Id) {
           res.json(materiels[0]);
@@ -101,7 +98,6 @@ const createOneMateriel = (req, res, next) => {
         }).validate({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
           createOne({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change })
@@ -122,7 +118,6 @@ const createOneMateriel = (req, res, next) => {
 };
 const updateOneMateriel = (req, res, next) => {
   const { year, serial_number, type, modele_id, prev_oil_change, next_oil_change } = req.body;
-  console.log(req.body);
   const { id } = req.params;
 
   findOneById(id)
@@ -144,7 +139,6 @@ const updateOneMateriel = (req, res, next) => {
         }).validate({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
           updateOne({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, req.params.id)
@@ -152,7 +146,6 @@ const updateOneMateriel = (req, res, next) => {
               if (materiels.affectedRows === 0) {
                 res.status(404).send('Materiel not found');
               } else {
-                console.log(materiels);
                 req.info = { materiel: materiels[0] };
                 if (req.materiel_Id) {
                   res.json(materiels[0]);
@@ -202,7 +195,6 @@ const AllMaterielsByUserId = (req, res) => {
       if (results.length === 0) {
         res.status(404).send('Park not found');
       } else {
-        console.log(results);
         res.json(results);
       }
     })

@@ -73,12 +73,10 @@ const getOneUserByIdRefresh = (req, res, next) => {
 
   findOneUserById(id)
     .then(([users]) => {
-      console.log(users);
       if (users.length === 0) {
         res.status(404).send('user not found');
       } else {
         req.userId = users;
-        console.log(req.userId);
         next();
       }
     })
@@ -90,7 +88,6 @@ const getOneUserByIdRefresh = (req, res, next) => {
 const createOneUser = (req, res, next) => {
   // il faudrait vérifier que les données fournies dans la requête sont correctes
   const { statue, nom, prenom, email, identifiant, hassPassword, phone, photo_profil } = req.body;
-  console.log(req.body);
 
   verifExistData(email, phone).then(async ([results]) => {
     if (results[0]) {
@@ -117,7 +114,6 @@ const createOneUser = (req, res, next) => {
       }).validate({ statue, nom, prenom, email, identifiant, hassPassword, phone, photo_profil: 'twitter.jpg' }, { abortEarly: false }).error;
 
       if (validationErrors) {
-        console.log(validationErrors);
         res.send('Data enter is invalid');
       } else {
         const hashedPassword = await hashPassword(hassPassword);
@@ -135,7 +131,6 @@ const createOneUser = (req, res, next) => {
 };
 const updateOneUser = (req, res, next) => {
   const { id } = req.params;
-  console.log(req.body.email);
   if (!req.body.email) {
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
@@ -156,10 +151,8 @@ const updateOneUser = (req, res, next) => {
         const { profil_picture } = user;
         user.photo_profil = req.file.filename;
         delete user.profil_picture;
-        console.log(user);
         findOneUserById(id)
           .then(async ([results]) => {
-            console.log(results);
             if (results[0]) {
               let validationErrors = null;
               validationErrors = Joi.object({
@@ -181,7 +174,6 @@ const updateOneUser = (req, res, next) => {
               }).validate(user, { abortEarly: false }).error;
 
               if (validationErrors) {
-                console.log(validationErrors);
                 res.send('Data enter is invalid');
               } else {
                 if (user.hassPassword) {
@@ -195,7 +187,6 @@ const updateOneUser = (req, res, next) => {
                     if (result.affectedRows === 0) {
                       res.status(404).send('user not found');
                     } else {
-                      console.log(__dirname);
                       fs.unlink(path.join(__dirname, `/../../public/images_profil/${profil_picture}`), (err) => {
                         if (err) {
                           res.status(500).json(err);
@@ -221,7 +212,6 @@ const updateOneUser = (req, res, next) => {
   } else {
     findOneUserById(id)
       .then(async ([results]) => {
-        console.log(results);
         if (results[0]) {
           let validationErrors = null;
           validationErrors = Joi.object({
@@ -243,7 +233,6 @@ const updateOneUser = (req, res, next) => {
           }).validate(req.body, { abortEarly: false }).error;
 
           if (validationErrors) {
-            console.log(validationErrors);
             res.send('Data enter is invalid');
           } else {
             if (req.body.hassPassword) {
@@ -291,7 +280,6 @@ const deleteOneUser = (req, res) => {
 const verifUserEmailandPassword = async (req, res, next) => {
   const { email } = req.body;
   const { password } = req.body;
-  console.log(email, password);
 
   let validationErrors = null;
   validationErrors = Joi.object({
@@ -301,20 +289,16 @@ const verifUserEmailandPassword = async (req, res, next) => {
   }).validate({ password, email }, { abortEarly: false }).error;
   if (validationErrors) {
     res.send('error');
-    console.log('Banane');
   } else {
-    console.log('ok22');
     await existEmail(email)
       .then(async ([results]) => {
         if (results.length === 0) {
           res.status(404).send("user email don't exist");
         } else {
           findOnePasswordByEmail(email).then(async ([result]) => {
-            console.log(result[0].hassPassword);
 
             req.body.loginPassword = result[0].hassPassword;
             const passValid = await verifyPassword(password, req.body.loginPassword);
-            console.log(passValid);
             if (!passValid) {
               res.status(401).send('Password est pas bon');
             } else {
@@ -337,7 +321,6 @@ const getManyMaterielById = (req, res) => {
   } else {
     id = req.params.id;
   }
-  console.log(id);
   findManyByMaterielId(id)
     .then(([users]) => {
       if (users.length === 0) {

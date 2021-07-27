@@ -17,7 +17,6 @@ const getAllModeles = (req, res) => {
   } else {
     findMany()
       .then(([results]) => {
-        console.log(results);
         const modeles = results;
         res.json(modeles);
       })
@@ -29,7 +28,6 @@ const getAllModeles = (req, res) => {
 
 const getOneModeleById = (req, res, next) => {
   let id;
-  console.log(req.info.materiel.modele_id);
   if (req.modeleId) {
     id = req.modeleId;
   } else if (req.info.materiel.modele_id) {
@@ -44,7 +42,6 @@ const getOneModeleById = (req, res, next) => {
         res.status(404).send('Modele not found');
       }
       req.info.modele = modeles[0];
-      console.log(req.info);
       next();
     })
     .catch((err) => {
@@ -54,14 +51,12 @@ const getOneModeleById = (req, res, next) => {
 
 const createOneModele = (req, res, next) => {
   const { name, picture, marque_id } = req.body;
-  console.log(name, picture, marque_id);
 
   verifExistData(name, picture)
     .then(([results]) => {
       if (results[0]) {
         res.send('Modele data arleady exist');
       } else {
-        console.log(results);
         let validationErrors = null;
         validationErrors = Joi.object({
           name: Joi.string().max(255).required(),
@@ -74,7 +69,6 @@ const createOneModele = (req, res, next) => {
         if (validationErrors) {
           res.send('Data enter is invalid');
         } else {
-          console.log({ name, picture, marque_id });
           createOne({ name, picture, marque_id })
             .then(([result]) => {
               req.modeleId = result.insertId;
@@ -110,7 +104,6 @@ const updateOneModele = (req, res, next) => {
         }).validate({ name, picture, marque_id }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
           updateOne(req.body, req.params.id)
@@ -119,7 +112,6 @@ const updateOneModele = (req, res, next) => {
                 res.status(404).send('Modele not found');
               } else {
                 req.info.modele = modeles[0];
-                console.log(req.info);
                 next();
               }
             })
