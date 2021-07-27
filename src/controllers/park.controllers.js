@@ -83,13 +83,13 @@ const updateOneMaterielByUserById = (req, res, next) => {
     });
 };
 
-const deleteOneMaterielByUserId = (req, res) => {
+const deleteOneParkByMaterielId = (req, res, next) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
         res.status(404).send('Materiel not found');
       } else {
-        res.sendStatus(204);
+        next();
       }
     })
     .catch((err) => {
@@ -103,5 +103,5 @@ module.exports = {
   getOneMaterielByUserId,
   createOneMaterielByUserId,
   updateOneMaterielByUserById,
-  deleteOneMaterielByUserId,
+  deleteOneParkByMaterielId,
 };
