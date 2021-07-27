@@ -8,6 +8,7 @@ const modeleRouter = require('./modeleRoutes');
 const carnetRouter = require('./carnet_entretien.routes');
 const usersRouter = require('./Users.routes');
 const imgRouter = require('./imagesProfilsRoutes');
+// const factureRouter = require('./facture.routes');
 
 const loginRouter = require('./login.routes');
 
@@ -21,6 +22,7 @@ mainRouter.use('/images_profil', express.static('public/images_profil'), imgRout
 
 mainRouter.use('/modele', modeleRouter);
 mainRouter.use('/carnet_entretien', carnetRouter);
+// mainRouter.use('/facture', factureRouter);
 
 // mainRouter.use('/fiche_technique', ficheRouter);
 
