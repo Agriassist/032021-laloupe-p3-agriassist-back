@@ -5,7 +5,7 @@ const marquesRoutes = require('./marqueRoutes');
 
 modeleRouter.get('/', getAllModeles);
 modeleRouter.get('/:id', getOneModeleById);
-modeleRouter.post('/', createOneModele, getOneModeleById);
+modeleRouter.post('/', createOneModele);
 modeleRouter.put('/:id', updateOneModele, getOneModeleById);
 modeleRouter.delete('/:id', deleteOneModele);
 

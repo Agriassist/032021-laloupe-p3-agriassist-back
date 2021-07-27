@@ -1,5 +1,7 @@
 /* eslint-disable prefer-destructuring */
 const Joi = require('joi');
+const multer = require('multer');
+
 const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistDataModele, findManyByMarqueId } = require('../models/modelesModels');
 
 const getAllModeles = (req, res) => {
@@ -29,7 +31,7 @@ const getAllModeles = (req, res) => {
 
 const getOneModeleById = (req, res, next) => {
   let id;
-  console.log(req.info.materiel.modele_id);
+  console.log(req.modeleId);
   if (req.modeleId) {
     id = req.modeleId;
   } else if (req.info.materiel.modele_id) {
@@ -53,45 +55,59 @@ const getOneModeleById = (req, res, next) => {
 };
 
 const createOneModele = (req, res, next) => {
-  const { name, picture, marque_id } = req.body;
-  console.log(name, picture, marque_id);
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/images_modele');
+    },
+    filename: (_, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
 
-  verifExistDataModele(name, picture)
-    .then(([results]) => {
-      if (results[0]) {
-        res.send('Modele data arleady exist');
-        console.log(results[0]);
-      } else {
-        console.log(results);
-        let validationErrors = null;
-        validationErrors = Joi.object({
-          name: Joi.string().max(255).required(),
+  const upload = multer({ storage }).single('file');
+  upload(req, res, (err) => {
+    const modele = JSON.parse(req.body.modele);
+    const picture = req.file.filename;
+    if (err) {
+      res.status(500).json(err);
+    } else {
+      verifExistDataModele(modele.name)
+        .then(([results]) => {
+          // console.log(file);
+          if (results[0]) {
+            res.send('Modele name  arleady exist');
+          } else {
+            let validationErrors = null;
+            validationErrors = Joi.object({
+              name: Joi.string().max(255).required(),
 
-          picture: Joi.string().max(100).required(),
+              marque_id: Joi.number().integer().required(),
+            }).validate(modele, { abortEarly: false }).error;
 
-          marque_id: Joi.number().integer().required(),
-        }).validate({ name, picture, marque_id }, { abortEarly: false }).error;
+            if (validationErrors) {
+              res.send('Data enter is invalid');
+            } else {
+              req.modeles = {
+                picture: req.file.filename,
+                ...modele,
+              };
 
-        if (validationErrors) {
-          res.send('Data enter is invalid');
-        } else {
-          console.log({ name, picture, marque_id });
-          createOne({ name, picture, marque_id })
-            .then(([result]) => {
-              req.modeleId = result.insertId;
-              console.log('Ok');
-              next();
-            })
-            .catch((err) => {
-              res.status(500).send(err.message);
-            });
-        }
-      }
-    })
+              createOne(req.modeles)
+                .then(([result]) => {
+                  res.json(result);
+                })
+                .catch((err) => {
+                  res.status(500).send(err.message);
+                });
+            }
+          }
+        })
 
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+        .catch((err) => {
+          res.status(500).send(err.message);
+        });
+    }
+  });
 };
 
 const updateOneModele = (req, res, next) => {

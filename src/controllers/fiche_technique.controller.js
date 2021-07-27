@@ -70,7 +70,7 @@ const createOneFiche = (req, res, next) => {
     if (err) {
       res.status(500).json(err);
     } else {
-      verifExistData(info.name).then(async ([results]) => {
+      verifExistData(info.name).then(([results]) => {
         if (results[0]) {
           res.send('name file already exist');
         } else {
@@ -84,7 +84,7 @@ const createOneFiche = (req, res, next) => {
           }).validate(info, { abortEarly: false }).error;
 
           if (validationErrors) {
-            console.log(validationErrors);
+           
             res.send('Data enter is invalid');
           } else {
             req.pdf = {

@@ -12,6 +12,7 @@ app.use(
   }),
 );
 app.use('/images_profil', express.static('public/images_profil'));
+app.use('/images_modele', express.static('public/images_modele'));
 app.use('/images_fichetech', express.static('public/images_fichetech'));
 app.use('/images_facture', express.static('public/images_facture'));
 app.use('/images_bon_travail', express.static('public/bon_travail'));
