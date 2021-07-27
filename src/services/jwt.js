@@ -38,7 +38,7 @@ const recupCookie = (req, res) => {
 
 const clearCookie = (req, res) => {
   res.clearCookie('refresh_token');
-  res.sendStatus(200);
+  res.sendStatus(204);
 };
 
 const authenticateWithJsonWebToken = (req, res, next) => {
