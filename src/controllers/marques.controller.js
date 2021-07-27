@@ -37,7 +37,7 @@ const getOneMarqueById = (req, res) => {
     });
 };
 
-const createOneMarque = (req, res, next) => {
+const createOneMarque = (req, res) => {
   const { name } = req.body;
   verifExistData(name)
     .then(([results]) => {
@@ -54,8 +54,7 @@ const createOneMarque = (req, res, next) => {
         } else {
           createOne({ name })
             .then(([result]) => {
-              req.marqueId = result.insertId;
-              next();
+              res.json(result);
             })
             .catch((err) => {
               res.status(500).send(err.message);

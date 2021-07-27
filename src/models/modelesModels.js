@@ -30,7 +30,7 @@ const deleteOne = (id) => {
 };
 
 const findManyByMarqueId = (id) => {
-  const sql = 'SELECT m.id, m.name FROM marque m JOIN modele d ON m.id = d.marque_id';
+  const sql = 'SELECT * FROM modele where marque_id =  ? ';
   return connection.promise().query(sql, [id]);
 };
 
