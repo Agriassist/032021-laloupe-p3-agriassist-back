@@ -1,6 +1,8 @@
 /* eslint-disable prefer-destructuring */
 const Joi = require('joi');
-const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistData, findManyByMarqueId } = require('../models/modelesModels');
+const multer = require('multer');
+
+const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistDataModele, findManyByMarqueId } = require('../models/modelesModels');
 
 const getAllModeles = (req, res) => {
   const { marque_Id } = req.body;
@@ -62,40 +64,59 @@ const getOneModeleById = (req, res, next) => {
 };
 
 const createOneModele = (req, res, next) => {
-  const { name, picture, marque_id } = req.body;
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/images_modele');
+    },
+    filename: (_, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
 
-  verifExistData(name, picture)
-    .then(([results]) => {
-      if (results[0]) {
-        res.send('Modele data arleady exist');
-      } else {
-        let validationErrors = null;
-        validationErrors = Joi.object({
-          name: Joi.string().max(255).required(),
+  const upload = multer({ storage }).single('file');
+  upload(req, res, (err) => {
+    const modele = JSON.parse(req.body.modele);
+    const picture = req.file.filename;
+    if (err) {
+      res.status(500).json(err);
+    } else {
+      verifExistDataModele(modele.name)
+        .then(([results]) => {
+          // console.log(file);
+          if (results[0]) {
+            res.send('Modele name  arleady exist');
+          } else {
+            let validationErrors = null;
+            validationErrors = Joi.object({
+              name: Joi.string().max(255).required(),
 
-          picture: Joi.string().max(100).required(),
+              marque_id: Joi.number().integer().required(),
+            }).validate(modele, { abortEarly: false }).error;
 
-          marque_id: Joi.number().integer().required(),
-        }).validate({ name, picture, marque_id }, { abortEarly: false }).error;
+            if (validationErrors) {
+              res.send('Data enter is invalid');
+            } else {
+              req.modeles = {
+                picture: req.file.filename,
+                ...modele,
+              };
 
-        if (validationErrors) {
-          res.send('Data enter is invalid');
-        } else {
-          createOne({ name, picture, marque_id })
-            .then(([result]) => {
-              req.modeleId = result.insertId;
-              next();
-            })
-            .catch((err) => {
-              res.status(500).send(err.message);
-            });
-        }
-      }
-    })
+              createOne(req.modeles)
+                .then(([result]) => {
+                  res.json(result);
+                })
+                .catch((err) => {
+                  res.status(500).send(err.message);
+                });
+            }
+          }
+        })
 
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+        .catch((err) => {
+          res.status(500).send(err.message);
+        });
+    }
+  });
 };
 
 const updateOneModele = (req, res, next) => {

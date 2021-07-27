@@ -14,7 +14,7 @@ const createOne = (modele) => {
   const sql = 'INSERT INTO modele SET ?';
   return connection.promise().query(sql, [modele]);
 };
-const verifExistData = (name, picture) => {
+const verifExistDataModele = (name, picture) => {
   const sql = 'SELECT * FROM modele WHERE name = ? OR picture = ?';
   return connection.promise().query(sql, [name, picture]);
 };
@@ -38,7 +38,7 @@ module.exports = {
   findMany,
   findOneById,
   createOne,
-  verifExistData,
+  verifExistDataModele,
   updateOne,
   deleteOne,
   findManyByMarqueId,
