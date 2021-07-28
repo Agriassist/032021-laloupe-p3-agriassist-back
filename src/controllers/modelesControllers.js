@@ -5,10 +5,10 @@ const multer = require('multer');
 const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistDataModele, findManyByMarqueId } = require('../models/modelesModels');
 
 const getAllModeles = (req, res) => {
-  const { modeleId } = req.params;
-
-  if (modeleId) {
-    findManyByMarqueId(modeleId)
+  const { marque_Id } = req.body;
+  console.log(req);
+  if (marque_Id) {
+    findManyByMarqueId(marque_Id)
       .then((results) => {
         const modeles = results[0];
         res.json(modeles);
@@ -26,6 +26,18 @@ const getAllModeles = (req, res) => {
         res.status(500).send(err.message);
       });
   }
+};
+
+const getAllModelesByMarqueId = (req, res) => {
+  const { id } = req.params;
+  findManyByMarqueId(id)
+    .then((results) => {
+      const modeles = results[0];
+      res.json(modeles);
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
 };
 
 const getOneModeleById = (req, res, next) => {
@@ -170,4 +182,5 @@ module.exports = {
   createOneModele,
   updateOneModele,
   deleteOneModele,
+  getAllModelesByMarqueId,
 };
