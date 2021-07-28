@@ -8,7 +8,7 @@ const createToken = (req, res) => {
   if (req.userId[0]) {
     token = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, JWT_SECRET, { expiresIn: '15min' });
     const refreshToken = jwt.sign({ id: req.userId[0].id, status: req.userId[0].statue }, REFRESH_JWT_SECRET);
-    res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 1000, httpOnly: true, secure: false, sameSite: 'lax' });
+    res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'lax' });
     res.json({ token, status: req.userId[0].statue, id: req.userId[0].id });
   } else {
     res.status(500).send("Erreur d'authentification");
