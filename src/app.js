@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 const mainRouter = require('./routes');
 
 app.use(
@@ -15,8 +14,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-console.log(__dirname);
 
 app.use('/images_profil', express.static('public/images_profil'));
 app.use('/images_modele', express.static('public/images_modele'));
