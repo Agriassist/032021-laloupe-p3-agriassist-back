@@ -9,6 +9,7 @@ const {
   verifExistData,
   findManyModeleId,
 } = require('../models/materielsModels');
+const materielRouter = require('../routes/materielRoutes');
 
 const getAllMateriels = (req, res) => {
   const id = req.params.agriId;
@@ -50,6 +51,8 @@ const getOneMaterielById = (req, res, next) => {
     id = req.materielId;
   } else if (req.body.id) {
     id = req.body.id;
+  } else if (req.materiel_Id) {
+    id = req.materiel_Id;
   } else {
     id = req.params.id;
   }
@@ -60,7 +63,11 @@ const getOneMaterielById = (req, res, next) => {
         res.status(404).send('Materiel not found');
       } else {
         req.info = { materiel: materiels[0] };
-        next();
+        if (req.materiel_Id) {
+          res.json(materiels[0]);
+        } else {
+          next();
+        }
       }
     })
     .catch((err) => {
@@ -69,7 +76,7 @@ const getOneMaterielById = (req, res, next) => {
 };
 
 const createOneMateriel = (req, res, next) => {
-  const { year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang } = req.body;
+  const { year, serial_number, type, modele_id, prev_oil_change, next_oil_change, modeleId, marqueId, concessionnaireId, agriculteurId } = req.body;
   verifExistData(serial_number)
     .then(([results]) => {
       if (results[0]) {
@@ -85,18 +92,18 @@ const createOneMateriel = (req, res, next) => {
 
           modele_id: Joi.number().integer(),
 
-          prev_oil_chang: Joi.string().max(255),
+          prev_oil_change: Joi.string().max(255),
 
-          next_oil_chang: Joi.string().max(255),
-        }).validate({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang }, { abortEarly: false }).error;
+          next_oil_change: Joi.string().max(255),
+        }).validate({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          createOne({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang })
+          createOne({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change })
             .then(([result]) => {
-              req.materielId = result.insertId;
+              // req.materielId = result.insertId;
+              req.infoCompte = { materiel_Id: result.insertId, modeleId, agriculteurId, concessionnaireId };
               next();
             })
             .catch((err) => {
@@ -110,7 +117,7 @@ const createOneMateriel = (req, res, next) => {
     });
 };
 const updateOneMateriel = (req, res, next) => {
-  const { year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang } = req.body;
+  const { year, serial_number, type, modele_id, prev_oil_change, next_oil_change } = req.body;
   const { id } = req.params;
 
   findOneById(id)
@@ -126,21 +133,25 @@ const updateOneMateriel = (req, res, next) => {
 
           modele_id: Joi.number().integer(),
 
-          prev_oil_chang: Joi.string().max(255),
+          prev_oil_change: Joi.string().max(255),
 
-          next_oil_chang: Joi.string().max(255),
-        }).validate({ year, serial_number, type, modele_id, prev_oil_chang, next_oil_chang }, { abortEarly: false }).error;
+          next_oil_change: Joi.string().max(255),
+        }).validate({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, { abortEarly: false }).error;
 
         if (validationErrors) {
-          console.log(validationErrors);
           res.send('Data enter is invalid');
         } else {
-          updateOne(req.body, req.params.id)
-            .then(([result]) => {
-              if (result.affectedRows === 0) {
+          updateOne({ year, serial_number, type, modele_id, prev_oil_change, next_oil_change }, req.params.id)
+            .then(([materiels]) => {
+              if (materiels.affectedRows === 0) {
                 res.status(404).send('Materiel not found');
               } else {
-                next();
+                req.info = { materiel: materiels[0] };
+                if (req.materiel_Id) {
+                  res.json(materiels[0]);
+                } else {
+                  next();
+                }
               }
             })
             .catch((err) => {

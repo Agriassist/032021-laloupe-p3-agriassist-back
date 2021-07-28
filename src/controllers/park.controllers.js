@@ -1,4 +1,4 @@
-const { findMany, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
+const { findMany, findManyById, findOneById, createOne, updateOne, deleteOne } = require('../models/parkModels');
 
 const getAllAMaterielByUserId = (req, res) => {
   findMany()
@@ -13,7 +13,6 @@ const getAllAMaterielByUserId = (req, res) => {
 
 const getOneMaterielByUserId = (req, res) => {
   let id;
-  console.log(req.body);
   if (req.materielId) {
     id = req.materielId;
   } else {
@@ -33,13 +32,36 @@ const getOneMaterielByUserId = (req, res) => {
     });
 };
 
-const createOneMaterielByUserId = (req, res, next) => {
-  const { users_id, materiel_id } = req.body;
+const getUsersByMaterielId = (req, res) => {
+  let id;
+  if (req.materielId) {
+    id = req.materielId;
+  } else {
+    id = req.params.id;
+  }
 
-  createOne({ users_id, materiel_id })
+  findManyById(id)
+    .then(([park]) => {
+      if (park.length === 0) {
+        res.status(404).send(id);
+      } else {
+        res.json(park);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
+const createOneMaterielByUserId = (req, res, next) => {
+  const { materiel_Id, agriculteurId, concessionnaireId } = req.infoCompte;
+
+  createOne({ users_id: agriculteurId, materiel_id: materiel_Id })
     .then(() => {
-      req.agriId = users_id;
-      next();
+      createOne({ users_id: concessionnaireId, materiel_id: materiel_Id }).then(() => {
+        req.materiel_Id = materiel_Id;
+        next();
+      });
     })
     .catch((err) => {
       res.status(500).send(err.message);
@@ -61,13 +83,13 @@ const updateOneMaterielByUserById = (req, res, next) => {
     });
 };
 
-const deleteOneMaterielByUserId = (req, res) => {
+const deleteOneParkByMaterielId = (req, res, next) => {
   deleteOne(req.params.id)
     .then(([results]) => {
       if (results.affectedRows === 0) {
         res.status(404).send('Materiel not found');
       } else {
-        res.sendStatus(204);
+        next();
       }
     })
     .catch((err) => {
@@ -77,8 +99,9 @@ const deleteOneMaterielByUserId = (req, res) => {
 
 module.exports = {
   getAllAMaterielByUserId,
+  getUsersByMaterielId,
   getOneMaterielByUserId,
   createOneMaterielByUserId,
   updateOneMaterielByUserById,
-  deleteOneMaterielByUserId,
+  deleteOneParkByMaterielId,
 };
