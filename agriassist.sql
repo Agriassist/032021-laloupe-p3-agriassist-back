@@ -111,7 +111,7 @@ CREATE TABLE `marque` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +170,7 @@ CREATE TABLE `modele` (
   PRIMARY KEY (`id`),
   KEY `marque_id` (`marque_id`),
   CONSTRAINT `modele_ibfk_1` FOREIGN KEY (`marque_id`) REFERENCES `marque` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `modele` (
 
 LOCK TABLES `modele` WRITE;
 /*!40000 ALTER TABLE `modele` DISABLE KEYS */;
-INSERT INTO `modele` VALUES (20,'PUMA 210','PUMA_210.jpg',6),(21,'MAGNUM 340','MAGNUM_340.jpg',6),(22,'T 6050','T_6050.jpg',5),(23,'T7.200','T7.200.jpg',5),(24,'7718S','7718S.jpg',4),(25,'6713S','645.jpg',4);
+INSERT INTO `modele` VALUES (20,'PUMA 210','PUMA_210.jpg',6),(23,'T7.200','T7.200.jpg',5),(24,'7718S','7718S.jpg',4);
 /*!40000 ALTER TABLE `modele` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `identifiant` (`identifiant`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'agriculteur','Georges','Lepetit','g.lepetit@orange.fr','GeorgesDeLaBrousse','$argon2i$v=19$m=4096,t=3,p=1$HqyTE1yGi2QDF+QEgfo7bw$qEzLM4Iq85yL2OJmoYsOWk2YTxrMKGxKWGkZjgikHtE','0237450178','1626874309427-no_profile_s.png'),(3,'concessionnaire','michel','Lepetit','g.legrnad@orange.fr','GeorgeBrousse','$argon2i$v=19$m=4096,t=3,p=1$12WIb55vCDJquUuuwq3s/A$ptze47rFeJOGw3o2PnLZsrtWItUsCFT14UXkNSnyuEc','0237450278','left.jpg'),(5,'administrateur','Benoit','Masson','b-masson28@gmail.fr','benoit','$argon2i$v=19$m=4096,t=3,p=1$Giw62gRWGMukdyna4u32wA$1YFkK9TdCIDAnU4jznaDbJy3QSGqcdwpqwGmbPrejH0','0237008290','1627293006173-88814776_p0_square1200.jpg');
+INSERT INTO `users` VALUES (1,'agriculteur','Lepetit','Georges','g.lepetit@orange.fr','GeorgesDeLaBrousse','$argon2i$v=19$m=4096,t=3,p=1$HqyTE1yGi2QDF+QEgfo7bw$qEzLM4Iq85yL2OJmoYsOWk2YTxrMKGxKWGkZjgikHtE','0237450178','1626874309427-no_profile_s.png'),(3,'concessionnaire','Lepetit','Michel','g.legrnad@orange.fr','GeorgeBrousse','$argon2i$v=19$m=4096,t=3,p=1$12WIb55vCDJquUuuwq3s/A$ptze47rFeJOGw3o2PnLZsrtWItUsCFT14UXkNSnyuEc','0237450278','left.jpg'),(5,'administrateur','Masson','Benoit','b-masson28@gmail.fr','benoit','$argon2i$v=19$m=4096,t=3,p=1$7qVrIxtTeIeJ10iqjeQY4Q$Q1gicw9kcGkuO+0hYZaLy8ZSfmZWYhk3Akmy2dH8JKk','0237008290','1627293006173-88814776_p0_square1200.jpg');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -255,4 +255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-07-28 14:00:14
+-- Dump completed on 2021-07-29 15:21:07

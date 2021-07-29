@@ -6,7 +6,6 @@ const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistDataMo
 
 const getAllModeles = (req, res) => {
   const { marque_Id } = req.body;
-  console.log(req);
   if (marque_Id) {
     findManyByMarqueId(marque_Id)
       .then((results) => {
@@ -76,13 +75,11 @@ const createOneModele = (req, res, next) => {
   const upload = multer({ storage }).single('file');
   upload(req, res, (err) => {
     const modele = JSON.parse(req.body.modele);
-    const picture = req.file.filename;
     if (err) {
       res.status(500).json(err);
     } else {
       verifExistDataModele(modele.name)
         .then(([results]) => {
-          // console.log(file);
           if (results[0]) {
             res.send('Modele name  arleady exist');
           } else {
