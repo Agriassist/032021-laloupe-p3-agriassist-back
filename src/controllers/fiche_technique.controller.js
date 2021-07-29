@@ -93,7 +93,6 @@ const createOneFiche = (req, res, next) => {
             };
             createOne(req.pdf)
               .then(([result]) => {
-                console.log(result);
                 req.ficheId = result.insertId;
                 next();
               })

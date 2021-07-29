@@ -6,7 +6,6 @@ const { findMany, findOneById, createOne, updateOne, deleteOne, verifExistDataMo
 
 const getAllModeles = (req, res) => {
   const { marque_Id } = req.body;
-  console.log(req);
   if (marque_Id) {
     findManyByMarqueId(marque_Id)
       .then((results) => {
@@ -82,7 +81,6 @@ const createOneModele = (req, res, next) => {
     } else {
       verifExistDataModele(modele.name)
         .then(([results]) => {
-          // console.log(file);
           if (results[0]) {
             res.send('Modele name  arleady exist');
           } else {
