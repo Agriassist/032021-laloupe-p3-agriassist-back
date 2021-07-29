@@ -75,7 +75,6 @@ const createOneModele = (req, res, next) => {
   const upload = multer({ storage }).single('file');
   upload(req, res, (err) => {
     const modele = JSON.parse(req.body.modele);
-    const picture = req.file.filename;
     if (err) {
       res.status(500).json(err);
     } else {
