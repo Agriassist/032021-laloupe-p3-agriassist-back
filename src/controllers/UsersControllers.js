@@ -239,7 +239,6 @@ const updateOneUser = (req, res, next) => {
           }).validate(req.body, { abortEarly: false }).error;
 
           if (validationErrors) {
-            console.log(validationErrors);
             res.status(500).send('Data enter is invalid');
           } else {
             if (req.body.hassPassword) {
@@ -248,7 +247,6 @@ const updateOneUser = (req, res, next) => {
             if (req.body.email === results[0].email) {
               delete req.body.email;
             }
-            console.log(req.body);
             updateOne(req.body, id)
               .then(([result]) => {
                 if (result.affectedRows === 0) {
