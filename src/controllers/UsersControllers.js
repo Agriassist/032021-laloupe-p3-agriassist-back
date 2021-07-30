@@ -215,7 +215,6 @@ const updateOneUser = (req, res, next) => {
   } else {
     findOneUserById(id)
       .then(async ([results]) => {
-        console.log(results);
         if (results[0]) {
           if (req.body.hassPassword === '') {
             delete req.body.hassPassword;
@@ -241,7 +240,7 @@ const updateOneUser = (req, res, next) => {
 
           if (validationErrors) {
             console.log(validationErrors);
-            res.send('Data enter is invalid');
+            res.status(500).send('Data enter is invalid');
           } else {
             if (req.body.hassPassword) {
               req.body.hassPassword = await hashPassword(req.body.hassPassword);
