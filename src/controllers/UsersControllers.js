@@ -154,6 +154,9 @@ const updateOneUser = (req, res, next) => {
         findOneUserById(id)
           .then(async ([results]) => {
             if (results[0]) {
+              if (req.body.hassPassword === '') {
+                delete req.body.hassPassword;
+              }
               let validationErrors = null;
               validationErrors = Joi.object({
                 statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
@@ -213,6 +216,9 @@ const updateOneUser = (req, res, next) => {
     findOneUserById(id)
       .then(async ([results]) => {
         if (results[0]) {
+          if (req.body.hassPassword === '') {
+            delete req.body.hassPassword;
+          }
           let validationErrors = null;
           validationErrors = Joi.object({
             statue: Joi.string().valid('agriculteur', 'concessionnaire', 'administrateur'),
@@ -233,7 +239,7 @@ const updateOneUser = (req, res, next) => {
           }).validate(req.body, { abortEarly: false }).error;
 
           if (validationErrors) {
-            res.send('Data enter is invalid');
+            res.status(500).send('Data enter is invalid');
           } else {
             if (req.body.hassPassword) {
               req.body.hassPassword = await hashPassword(req.body.hassPassword);
@@ -296,7 +302,6 @@ const verifUserEmailandPassword = async (req, res, next) => {
           res.status(404).send("user email don't exist");
         } else {
           findOnePasswordByEmail(email).then(async ([result]) => {
-
             req.body.loginPassword = result[0].hassPassword;
             const passValid = await verifyPassword(password, req.body.loginPassword);
             if (!passValid) {
